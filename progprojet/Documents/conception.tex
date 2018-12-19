@@ -1,0 +1,46 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+
+%opening
+\title{Conception}
+\author{Thibault Rieben \\ Youssef Saied}
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+	Fichier qui contient une description de la conception
+\end{abstract}
+
+\begin{itemize}
+ \item \textbf{Mediumi}  : Représente le milieu interne, dans notre cas l'eau. Il a la forme d'une brique, pour ça est une fille de brique, avec la face du haut ouverte, qui contient dans son intérieur de l'eau. Alors les grains quand sont à l'intérieur c'est comme si ils était dans l'eau.
+ 	
+ \item \textbf{Systeme} : Superclasse des systèmes avec ajouteGrain abstrait pur car chaque système aura ça façon de ajouter les grains
+ 
+ \item \textbf{SystemeP9} : Système classic du projet. Sans case. Les grains sont ajouter dans un attribut tab\_ptr\_grains.
+ Avec 2 méthodes évolue : une avec l'algo 1 et ses améliorations l'autre avec l'algo 2 basic.
+ 
+ 
+ \textbf{Attention} spéciale pour la méthode : double SystemeP9:: evolue1(double dt) qui retourne un double: le nouveau pas de temps. Superieur à 2.0/10000.0 pour que la simulation ne soit pas trop lente!
+ 
+ 
+ \item \textbf{SystemeP12} : Système qui a un tableau 3D de tableau de grain, ça représente les cases. Alors le systèmes a plusieurs cases. Et elles ont les grains.
+ 
+ \item \textbf{SystemeP13} : une map qui pointe vers un tableau de grain.
+ 
+ \item \textbf{Système Hetérogène} : Alors on a pu mettre ensemble dans un exécutable SystemeP12 et SystemeP9 avec un changement en temps réelle!
+ 
+ \item \textbf{Grain} : Super classe qui a comme filles des grains spécifique : GrainLJ, GrainLJUn et GrainLJDeux. Chacun avec un affichage différent. \textbf{Attention} spéciale pour les méthodes ajoutes forces : qui contiennent les forces qui agissent sur le grain en particulier la force d’Archimède et la force entre les grains qui verifie si leur distance est trop courte : Grains moins ponctuels!.  Et pour la méthode bouger que retourne un bool :  Est ce-que la distance parcourue et plus grande que le rayon/2?
+ 
+ \item \textbf{Obstacle} : Super classe qui a comme filles des obstacles spécifique : Brique, Plan, Dalle, Cylinder et Sphère. \textbf{Attention} spéciale pour les Cylindres!
+ 
+ \item \textbf{Source} : Classe qui nous aide a mettre des nouveau grains dans le système!
+ 
+ \item \textbf{SupportADessin} : Super classe qui a comme fille SupportADessinTexte, c'est des classes qui servent a dessiner les objets dessinables, dans chaque cas d'une manière. Par exemple dans SupportADessinTexte il y a du texte qui est affiché!
+ 
+  \item \textbf{Vecteur3D} : Classe qui nous aide a manipuler les Vecteurs3D!
+ 
+\end{itemize}
+
+\end{document}

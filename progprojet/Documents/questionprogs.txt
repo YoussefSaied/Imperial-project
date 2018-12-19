@@ -1,0 +1,2 @@
+1.comment passer le generateur par reference à la source?
+2.position des nouveaux grains? celle de la source ou du modele?

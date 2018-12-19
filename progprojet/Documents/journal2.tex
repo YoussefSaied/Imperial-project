@@ -1,0 +1,63 @@
+\documentclass[a4paper,10pt]{article}
+\usepackage[utf8]{inputenc}
+
+
+%opening
+\title{Journal du Projet de Prog 2017}
+\author{Thibault Rieben \\ Youssef Saied }
+
+\begin{document}
+
+\maketitle
+
+\begin{abstract}
+
+Journal qui contient une brève description de nos semaines. Parfois les semaines sont considérée a partir du vendredi (nouvelle étape du projet).
+
+\end{abstract}
+
+\begin{itemize}
+ \item Semaine 1 : Présentation du Projet. 
+ 
+ 
+ \item Semaine 2 : Début des travailles: Première classe (Vecteur3D), création du repos GitHub.
+ Un peu de difficulté avec git/GitHub. A part ça, nous sommes motivés! On aussi crée le Makefile.
+ 
+ 
+ \item Semaine 3 : Début du journal, nous avons décidé de l'écrire en LaTeX, quelle aventure!
+ Code intact car il était déjà modularisé.
+
+ 
+ 
+ \item Semaine 4 : Continuation de la classe Vecteur3D (quelques testes et opérateurs) . On a aussi fini la classe Grains.
+ 
+ 
+ \item Semaine 5 : On a défini beaucoup d'opérateurs dans la classe Vecteur3D, alors on a fait énormément de tests, les écrire c'était fastidieux! On commence a sentir la "pression" du projet. Classe source prends forme gentiment .On a fait les classe Plan et Dalle aussi. On a aussi fait des tests pour grain et obstacles.
+ 
+ 
+ \item Semaine 6 : Écriture de la classe SupportADessin. Révision de grain (Un peu triste de changer tous nos grains...). Classe Système! On a décider de faire les collections comme de pointeur à la C! On a des problèmes pour l'affichage polymorphique des grains. Première simulations, beaucoup de petites erreurs !! Pour les testes de système, notre coordonnée z était bien loin du résultat attendu. On a pu réparer cette dernière erreur. Mais pour toutes les coordonnées du premier pas de temps le résultat prévue est par ex 0,000001 on a 0,000002. On s'est dit que c'est pas grave!
+ 
+ 
+ \item Semaine 7 : Le projet nous prends beaucoup de temps: Teste chute libre. Problème avec l’installation de Qt sur Windows! On a du réinstaller et c'est énorme! Modification sur Système, on a caché les pointeurs et plus de pointeurs à la C! Maintenant c'est des unique\_ptr! On a toujours des problèmes pour l'affichage polymorphique des grains. Changements des valeurs de la constante g, le premier pas de temps est aussi proche qu'avant, mais après 100 pas on est loin du résultat proposé par le prof!!!
+ 
+ \item Semaine 8 : Pâques : Vacances, Thibault est parti à New York, alors Youssef à du faire le graphisme tout seul, une journée intense, mais ça fait plaisir de voir des grains!! runme.sh est très chouette! On a encore beaucoup de choses à finir, mais c'est des petits détails (on espère!)
+ 
+ \item Semaine 9 : Pas de nouvelles choses à faire (heureusement) car il y a la série notée. on focalise un peu sur la série notée, mais le week-end nous donnes un peu de temps pour s'y mettre au projet! Actualisation du journal et autres documents, tutoriel graphisme (Thibault), changement dans Grain: le clone de grain marche et suffit mais n'est pas juste. Réparation des méthodes de grain: copie() et cloneMe().
+ 
+ \item Semaine 10 : Amélioration de la simulation. On a changé notre méthode évolue de Système, pour qu'elle retourne un double pour "manipuler" le pas de temps. On a beaucoup touché à Source car transformation en unique\_ptr, fin de la méthode création. Dessiner source, Obstacle sphere. On a un problème avec l'affichage des grains crées par Source dans la version Graphique.
+ 
+ \item Semaine 11 : Dernière étape du projet. Mais on a un peu de retard alors on n'as pas encore commencer P12 et P13. Mais on a réparer l’affichage des grains de la source, c'était une petit ligne du code qui manquais. On a aussi dessiner une brique et des autres petites choses.
+ 
+ \item Semaine 12 : Examen de prog, alors on a pas fait des changements importants jusqu'à l'examen.Par contre, après l'examen, le sprint a commencé. On a réussi a dessiner un cylindre. Notre simulation avait quelques problèmes au niveau de la physique. On a pu réparer! On a aussi commencé à préparer le rendu: Beaucoup de choses à rendre!
+
+ \item Semaine 13 : Dernière semaine du projet. Énormément de choses à faire. Préparer les rendus, conception, commenter le code, réviser les classes, P12 et P13, quelques extensions! Mais c'est le dernier effort, alors on s'y met! On a réalisé que sur quelques machines notre partie graphique ne marche pas! On sait pas pourquoi, ça nous a beaucoup stressé. Mais on rend quand même ce qu'on a fait!
+ 
+ \item JOUR J: Le problème nous a beaucoup perturbé, on a pu régler!!! On a mis les .cc dans les sources du fichier Qt\_Gl.pro! On a fini le changement de couleur de grain. On a fini les déplacements des obstacles. Le temps passe vite!!! Mis en page du code, fin des documents. Petites révisions et testes. Rendu!
+ 
+ 
+ 
+ 
+\end{itemize}
+
+
+\end{document}
