@@ -11,38 +11,92 @@
 using namespace std;
 
 //               = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
-void VueOpenGL::dessine(GrainLJ const& G )
-{
-    QMatrix4x4 matrice;
-    matrice.translate((G.get_position()).get_x(),(G.get_position()).get_y(),(G.get_position()).get_z());
-    matrice.scale(1.0* G.get_radius());
-    dessineSphere(matrice,1/(G.get_velocity()).norme(),(G.get_velocity()).norme(),0); // VERIF
-    //dessineSphere(matrice,78,100,0); // vert
+
+void VueOpenGL::dessine(MagnetE const& M )
+{		//rotate
+		Vecteur3D axer(M.get_moment()^Vecteur3D(1,0,0));
+		double angle= acos((M.get_moment()*Vecteur3D(1,0,0))/(M.get_moment().norme()));
+
+	std::cout << "angleMM:" << axer << angle <<-1*angle*180/M_PI<<" "<<axer.get_x()<<'\n';
+
+
+				QMatrix4x4 matrice2;
+
+
+
+			//	matrice2.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
+				matrice2.setToIdentity();
+				matrice2.translate((M.get_position()).get_x(),(M.get_position()).get_y(),(M.get_position()).get_z());
+				matrice2.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
+				matrice2.translate(0,0,-1*M.get_height()/2);
+				prog.setUniformValue("vue_modele", matrice_vue * matrice2);
+				prog.setAttributeValue(CouleurId, 0.7, 0, 0);  // met la couleur
+				cylinder.set_dimension(M.get_radius(),M.get_height()/2);
+				cylinder.initialize();
+				cylinder.draw(prog, SommetId);
+				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		QMatrix4x4 matrice;
+		matrice.setToIdentity();
+		//matrice.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
+    matrice.translate((M.get_position()).get_x(),(M.get_position()).get_y(),(M.get_position()).get_z());
+		matrice.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
+
+		//matrice.scale(M.get_radius(),M.get_radius(),M.get_height()/2);
+//matrice.rotate(-90,1,0,0);
+		//prog.setUniformValue("vue_modele", matrice_vue * matrice);
+	//	prog.setAttributeValue(CouleurId, 0, 0, 0.7);  // met la couleur
+		//cylinder.set_dimension(M.get_radius(),M.get_height()/2);
+		//cylinder.initialize();
+		//cylinder.draw(prog, SommetId);
+		dessineCylinder(matrice,0,0,0.7);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 
 }
-void VueOpenGL::dessine(GrainLJUn const& G )
-{
-    QMatrix4x4 matrice;
-    matrice.translate((G.get_position()).get_x(),(G.get_position()).get_y(),(G.get_position()).get_z());
-    matrice.scale(1.0* G.get_radius());
 
-    //dessineLine(matrice, 0.8 * G.get_position(), 0.01*(G.get_position() + G.get_velocity()) );
-    //QMatrix4x4 matrice1;
-    //dessineSphere(matrice,250,100,0); // vert
-	dessineSphere(matrice,(G.get_velocity()).norme()/300,(G.get_position()).get_z()/60,.5); // VERIF
-}
-void VueOpenGL::dessine(GrainLJDeux const& G )
+void VueOpenGL::dessine(MagnetEO const& M )
 {
-    QMatrix4x4 matrice;
-    matrice.translate((G.get_position()).get_x(),(G.get_position()).get_y(),(G.get_position()).get_z());
-    matrice.scale(1.0* G.get_radius());
-    //dessineLine(matrice,  0.8 * G.get_position(), 0.01*(G.get_position() + G.get_velocity()) );
-    //QMatrix4x4 matrice1;
-    dessineSphere(matrice,(G.get_velocity()).norme()/300,(G.get_position()).get_z()/60,0);  // bleu
-    //dessineSphere(matrice,1/(G.get_velocity()).norme(),(G.get_velocity()).norme(),0); // VERIF
-    //dessineSphere(matrice,170,100,0); // vert
+		//rotate
+		Vecteur3D axer(M.get_moment()^Vecteur3D(1,0,0));
+		double angle= acos((M.get_moment()*Vecteur3D(1,0,0))/(M.get_moment().norme()));
+
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		QMatrix4x4 matrice;
+
+    matrice.translate(0,0,M.get_height()/2);
+    matrice.translate((M.get_position()).get_x(),(M.get_position()).get_y(),(M.get_position()).get_z());
+
+		matrice.rotate(angle,axer.get_x(),axer.get_y(),axer.get_z());
+
+		GLCylinder cylinderm;
+		prog.setUniformValue("vue_modele", matrice_vue * matrice);
+		prog.setAttributeValue(CouleurId, 0.7, 0, 0);  // met la couleur
+		cylinderm.set_dimension(M.get_radius(),M.get_height()/2);
+		cylinderm.initialize();
+		cylinderm.draw(prog, SommetId);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+		/*glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		QMatrix4x4 matrice2;
+		matrice2.translate(0,0,-1*M.get_height()/2);
+		matrice2.translate((M.get_position()).get_x(),(M.get_position()).get_y(),(M.get_position()).get_z());
+		matrice2.rotate(angle,axer.get_x(),axer.get_y(),axer.get_z());
+
+		GLCylinder cylinderm2;
+		prog.setUniformValue("vue_modele", matrice_vue * matrice2);
+		prog.setAttributeValue(CouleurId, 0, 0, 0.7);  // met la couleur
+		cylinderm2.set_dimension(M.get_radius(),M.get_height()/2);
+		cylinderm2.initialize();
+		cylinderm2.draw(prog, SommetId);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);*/
 
 }
+
+
+
 void VueOpenGL::dessine(Sphere const& sphere )
 {
     QMatrix4x4 matrice;
@@ -61,15 +115,7 @@ void VueOpenGL::dessine(Dalle const& d)
     QMatrix4x4 matrice;
     dessineDalle(matrice, d);
 }
-void VueOpenGL::dessine(Source const& source)
-{
-    glPolygonMode(GL_FRONT_AND_BACK, GL_LINE); // passe en mode "fil de fer"
-    QMatrix4x4 matrice;
-    matrice.translate((source.get_position()).get_x(),(source.get_position()).get_y(),(source.get_position()).get_z());
-    matrice.scale(0.25);
-    dessineCylinder(matrice,0,1,1); //couleur
-    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL); // repasse en mode "plein"
-}
+
 
 void VueOpenGL::dessine(Brique const& b){
 		std::vector<Dalle> d6;
@@ -93,11 +139,17 @@ void VueOpenGL::dessine(Mediumi const& M){
 }
 
 void VueOpenGL::dessine(Cylinder const& c){
-  glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
+	Vecteur3D axer(c.get_vecteur_1()^Vecteur3D(0,0,1));
+	double angle= acos((c.get_vecteur_1()*Vecteur3D(1,0,0))/((c.get_vecteur_1()).norme()));
+
+	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	QMatrix4x4 matrice;
+	std::cout << "angle:" << axer << angle <<'\n';
+
 
 	matrice.translate((c.get_position()).get_x(),(c.get_position()).get_y(),(c.get_position()).get_z());
-	matrice.rotate(90,1,0,0);
+matrice.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
+	//matrice.rotate(90,1,0,0);
 	//matrice.scale(c.get_radius()); //changer scale
 	GLCylinder cylinderm;
 	prog.setUniformValue("vue_modele", matrice_vue * matrice);
@@ -116,9 +168,9 @@ void VueOpenGL::dessine(SystemeP9 const& S)
 					(*ptr_medium).dessine();}}
 
 
-    if(!(S.tab_ptr_grains).empty()) {
-        for(auto const& ptr_grain : (S.tab_ptr_grains)) {
-            (*ptr_grain).dessine();
+    if(!(S.tab_ptr_Magnets).empty()) {
+        for(auto const& ptr_Magnet : (S.tab_ptr_Magnets)) {
+            (*ptr_Magnet).dessine();
         }
     }
     if((S.tab_ptr_obstacles).size() != 0) {
@@ -126,11 +178,7 @@ void VueOpenGL::dessine(SystemeP9 const& S)
             (*ptr_obstacle).dessine();
         }
     }
-    if((S.tab_ptr_sources).size() != 0) {
-        for(auto const& ptr_source : (S.tab_ptr_sources)) {
-            (*ptr_source).dessine();
-        }
-    }
+
 }
 
 void VueOpenGL::dessine(SystemeP12 const& S)
@@ -151,11 +199,7 @@ void VueOpenGL::dessine(SystemeP12 const& S)
             (*ptr_obstacle).dessine();
         }
     }
-    if((S.tab_ptr_sources).size() != 0) {
-        for(auto const& ptr_source : (S.tab_ptr_sources)) {
-            (*ptr_source).dessine();
-        }
-    }
+
 }
 //               = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 void VueOpenGL::init()
@@ -227,7 +271,7 @@ void VueOpenGL::initializePosition()
 {
     // position initiale
     matrice_vue.setToIdentity();
-    matrice_vue.translate(0.0, 0.0, -15.0);
+    //matrice_vue.translate(0.0, 0.0, -15.0);
     matrice_vue.rotate(-90.0, 1.0, 0.0, 0.0);
 }
 

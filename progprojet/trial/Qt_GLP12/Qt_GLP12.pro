@@ -3,7 +3,7 @@ QMAKE_CXXFLAGS += -std=c++11
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
-TARGET = excerciceP12
+TARGET = simulation1
 
 LIBS += -L../general -lgeneral
 PRE_TARGETDEPS += ../general/libgeneral.a
@@ -22,14 +22,13 @@ SOURCES += \
     ../general/SystemeP9.cc \
     ../general/SystemeP12.cc \
     ../general/Aleatoire.cc \
-    ../general/Source.cc \
+    ../general/Magnet.cc \
+    ../general/MagnetE.cc \
     ../general/Plan.cc \
     ../general/Dalle.cc \
     ../general/Mediumi.cc \
     ../general/Brique.cc \
     ../general/Sphere.cc \
-    ../general/Grain.cc \
-    ../general/GrainLJ.cc \
     ../general/Vecteur3D.cc
 
 
@@ -46,16 +45,14 @@ HEADERS += \
     ../general/SystemeP9.h \
     ../general/SystemeP12.h \
     ../general/Aleatoire.h \
-    ../general/Source.h \
+    ../general/Magnet.h \
+    ../general/MagnetE.h \
+    ../general/MagnetEO.h \
     ../general/Obstacle.h \
     ../general/Plan.h \
     ../general/Dalle.h \
     ../general/Brique.h \
     ../general/Sphere.h \
-    ../general/Grain.h \
-    ../general/GrainLJ.h \
-    ../general/GrainLJUn.h \
-    ../general/GrainLJDeux.h \
     ../general/Medium.h \
     ../general/Mediumi.h \
     ../general/Vecteur3D.h

@@ -19,7 +19,7 @@ public:
 
 	void distancea(Vecteur3D vector1)const; //affiche la distance du point plus proche au vector1
 
-	Vecteur3D get_vecteur_1() const { return vecteur_1; }
+	Vecteur3D get_vecteur_1() const { return vector1n; }
 
 	double get_radius() const {	return rayon; }
 
@@ -31,7 +31,7 @@ public:
 
 
 protected:
-	Vecteur3D vecteur_1; // vecteur unitaire perpendiculaire au plan
+	Vecteur3D vector1n; // unitary perpendiculaire vector au plan
 	double hauteur;
 	double rayon;
 };

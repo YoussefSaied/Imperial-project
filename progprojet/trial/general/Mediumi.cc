@@ -2,7 +2,7 @@
 #include <vector>
 #include <cmath>
 
-bool Mediumi:: is_inside(Grain& g) const
+bool Mediumi:: is_inside(Magnet& g) const
     {
         if(Brique::is_inside(g.get_position())) g.set_medium(*medium);
         return Brique::is_inside(g.get_position());
@@ -34,7 +34,7 @@ bool Mediumi:: is_inside(Grain& g) const
 
         return d5;
     }
-    
+
 std::ostream& Mediumi:: display(std::ostream& c) const
     {
         c<<"Je suis un millieu INTERNE!";

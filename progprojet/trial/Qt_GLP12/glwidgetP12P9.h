@@ -24,11 +24,9 @@ public:
 		system_tab.push_back(sys.copie());
 		system_tab.back()->set_support(&vue);}
 
-	void ajouteGrain(Grain const& nouveau_grain){system_tab[0]->ajouteGrain(nouveau_grain);}
+	void addMagnet(Magnet const& nouveau_Magnet){system_tab[0]->addMagnet(nouveau_Magnet);}
 
-	void ajouteObstacle(Obstacle const& nouveau_obstacle){system_tab[0]->ajouteObstacle(nouveau_obstacle);}
-
-	void ajouteSource(Source const& nouvelle_source){system_tab[0]->ajouteSource(nouvelle_source);}
+	void addObstacle(Obstacle const& nouveau_obstacle){system_tab[0]->ajouteObstacle(nouveau_obstacle);}
 
 	void ajouteMediumi(Mediumi const& nouveau_mediumi){system_tab[0]->ajouteMediumi(nouveau_mediumi);}
   // objets à dessiner, faire évoluer

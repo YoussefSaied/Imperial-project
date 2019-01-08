@@ -33,13 +33,13 @@ public:
     Vecteur3D PointPlusProche(Vecteur3D const& x_i) const override; // point sur la dalle qui est le plus proche au point x_i
 
     //methodes qui retournent les 4 sommets de la dalle
-    Vecteur3D Sommet1() const { return position; }
+    Vecteur3D Sommet1() const { return position-longueur/2*vecteur_2- largeur/2*vecteur_3(); }
 
-    Vecteur3D Sommet2() const { return position + longueur*vecteur_2; }
+    Vecteur3D Sommet3() const { return position + longueur/2*vecteur_2 + largeur/2*vecteur_3(); }
 
-    Vecteur3D Sommet3() const { return position + longueur*vecteur_2 + largeur*vecteur_3(); }
+    Vecteur3D Sommet4() const { return position -longueur/2*vecteur_2 + largeur/2*vecteur_3(); }
 
-    Vecteur3D Sommet4() const { return position + largeur*vecteur_3(); }
+    Vecteur3D Sommet2() const { return position + longueur/2*vecteur_2 - largeur/2*vecteur_3(); }
 
     std:: unique_ptr<Dalle> cloneMe() const;
 

@@ -1,11 +1,6 @@
 #pragma once
 #include <vector>
 #include "Obstacle.h"
-#include "GrainLJ.h"
-#include "Source.h"
-#include "Grain.h"
-#include "GrainLJUn.h"
-#include "GrainLJDeux.h"
 #include <iostream>
 #include "Dessinable.h"
 #include <memory>
@@ -47,11 +42,11 @@ public:
 
 // manipulateurs
 
-    void ajouteGrain(Grain const& nouveau_grain);
+    void addMagnet(Magnet const& nouveau_Magnet);
 
 private:
 	// attributs
-	std:: vector<std::vector<std::vector<std:: vector<std::unique_ptr<Grain>> >>> tab_case;
+	std:: vector<std::vector<std::vector<std:: vector<std::unique_ptr<Magnet>> >>> tab_case;
 
 	// deletes
 	SystemeP12 (SystemeP12 const&) = delete;

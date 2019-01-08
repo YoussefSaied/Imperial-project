@@ -5,9 +5,11 @@
 #include "Obstacle.h"
 #include "Brique.h"
 #include "Medium.h"
-#include "Grain.h"
 #include <iostream>
 #include <memory>
+#include "Magnet.h"
+#include "MagnetE.h"
+#include "MagnetEO.h"
 
 class Mediumi: public Brique
 {
@@ -20,7 +22,7 @@ public:
     virtual void dessine() const override { if (support != nullptr) support->dessine(*this); }
     void set_medium(Medium medium = water) { (*this).medium = &medium; }
     Medium* get_medium() const { return medium; }
-    bool is_inside(Grain& g) const;
+    bool is_inside(Magnet& g) const;
     std::vector<Dalle> dalle5() const;
 
     virtual std::ostream& display(std::ostream& c) const override;

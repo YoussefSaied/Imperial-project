@@ -8,7 +8,7 @@ using namespace std;
 // constructeurs
 SystemeP12:: SystemeP12(SupportADessin* support):Systeme(support)
 {
-    int t(DistanceMax/GrainLJ::get_sigma());
+    int t(DistanceMax/MagnetE::get_sigma());
     tab_case.resize(t);
     for(auto& t1: tab_case) {
         t1.resize(t);
@@ -20,14 +20,14 @@ SystemeP12:: SystemeP12(SupportADessin* support):Systeme(support)
 
 // manipulateurs
 
-void SystemeP12:: ajouteGrain(Grain const& nouveau_grain )
+void SystemeP12:: addMagnet(Magnet const& nouveau_Magnet )
 {
     int x, y,	z;
-    double t(2 * GrainLJ::get_sigma());
-    x = (nouveau_grain.get_position().get_x() + DistanceMax)/t;
-    y = (nouveau_grain.get_position().get_y() + DistanceMax)/t;
-    z = (nouveau_grain.get_position().get_z() + DistanceMax)/t;
-    (tab_case[x][y][z]).push_back(nouveau_grain.copie());
+    double t(2 * MagnetE::get_sigma());
+    x = (nouveau_Magnet.get_position().get_x() + DistanceMax)/t;
+    y = (nouveau_Magnet.get_position().get_y() + DistanceMax)/t;
+    z = (nouveau_Magnet.get_position().get_z() + DistanceMax)/t;
+    (tab_case[x][y][z]).push_back(nouveau_Magnet.copie());
     (*((tab_case[x][y][z]).back())).set_support(support);
 }
 
@@ -45,7 +45,7 @@ ostream& SystemeP12:: display(std:: ostream& c) const
             }
         }
     }
-    c << s << " grains ";
+    c << s << " Magnets ";
     if(s!=0) {
         c<<",les suivants : "<<std::endl;
     }
@@ -59,19 +59,11 @@ ostream& SystemeP12:: display(std:: ostream& c) const
         }
     }
     c << tab_ptr_obstacles.size()<<" obstacles ";
-    if(tab_ptr_obstacles.size()!=0) {
-        c<<",les suivants : "<<std::endl;
-    }
+
     for(auto const& ptr_obstacle : tab_ptr_obstacles) {
         (*ptr_obstacle).dessine();
     }
-    c << tab_ptr_sources.size()<<" sources ";
-    if(tab_ptr_sources.size()!=0) {
-        c<<",les suivantes : "<<std::endl;
-    }
-    for(auto const& ptr_source : tab_ptr_sources) {
-        (*ptr_source).dessine();
-    }
+
     c<<std::endl;
     return c;
 }
@@ -83,7 +75,7 @@ unique_ptr<SystemeP9> SystemeP12 :: P12toP9s() const
         for(auto& j: i) {
             for(auto& k: j) {
                 for(auto& g: k) {
-                    P9->ajouteGrain(*g);
+                    P9->addMagnet(*g);
                 }
             }
         }
@@ -91,9 +83,7 @@ unique_ptr<SystemeP9> SystemeP12 :: P12toP9s() const
     for(auto& o : tab_ptr_obstacles) {
         P9->ajouteObstacle(*o);
     }
-    for(auto& s : tab_ptr_sources) {
-        P9->ajouteSource(*s);
-    }
+
     for(auto& m : tab_ptr_mediums) {
         P9->ajouteMediumi(*m);
     }
@@ -111,7 +101,7 @@ unique_ptr<SystemeP12> SystemeP12 :: cloneme() const
         for(auto& j: i) {
             for(auto& k: j) {
                 for(auto& g: k) {
-                    P12->ajouteGrain(*g);
+                    P12->addMagnet(*g);
                 }
             }
         }
@@ -119,9 +109,7 @@ unique_ptr<SystemeP12> SystemeP12 :: cloneme() const
     for(auto& o : tab_ptr_obstacles) {
         P12->ajouteObstacle(*o);
     }
-    for(auto& s : tab_ptr_sources) {
-        P12->ajouteSource(*s);
-    }
+
     for(auto& m : tab_ptr_mediums) {
         P12->ajouteMediumi(*m);
     }
@@ -136,22 +124,15 @@ unique_ptr<Systeme> SystemeP12 ::copie() const
 double SystemeP12:: evolue1(double dt)
 {
     double newdt(dt);
-    for(size_t i(0); i<tab_ptr_sources.size(); ++i) {
-        int x, y,	z;
-        double t(2 * GrainLJ::get_sigma());
-        x = (tab_ptr_sources[i]->get_position().get_x() + DistanceMax)/t;
-        y = (tab_ptr_sources[i]->get_position().get_y() + DistanceMax)/t;
-        z = (tab_ptr_sources[i]->get_position().get_z() + DistanceMax)/t;
-        tab_ptr_sources[i]->creation(tab_case[x][y][z], newdt);
-    }
+
     for(size_t i(0); i<tab_case.size()-1; ++i) {
         for(size_t j(0); j<tab_case.size()-1; ++j) {
             for(size_t k(0); k<tab_case.size()-1; ++k) {
                 for(size_t l(0); l< (tab_case[i][j][k]).size(); ++l) {
-                    (tab_case[i][j][k][l])->Grain::ajouteForce();
+                    (tab_case[i][j][k][l])->Magnet::ajouteForce();
                 }
                 for(size_t l(0); l< (tab_case[i][j][k]).size(); ++l) {
-                    (tab_case[i][j][k][l])->Grain::ajouteForce();
+                    (tab_case[i][j][k][l])->Magnet::ajouteForce();
                     for(size_t m(l+1); m < (tab_case[i][j][k]).size(); ++m) {
                         Vecteur3D force_oppose(((tab_case[i][j][k])[l]->
                                                 ajouteForce((tab_case[i][j][k])[m])).oppose());
@@ -200,7 +181,7 @@ double SystemeP12:: evolue1(double dt)
                         (tab_case[i][j][k+1])[m]->ajouteForce(force_oppose);
                     }
 
-                    // grain interne
+                    // Magnet interne
 
                     for(auto const& ptr_obstacle : tab_ptr_obstacles) {
                         (tab_case[i][j][k][l])->ajouteForce(ptr_obstacle);
@@ -213,23 +194,23 @@ double SystemeP12:: evolue1(double dt)
                         newdt = (0.5 * (tab_case[i][j][k])[l]->get_radius())/(((tab_case[i][j][k])[l]->get_velocity()).norme());
 
                     if(((tab_case[i][j][k])[l]->get_position()).norme()>DistanceMax) {
-                        tab_case[i][j][k].erase(tab_case[i][j][k].begin()+l); //est-ce que le grain cesse d'exister? pas bésoin de delete?
+                        tab_case[i][j][k].erase(tab_case[i][j][k].begin()+l); //est-ce que le Magnet cesse d'exister? pas bésoin de delete?
                         l-=1;
                     }
 
                     unsigned int x, y,	z;
-                    double t(2 * GrainLJ::get_sigma());
+                    double t(2 * MagnetE::get_sigma());
                     x = (tab_case[i][j][k][l] ->get_position().get_x() + DistanceMax)/t;
                     y = (tab_case[i][j][k][l] ->get_position().get_y() + DistanceMax)/t;
                     z = (tab_case[i][j][k][l] ->get_position().get_z() + DistanceMax)/t;
 
                     if(x!=i or y!=j or z!= k) {
-                        ajouteGrain(*tab_case[i][j][k][l]);
+                        addMagnet(*tab_case[i][j][k][l]);
                         tab_case[i][j][k].erase(tab_case[i][j][k].begin()+l);
                         l-=1;
                     }
 
-                }// fin for one grain
+                }// fin for one Magnet
             }
         }
     }

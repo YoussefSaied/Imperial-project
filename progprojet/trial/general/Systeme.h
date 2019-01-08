@@ -1,11 +1,6 @@
 #pragma once
 #include <vector>
 #include "Obstacle.h"
-#include "GrainLJ.h"
-#include "Source.h"
-#include "Grain.h"
-#include "GrainLJUn.h"
-#include "GrainLJDeux.h"
 #include <iostream>
 #include "Dessinable.h"
 #include <memory>
@@ -15,6 +10,9 @@
 #include "Vecteur3D.h"
 #include "Mediumi.h"
 #include "Sphere.h"
+#include "Magnet.h"
+#include "MagnetE.h"
+#include "MagnetEO.h"
 class Systeme: public Dessinable
 {
     friend class VueOpenGL; //simple solution
@@ -35,19 +33,18 @@ public:
 
     virtual std:: ostream& display(std:: ostream& c) const = 0;
 
-    virtual void ajouteGrain(Grain const& nouveau_grain) = 0 ;
+    virtual void addMagnet(Magnet const& new_Magnet) = 0 ;
 
     void ajouteObstacle(Obstacle const& nouveau_obstacle);
 
-    void ajouteSource(Source const& nouvelle_source);
 
     void ajouteMediumi(Mediumi const& nouveau_mediumi);
 
     virtual std::unique_ptr<Systeme> copie() const =0;
 
-    virtual std::unique_ptr<Systeme> P9toP12() const =0;
+    //virtual std::unique_ptr<Systeme> P9toP12() const =0;
 
-    virtual std::unique_ptr<Systeme> P12toP9() const =0;
+    //virtual std::unique_ptr<Systeme> P12toP9() const =0;
 
 
 		Dalle notre_Dalle;
@@ -61,7 +58,6 @@ protected:
 
 	// attributs
     std:: vector<std::unique_ptr<Obstacle>> tab_ptr_obstacles;
-    std:: vector<std::unique_ptr<Source>> tab_ptr_sources;
     std:: vector<std::unique_ptr<Mediumi>> tab_ptr_mediums;
     Medium* ptr_medium;
 

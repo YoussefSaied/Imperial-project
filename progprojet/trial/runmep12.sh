@@ -1,4 +1,4 @@
 make distclean
-qmake exerciceP12.pro
+qmake simulation1.pro
 make
-./Qt_GLP12/excerciceP12
+./Qt_GLP12/simulation1

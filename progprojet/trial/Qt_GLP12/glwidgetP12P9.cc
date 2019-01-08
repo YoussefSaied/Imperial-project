@@ -106,12 +106,12 @@ void GLWidget::keyPressEvent(QKeyEvent* event)
   case Qt::Key_Space:
     pause();
     break;
-	case Qt::Key_9:
-	  if(!system_tab.empty()) system_tab.push_back(system_tab.back()->P12toP9());
-	  break;
-	case Qt::Key_2:
-		if(!system_tab.empty()) system_tab.push_back(system_tab.back()->P9toP12());
-		break;
+//	case Qt::Key_9:
+//	  if(!system_tab.empty()) system_tab.push_back(system_tab.back()->P12toP9());
+//	  break;
+//	case Qt::Key_2:
+//		if(!system_tab.empty()) system_tab.push_back(system_tab.back()->P9toP12());
+//		break;
   };
 
   updateGL(); // redessine

@@ -8,30 +8,30 @@ using namespace std;
 
 Cylinder:: Cylinder(Position position, Vecteur3D vector1, double h, double r, bool m): Obstacle(position, m), hauteur(h), rayon(r)
 {
-    vecteur_1 = vector1.normalise();
+    vector1n = vector1.normalise();
 }
 
 Vecteur3D Cylinder :: PointPlusProche(Vecteur3D const& x_i) const
 {
-    double d(x_i * vecteur_1);
-    Vecteur3D e(x_i-position);
-    Vecteur3D en(d*vecteur_1);
-    Vecteur3D n(en.normalise());
-    Vecteur3D eu(e-en);
-    Vecteur3D u(eu.normalise());
-    if(d < hauteur/2) return position + d * vecteur_1 + rayon*u;
-    return position + hauteur * n/2 + min(rayon,eu.norme()) * u;
+    double d(x_i * vector1n);
+    Vecteur3D relatpos(x_i-position); //relative position
+    Vecteur3D ep(d*vector1n);
+    Vecteur3D epn(ep.normalise());
+    Vecteur3D eu(relatpos-ep); //eu and ep form a right angled triangle
+    Vecteur3D eun(eu.normalise());
+    if(d < hauteur/2) return position + ep + rayon*eun;
+    return position + hauteur/2 * epn + min(rayon,eu.norme()) * eun;
 }
 
 ostream& Cylinder:: display (ostream& sortie) const
 {
-    sortie<<"Je suis un cylindre! " << vecteur_1<<endl;
+    sortie<<"Je suis un cylindre! " << vector1n<<endl;
     return sortie;
 }
 
 void Cylinder :: distancea(Vecteur3D vector1)const
 {
-    cout<<"distance à "<< vector1<< " : " << PointPlusProche(vector1);
+    cout<<"distance from "<< vector1<< " : " << PointPlusProche(vector1);
 }
 
 unique_ptr<Cylinder> Cylinder:: cloneMe() const
