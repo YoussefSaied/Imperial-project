@@ -20,7 +20,7 @@ public:
 
     // constructeurs et destructeurs
     Systeme(SupportADessin* support=&Texte1, Medium m = air):Dessinable(Position(),support),
-												notre_Dalle(Vecteur3D(3,2.5,1),Vecteur3D(0,0,1),Vecteur3D(0,-1,0),10,10, true),ptr_medium(&m)
+												notre_Dalle(Vecteur3D(3,2.5,1),Vecteur3D(0,0,1),Vecteur3D(0,-1,0),0.1,0.1, true),ptr_medium(&m)
 												{notre_Dalle.set_support(support);}
 
     virtual ~Systeme() {}
