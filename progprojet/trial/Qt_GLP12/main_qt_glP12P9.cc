@@ -22,14 +22,14 @@ int main(int argc, char* argv[])
 		MagnetE M2(Position(2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air);
 		MagnetE M3(Position(-2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air);
 		MagnetE M4(Position(-2,2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air);
-		MagnetE M5(Position(2,2,4), Vitesse(), 1.0, 0.2, Vecteur3D(), air);
+		MagnetE M5(Position(2,2,4), Vitesse(), 1.0, 0.2, Vecteur3D(), air,1,Vecteur3D(1,1,0));
 		MagnetE M6(Position(2,-2,4), Vitesse(), 1.0, 0.2, Vecteur3D(), air);
 		MagnetE M7(Position(-2,-2,4), Vitesse(), 1.0, 0.2, Vecteur3D(), air);
 		MagnetE M8(Position(-2,2,4), Vitesse(), 1.0, 0.2, Vecteur3D(), air);
 		Dalle dalle_obstacled(Position(0, 0, 0), Vecteur3D(0, 0.0, 1.0), Vecteur3D(0.0, 1.0, 0.0), 4, 4);
 	  Brique b(dalle_obstacled, 4.0);
-		Cylinder c1(Position(0,0,10),Vecteur3D(7,7,0),1,1);
-		Cylinder c2(Position(0,0,10),Vecteur3D(7,0,0),1,1);
+		Cylinder c1(Position(0,10,0),Vecteur3D(7,7,0),1,1);
+		Cylinder c2(Position(10,0,0),Vecteur3D(7,0,0),1,1);
 		Cylinder c3(Position(0,0,10),Vecteur3D(0,0,1),1,1);
 		w.addMagnet(M1);
 		w.addMagnet(M2);

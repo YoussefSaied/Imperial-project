@@ -14,8 +14,8 @@ using namespace std;
 
 void VueOpenGL::dessine(MagnetE const& M )
 {		//rotate
-		Vecteur3D axer(M.get_moment()^Vecteur3D(1,0,0));
-		double angle= acos((M.get_moment()*Vecteur3D(1,0,0))/(M.get_moment().norme()));
+		Vecteur3D axer(M.get_moment()^Vecteur3D(0,0,1));
+		double angle= acos((M.get_moment()*Vecteur3D(0,0,1))/(M.get_moment().norme()));
 
 	std::cout << "angleMM:" << axer << angle <<-1*angle*180/M_PI<<" "<<axer.get_x()<<'\n';
 
@@ -27,7 +27,7 @@ void VueOpenGL::dessine(MagnetE const& M )
 			//	matrice2.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
 				matrice2.setToIdentity();
 				matrice2.translate((M.get_position()).get_x(),(M.get_position()).get_y(),(M.get_position()).get_z());
-				matrice2.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
+				if(axer != 0) matrice2.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
 				matrice2.translate(0,0,-1*M.get_height()/2);
 				prog.setUniformValue("vue_modele", matrice_vue * matrice2);
 				prog.setAttributeValue(CouleurId, 0.7, 0, 0);  // met la couleur
@@ -42,7 +42,7 @@ void VueOpenGL::dessine(MagnetE const& M )
 		matrice.setToIdentity();
 		//matrice.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
     matrice.translate((M.get_position()).get_x(),(M.get_position()).get_y(),(M.get_position()).get_z());
-		matrice.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
+		if(axer != 0) matrice.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
 
 		//matrice.scale(M.get_radius(),M.get_radius(),M.get_height()/2);
 //matrice.rotate(-90,1,0,0);
@@ -139,17 +139,24 @@ void VueOpenGL::dessine(Mediumi const& M){
 }
 
 void VueOpenGL::dessine(Cylinder const& c){
-	Vecteur3D axer(c.get_vecteur_1()^Vecteur3D(0,0,1));
-	double angle= acos((c.get_vecteur_1()*Vecteur3D(1,0,0))/((c.get_vecteur_1()).norme()));
+
+	Vecteur3D axer(Vecteur3D(0,0,1)^(c.get_vecteur_1()).normalise());
+	double angle= acos((c.get_vecteur_1()*Vecteur3D(0,0,1))/((c.get_vecteur_1()).norme()));
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	QMatrix4x4 matrice;
-	std::cout << "angle:" << axer << angle <<'\n';
+	std::cout << "angle:" << axer << angle <<(c.get_vecteur_1()).norme()<< "produ"<< c.get_vecteur_1()*Vecteur3D(0,0,1)<<'\n';
+	std::cout << "2 vectors:" << c.get_vecteur_1()<< Vecteur3D(0,0,1)<<'\n';
 
 
 	matrice.translate((c.get_position()).get_x(),(c.get_position()).get_y(),(c.get_position()).get_z());
-matrice.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
-	//matrice.rotate(90,1,0,0);
+
+	//matrice.rotate(-90,0,0,1);
+	//matrice.rotate(-90,1,0,0);
+	if(axer != 0) matrice.rotate(1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
+	//matrice.rotate(-90,1,0,0);
+	//matrice.rotate(-90,1,0,0);
+
 	//matrice.scale(c.get_radius()); //changer scale
 	GLCylinder cylinderm;
 	prog.setUniformValue("vue_modele", matrice_vue * matrice);

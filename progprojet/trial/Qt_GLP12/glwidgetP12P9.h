@@ -40,7 +40,11 @@ private:
   // Méthodes de gestion d'évènements
   virtual void keyPressEvent(QKeyEvent* event) override;
   virtual void timerEvent(QTimerEvent* event)  override;
+	virtual void mousePressEvent(QMouseEvent* event) override;
+	virtual void mouseMoveEvent(QMouseEvent* event)  override;
 
+	// position de la souris
+	QPointF lastMousePosition;
   // Méthodes de gestion interne
   void pause();
 
@@ -53,7 +57,7 @@ private:
   // pour faire évoluer les objets avec le bon "dt"
   QTime chronometre;
 	std::vector<std::unique_ptr<Systeme>> system_tab;
-	SystemeP12 sysm;
+	SystemeP9 sysm;
 
 };
 
