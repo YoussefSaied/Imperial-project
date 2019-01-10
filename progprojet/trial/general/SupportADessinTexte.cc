@@ -7,6 +7,7 @@
 #include "SystemeP9.h"
 #include "SystemeP12.h"
 #include "Brique.h"
+#include "Dodec.h"
 #include "Sphere.h"
 #include "Cylinder.h"
 #include "Magnet.h"
@@ -58,6 +59,11 @@ void SupportADessinTexte :: dessine(Brique const& b)
         d.dessine();
     }
 }
+void SupportADessinTexte :: dessine(Dodec const& d)
+{
+d.display(cout);
+}
+
 void SupportADessinTexte :: dessine(Cylinder const& c)
 {
     c.display(cout);

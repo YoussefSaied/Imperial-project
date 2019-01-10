@@ -5,6 +5,7 @@ class SystemeP12;
 class Dalle;
 class Sphere;
 class Brique;
+class Dodec;
 class Cylinder;
 class Mediumi;
 class Magnet;
@@ -23,6 +24,7 @@ public:
     virtual void dessine(Dalle const& d) = 0;
     virtual void dessine(Sphere const& s) = 0;
     virtual void dessine(Brique const& b) = 0;
+    virtual void dessine(Dodec const& d) = 0;
     virtual void dessine(Mediumi const& M)= 0;
     virtual void dessine(Cylinder const& c) = 0;
 		//virtual void dessine(Magnet const& M) = 0;

@@ -19,6 +19,7 @@ public:
     virtual void dessine(Dalle const& d) override;
     virtual void dessine(Sphere const& s)override;
     virtual void dessine(Brique const& b) override;
+		virtual void dessine(Dodec const& d) override;
 	virtual void dessine(Mediumi const& M)override;
 	virtual void dessine(Cylinder const& c) override;
 	//virtual void dessine(Magnet const& M) override;

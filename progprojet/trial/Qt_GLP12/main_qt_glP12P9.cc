@@ -10,6 +10,7 @@
 #include <vector>
 #include "Sphere.h"
 #include "Brique.h"
+#include "Dodec.h"
 #include "Cylinder.h"
 #include <iostream>
 using namespace std;
@@ -31,6 +32,7 @@ int main(int argc, char* argv[])
 		Cylinder c1(Position(0,10,0),Vecteur3D(7,7,0),1,1);
 		Cylinder c2(Position(10,0,0),Vecteur3D(7,0,0),1,1);
 		Cylinder c3(Position(0,0,10),Vecteur3D(0,0,1),1,1);
+		Dodec dode(Vecteur3D(0,0,0), 1,Vecteur3D(0,0,1), false);
 		w.addMagnet(M1);
 		w.addMagnet(M2);
 		w.addMagnet(M3);
@@ -39,10 +41,11 @@ int main(int argc, char* argv[])
 		w.addMagnet(M6);
 		w.addMagnet(M7);
 		w.addMagnet(M8);
-		w.addObstacle(b);
+		//w.addObstacle(b);
 		w.addObstacle(c1);
 		w.addObstacle(c2);
 		w.addObstacle(c3);
+		w.addObstacle(dode);
 		//w.addObstacle(dalle_obstacled);
 		//w.addObstacle((b.dalle6())[3]);
 		//w.addObstacle((b.dalle6())[4]);

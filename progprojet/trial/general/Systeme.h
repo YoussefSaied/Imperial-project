@@ -10,6 +10,7 @@
 #include "Vecteur3D.h"
 #include "Mediumi.h"
 #include "Sphere.h"
+#include "Dodec.h"
 #include "Magnet.h"
 #include "MagnetE.h"
 #include "MagnetEO.h"
@@ -29,14 +30,13 @@ public:
 	// methodes
 
 
-	virtual double evolue1(double dt=0.001)=0;
+		virtual double evolue1(double dt=0.001)=0;
 
     virtual std:: ostream& display(std:: ostream& c) const = 0;
 
     virtual void addMagnet(Magnet const& new_Magnet) = 0 ;
 
     void ajouteObstacle(Obstacle const& nouveau_obstacle);
-
 
     void ajouteMediumi(Mediumi const& nouveau_mediumi);
 
@@ -45,7 +45,6 @@ public:
     //virtual std::unique_ptr<Systeme> P9toP12() const =0;
 
     //virtual std::unique_ptr<Systeme> P12toP9() const =0;
-
 
 		Dalle notre_Dalle;
 

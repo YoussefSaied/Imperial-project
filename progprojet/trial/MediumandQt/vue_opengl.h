@@ -20,6 +20,7 @@ public:
     virtual void dessine(Dalle const& d) override;
     virtual void dessine(Sphere const& s) override;
     virtual void dessine(Brique const& b) override;
+    virtual void dessine(Dodec const& d) override;
     virtual void dessine(Mediumi const& M);
     virtual void dessine(Cylinder const& c) override;
 		virtual void dessine(MagnetE const& M ) override;
@@ -43,6 +44,8 @@ public:
 
     // méthode utilitaire offerte pour simplifier
     void dessineCube(QMatrix4x4 const& point_de_vue = QMatrix4x4() );
+    void dessineDodec(QMatrix4x4 const& point_de_vue = QMatrix4x4() );
+    void dessinePenta(QMatrix4x4 const& point_de_vue = QMatrix4x4() ,Vecteur3D x1= Vecteur3D(0,0,0),Vecteur3D x2= Vecteur3D(0,0,0),Vecteur3D x3= Vecteur3D(0,0,0),Vecteur3D x4= Vecteur3D(0,0,0),Vecteur3D x5= Vecteur3D(0,0,0));
     void dessineDalle (QMatrix4x4 const& point_de_vue, Dalle dalle, double x=1.0, double y=1.0,double z=0.0);
     void dessinePlan (QMatrix4x4 const& point_de_vue, Plan p);
     void dessineCross (QMatrix4x4 const& point_de_vue, Vecteur3D v);
