@@ -176,7 +176,6 @@ void VueOpenGL::dessine(Cylinder const& c){
 	//matrice.rotate(-90,1,0,0);
 	if(axer != 0) matrice.rotate(1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
 	//matrice.rotate(-90,1,0,0);
-	//matrice.rotate(-90,1,0,0);
 
 	//matrice.scale(c.get_radius()); //changer scale
 	GLCylinder cylinderm;
