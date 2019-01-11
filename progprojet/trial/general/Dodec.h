@@ -21,7 +21,7 @@ class Dodec: public Obstacle{
 	std:: unique_ptr<Dodec> cloneMe() const;
 	virtual std::unique_ptr<Obstacle> copie() const override;
 	virtual std::ostream& display(std::ostream& sortie) const override{ sortie<<"Dodecahedron with edge:"<<edge; return sortie;};
-	std::vector<Vecteur3D> vertipositions() const ;
+	std::vector<std::vector<Vecteur3D>> vertipositions() const ;
 
 protected:
 	Vecteur3D vecteur_1;

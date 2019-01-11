@@ -25,6 +25,7 @@ SOURCES += \
     ../general/Aleatoire.cc \
     ../general/Magnet.cc \
     ../general/MagnetE.cc \
+    ../general/MagnetEO.cc \
     ../general/Plan.cc \
     ../general/Dalle.cc \
     ../general/Mediumi.cc \

@@ -30,11 +30,24 @@ Vecteur3D Dodec:: PointPlusProche(Vecteur3D const& x_i) const
     return Vecteur3D();
 }
 
-vector<Vecteur3D> Dodec:: vertipositions() const
+vector<vector<Vecteur3D>> Dodec:: vertipositions() const
 {
-	vector<Vecteur3D> vp; //vertixes positions
+	vector<vector<Vecteur3D>> vp; //vertixes positions
 	double a= (1+ sqrt(5))/2;
-	for(int i =-1; i<2; i+=2){
+	vp.push_back({Vecteur3D(1/a,0,a),Vecteur3D(-1/a,0,a),Vecteur3D(-1,-1,1),Vecteur3D(0,-a,1/a),Vecteur3D(1,-1,1)});
+	vp.push_back({Vecteur3D(-1,-1,1),Vecteur3D(-a,-1/a,0),Vecteur3D(-1,-1,-1),Vecteur3D(0,-a,-1/a),Vecteur3D(0,-a,1/a)});
+	vp.push_back({Vecteur3D(0,-a,1/a),Vecteur3D(0,-a,-1/a),Vecteur3D(1,-1,-1),Vecteur3D(a,-1/a,0),Vecteur3D(1,-1,1)});
+	vp.push_back({Vecteur3D(1/a,0,a),Vecteur3D(1,-1,1),Vecteur3D(a,-1/a,0),Vecteur3D(a,1/a,0),Vecteur3D(1,1,1)});
+	vp.push_back({Vecteur3D(1/a,0,-a),Vecteur3D(1,1,-1),Vecteur3D(a,1/a,0),Vecteur3D(a,-1/a,0),Vecteur3D(1,-1,-1)});
+	vp.push_back({Vecteur3D(1/a,0,-a),Vecteur3D(1,-1,-1),Vecteur3D(0,-a,-1/a),Vecteur3D(-1,-1,-1),Vecteur3D(-1/a,0,-a)});
+	vp.push_back({Vecteur3D(1/a,0,-a),Vecteur3D(1,1,-1),Vecteur3D(0,a,-1/a),Vecteur3D(-1,1,-1),Vecteur3D(-1/a,0,-a)});
+	vp.push_back({Vecteur3D(-1,-1,-1),Vecteur3D(-a,-1/a,0),Vecteur3D(-a,1/a,0),Vecteur3D(-1,1,-1),Vecteur3D(-1/a,0,-a)});
+	vp.push_back({Vecteur3D(-1,1,1),Vecteur3D(-a,1/a,0),Vecteur3D(-a,-1/a,0),Vecteur3D(-1,-1,1),Vecteur3D(-1/a,0,a)});
+	vp.push_back({Vecteur3D(-1,1,1),Vecteur3D(-1/a,0,a), Vecteur3D(1/a,0,a),Vecteur3D(1,1,1),Vecteur3D(0,a,1/a)});
+	vp.push_back({Vecteur3D(-1,1,1),Vecteur3D(0,a,1/a),Vecteur3D(0,a,-1/a),Vecteur3D(-1,1,-1),Vecteur3D(-a,1/a,0)});
+	vp.push_back({Vecteur3D(1,1,-1),Vecteur3D(0,a,-1/a),Vecteur3D(0,a,1/a),Vecteur3D(1,1,1),Vecteur3D(a,1/a,0)});
+
+	/*for(int i =-1; i<2; i+=2){
 		for(int j =-1; j<2; j+=2){
 			for(int k =-1; k<2; k+=2){
 				vp.push_back(Vecteur3D(i,j,k));
@@ -43,10 +56,11 @@ vector<Vecteur3D> Dodec:: vertipositions() const
 				vp.push_back(Vecteur3D(i*a,j/a,0));
 			}
 		}
-	}
+	}*/
 	//scaling
 	for(auto i : vp){
-		i*=edge;
+		for(auto j: i){
+			j*=edge;}
 	}
 
 	//rotate depending vecteur_1 (orientation vector)
@@ -59,12 +73,12 @@ vector<Vecteur3D> Dodec:: vertipositions() const
 	Vecteur3D axer1(vecteur_1^axer0);
 	double angle= acos((vecteur_1*axer0)/((vecteur_1.norme())*axer0.norme()));
 	for(auto i : vp){
-		i.rotate(angle,axer1);
+		for(auto j: i) j.rotate(angle,axer1);
 	}
 
 	//translate depending on position;
 	for(auto i : vp){
-		i+=position;
+		for(auto j: i) j+=position;
 	}
 	return vp;
 }

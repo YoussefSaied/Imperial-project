@@ -54,7 +54,7 @@ public:
 
     virtual void dessine() const override =0;
 
-    bool bouger(double temps); //update the coordinates and velocity of the Magnet after a period of time
+    virtual bool bouger(double temps); //update the coordinates and velocity of the Magnet after a period of time
 
     //method to display the Magnet's data
     std :: ostream& display(std :: ostream& sortie ) const;

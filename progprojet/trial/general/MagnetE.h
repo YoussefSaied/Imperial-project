@@ -22,7 +22,7 @@ public:
 
     static constexpr double sigma = 0.885;
 
-	static double get_sigma(){return sigma;}
+		static double get_sigma(){return sigma;}
 
   	double forceLJ(double x);
 
@@ -32,7 +32,7 @@ public:
 
     virtual void ajouteForce(Vecteur3D const& vector1) override;
 
-	std:: unique_ptr<MagnetE> cloneMe() const;
+		std:: unique_ptr<MagnetE> cloneMe() const;
 
     virtual std::unique_ptr<Magnet> copie() const override;
 		virtual void ajouteForce(Obstacle const& obstacle1){

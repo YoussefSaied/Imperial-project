@@ -75,6 +75,11 @@ Vecteur3D Vecteur3D :: GS1() const
     if ( (*this).normalise() != Vecteur3D(1,0,0) ) return Vecteur3D(1,0,0) - (Vecteur3D(1,0,0)*(*this)) * (*this)/norme2();
     else return Vecteur3D(0,1,0);
 }
+Vecteur3D Vecteur3D :: GS1(Vecteur3D excluded) const
+{
+    if( ((*this)^excluded) != 0 ) return (*this) - (excluded*(*this)) * excluded/(norme2());
+    else return Vecteur3D(1,10,100)^excluded;
+}
 
 Vecteur3D Vecteur3D :: normalise() const
 {

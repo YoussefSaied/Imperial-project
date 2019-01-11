@@ -58,39 +58,64 @@ void VueOpenGL::dessine(MagnetE const& M )
 
 void VueOpenGL::dessine(MagnetEO const& M )
 {
-		//rotate
-		Vecteur3D axer(M.get_moment()^Vecteur3D(1,0,0));
-		double angle= acos((M.get_moment()*Vecteur3D(1,0,0))/(M.get_moment().norme()));
+	//rotate
+		Vecteur3D axer(M.get_moment()^Vecteur3D(0,0,1));
+		double angle= acos((M.get_moment()*Vecteur3D(0,0,1))/(M.get_moment().norme()));
+		Vecteur3D axer2(M.get_axer()^Vecteur3D(0,0,1));
+		double angle2= acos((M.get_axer()*Vecteur3D(0,0,1))/(M.get_axer().norme()));
+
+		//std::cout << "angleMM:" << axer << angle <<-1*angle*180/M_PI<<" "<<axer.get_x()<<'\n';
+
+		//axe drawing
+		QMatrix4x4 matrice3;
+
+		//matrice2.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
+		matrice3.setToIdentity();
+		matrice3.translate((M.get_position()).get_x(),(M.get_position()).get_y(),(M.get_position()).get_z());
+		if(axer2 != 0) matrice3.rotate(-1*angle2*180/M_PI,axer2.get_x(),axer2.get_y(),axer2.get_z());
+		matrice3.translate(0,0,-0.5*M.get_axerheight());
+		prog.setUniformValue("vue_modele", matrice_vue * matrice3);
+		prog.setAttributeValue(CouleurId, 0.4, 0.25, 0.12);  // met la couleur
+		cylinder.set_dimension(M.get_axerradius(),M.get_axerheight());
+		cylinder.initialize();
+		cylinder.draw(prog, SommetId);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
+
+		QMatrix4x4 matrice2;
+
+		//matrice2.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
+		matrice2.setToIdentity();
+		matrice2.translate((M.get_position()).get_x(),(M.get_position()).get_y(),(M.get_position()).get_z());
+		if(axer != 0) matrice2.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
+		matrice2.translate(0,0,-1*M.get_height()/2);
+		prog.setUniformValue("vue_modele", matrice_vue * matrice2);
+		prog.setAttributeValue(CouleurId, 0.7, 0, 0);  // met la couleur
+		cylinder.set_dimension(M.get_radius(),M.get_height()/2);
+		cylinder.initialize();
+		cylinder.draw(prog, SommetId);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 		QMatrix4x4 matrice;
-
-    matrice.translate(0,0,M.get_height()/2);
+		matrice.setToIdentity();
+		//matrice.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
     matrice.translate((M.get_position()).get_x(),(M.get_position()).get_y(),(M.get_position()).get_z());
+		if(axer != 0) matrice.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
 
-		matrice.rotate(angle,axer.get_x(),axer.get_y(),axer.get_z());
-
-		GLCylinder cylinderm;
-		prog.setUniformValue("vue_modele", matrice_vue * matrice);
-		prog.setAttributeValue(CouleurId, 0.7, 0, 0);  // met la couleur
-		cylinderm.set_dimension(M.get_radius(),M.get_height()/2);
-		cylinderm.initialize();
-		cylinderm.draw(prog, SommetId);
+		//matrice.scale(M.get_radius(),M.get_radius(),M.get_height()/2);
+		//matrice.rotate(-90,1,0,0);
+		//prog.setUniformValue("vue_modele", matrice_vue * matrice);
+		//prog.setAttributeValue(CouleurId, 0, 0, 0.7);  // met la couleur
+		//cylinder.set_dimension(M.get_radius(),M.get_height()/2);
+		//cylinder.initialize();
+		//cylinder.draw(prog, SommetId);
+		dessineCylinder(matrice,0,0,0.7);
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
-		/*glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
-		QMatrix4x4 matrice2;
-		matrice2.translate(0,0,-1*M.get_height()/2);
-		matrice2.translate((M.get_position()).get_x(),(M.get_position()).get_y(),(M.get_position()).get_z());
-		matrice2.rotate(angle,axer.get_x(),axer.get_y(),axer.get_z());
 
-		GLCylinder cylinderm2;
-		prog.setUniformValue("vue_modele", matrice_vue * matrice2);
-		prog.setAttributeValue(CouleurId, 0, 0, 0.7);  // met la couleur
-		cylinderm2.set_dimension(M.get_radius(),M.get_height()/2);
-		cylinderm2.initialize();
-		cylinderm2.draw(prog, SommetId);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);*/
+
 
 }
 
