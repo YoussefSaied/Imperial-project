@@ -32,7 +32,7 @@ int main(int argc, char* argv[])
 		Cylinder c1(Position(0,10,0),Vecteur3D(7,7,0),1,1);
 		Cylinder c2(Position(10,0,0),Vecteur3D(7,0,0),1,1);
 		Cylinder c3(Position(0,0,10),Vecteur3D(0,0,1),1,1);
-		Dodec dode(Vecteur3D(0,0,0), 1,Vecteur3D(0,0,1), false);
+		Dodec dode(Vecteur3D(0,0,0), 4,Vecteur3D(0,0,1), false);
 		w.addMagnet(M1);
 		w.addMagnet(M2);
 		w.addMagnet(M3);

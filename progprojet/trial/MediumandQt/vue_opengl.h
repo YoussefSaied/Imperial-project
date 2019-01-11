@@ -46,6 +46,9 @@ public:
     void dessineCube(QMatrix4x4 const& point_de_vue = QMatrix4x4() );
     void dessineDodec(QMatrix4x4 const& point_de_vue = QMatrix4x4() );
     void dessinePenta(QMatrix4x4 const& point_de_vue = QMatrix4x4() ,Vecteur3D x1= Vecteur3D(0,0,0),Vecteur3D x2= Vecteur3D(0,0,0),Vecteur3D x3= Vecteur3D(0,0,0),Vecteur3D x4= Vecteur3D(0,0,0),Vecteur3D x5= Vecteur3D(0,0,0));
+    void dessinePentai(QMatrix4x4 const& point_de_vue = QMatrix4x4() ,Vecteur3D x1= Vecteur3D(0,0,0),Vecteur3D x2= Vecteur3D(0,0,0),Vecteur3D x3= Vecteur3D(0,0,0),Vecteur3D x4= Vecteur3D(0,0,0),Vecteur3D x5= Vecteur3D(0,0,0)){
+			dessinePenta(point_de_vue,x1,x5,x4,x3,x2);
+		}
     void dessineDalle (QMatrix4x4 const& point_de_vue, Dalle dalle, double x=1.0, double y=1.0,double z=0.0);
     void dessinePlan (QMatrix4x4 const& point_de_vue, Plan p);
     void dessineCross (QMatrix4x4 const& point_de_vue, Vecteur3D v);

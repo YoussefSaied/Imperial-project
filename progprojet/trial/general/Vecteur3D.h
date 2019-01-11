@@ -41,6 +41,8 @@ public :
 
     Vecteur3D GS1() const; //Procédé de Gram-Schmitt
 
+		Vecteur3D rotate(double angle, Vecteur3D axe) const; //rotation of angle about an axe
+
 
     // oppérateurs internes
     bool operator==(Vecteur3D const& autre) const;

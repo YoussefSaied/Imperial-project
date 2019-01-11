@@ -87,6 +87,14 @@ double Vecteur3D :: distance(Vecteur3D const& v2) const
     return ((*this) - v2).norme();
 }
 
+Vecteur3D Vecteur3D :: rotate(double angle, Vecteur3D axe) const
+{
+double x1= x* (cos(angle) + axe.x*axe.x*(1-cos(angle))) + y*(axe.x*axe.y*(1-cos(angle)) - axe.z*sin(angle)) + z*(axe.x*axe.z*(1-cos(angle)) + axe.y*sin(angle));
+double y1= y* (cos(angle) + axe.y*axe.y*(1-cos(angle))) + x*(axe.x*axe.y*(1-cos(angle)) + axe.z*sin(angle)) + z*(axe.y*axe.z*(1-cos(angle)) - axe.x*sin(angle));
+double z1= z* (cos(angle) + axe.z*axe.z*(1-cos(angle))) + x*(axe.x*axe.z*(1-cos(angle)) - axe.y*sin(angle)) + y*(axe.y*axe.z*(1-cos(angle)) + axe.x*sin(angle));
+return Vecteur3D(x1,y1,z1);
+}
+
 
 // operateurs interne
 

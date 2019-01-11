@@ -18,24 +18,22 @@ void VueOpenGL::dessine(MagnetE const& M )
 		Vecteur3D axer(M.get_moment()^Vecteur3D(0,0,1));
 		double angle= acos((M.get_moment()*Vecteur3D(0,0,1))/(M.get_moment().norme()));
 
-		std::cout << "angleMM:" << axer << angle <<-1*angle*180/M_PI<<" "<<axer.get_x()<<'\n';
+		//std::cout << "angleMM:" << axer << angle <<-1*angle*180/M_PI<<" "<<axer.get_x()<<'\n';
 
 
-				QMatrix4x4 matrice2;
+		QMatrix4x4 matrice2;
 
-
-
-			//	matrice2.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
-				matrice2.setToIdentity();
-				matrice2.translate((M.get_position()).get_x(),(M.get_position()).get_y(),(M.get_position()).get_z());
-				if(axer != 0) matrice2.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
-				matrice2.translate(0,0,-1*M.get_height()/2);
-				prog.setUniformValue("vue_modele", matrice_vue * matrice2);
-				prog.setAttributeValue(CouleurId, 0.7, 0, 0);  // met la couleur
-				cylinder.set_dimension(M.get_radius(),M.get_height()/2);
-				cylinder.initialize();
-				cylinder.draw(prog, SommetId);
-				glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+		//matrice2.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
+		matrice2.setToIdentity();
+		matrice2.translate((M.get_position()).get_x(),(M.get_position()).get_y(),(M.get_position()).get_z());
+		if(axer != 0) matrice2.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
+		matrice2.translate(0,0,-1*M.get_height()/2);
+		prog.setUniformValue("vue_modele", matrice_vue * matrice2);
+		prog.setAttributeValue(CouleurId, 0.7, 0, 0);  // met la couleur
+		cylinder.set_dimension(M.get_radius(),M.get_height()/2);
+		cylinder.initialize();
+		cylinder.draw(prog, SommetId);
+		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 
 		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -46,9 +44,9 @@ void VueOpenGL::dessine(MagnetE const& M )
 		if(axer != 0) matrice.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
 
 		//matrice.scale(M.get_radius(),M.get_radius(),M.get_height()/2);
-//matrice.rotate(-90,1,0,0);
+		//matrice.rotate(-90,1,0,0);
 		//prog.setUniformValue("vue_modele", matrice_vue * matrice);
-	//	prog.setAttributeValue(CouleurId, 0, 0, 0.7);  // met la couleur
+		//prog.setAttributeValue(CouleurId, 0, 0, 0.7);  // met la couleur
 		//cylinder.set_dimension(M.get_radius(),M.get_height()/2);
 		//cylinder.initialize();
 		//cylinder.draw(prog, SommetId);
@@ -128,11 +126,25 @@ void VueOpenGL::dessine(Brique const& b){
 }
 
 void VueOpenGL::dessine(Dodec const& d){
+	double a= (1+ sqrt(5))/2;
+	Vecteur3D v1(1/a,0,a);
+	Vecteur3D v2(-1/a,0,a);
+	Vecteur3D v3(-1,-1,1);
+	Vecteur3D o1(v1-v2);
+	Vecteur3D o2(v2-v3);
+
 	QMatrix4x4 matrice;
 	matrice.setToIdentity();
-	matrice.scale(d.get_edge());
+
 	matrice.translate((d.get_position()).get_x(),(d.get_position()).get_y(),(d.get_position()).get_z());
-	//matrice
+	matrice.scale(d.get_edge());
+	//rotation
+	Vecteur3D axer0(o1^o2);
+	Vecteur3D axer1(d.get_vecteur_1()^axer0);
+	double angle= acos((d.get_vecteur_1()*axer0)/((d.get_vecteur_1().norme())*axer0.norme()));
+
+	if(axer1 != 0) matrice.rotate(-1*angle*180/M_PI,axer1.get_x(),axer1.get_y(),axer1.get_z());
+
 	dessineDodec(matrice);
 }
 
@@ -154,8 +166,8 @@ void VueOpenGL::dessine(Cylinder const& c){
 
 	glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
 	QMatrix4x4 matrice;
-	std::cout << "angle:" << axer << angle <<(c.get_vecteur_1()).norme()<< "produ"<< c.get_vecteur_1()*Vecteur3D(0,0,1)<<'\n';
-	std::cout << "2 vectors:" << c.get_vecteur_1()<< Vecteur3D(0,0,1)<<'\n';
+	//std::cout << "angle:" << axer << angle <<(c.get_vecteur_1()).norme()<< "produ"<< c.get_vecteur_1()*Vecteur3D(0,0,1)<<'\n';
+	//std::cout << "2 vectors:" << c.get_vecteur_1()<< Vecteur3D(0,0,1)<<'\n';
 
 
 	matrice.translate((c.get_position()).get_x(),(c.get_position()).get_y(),(c.get_position()).get_z());
@@ -390,15 +402,15 @@ void VueOpenGL::dessineDodec (QMatrix4x4 const& point_de_vue)
 		dessinePenta(point_de_vue,Vecteur3D(1/a,0,a),Vecteur3D(-1/a,0,a),Vecteur3D(-1,-1,1),Vecteur3D(0,-a,1/a),Vecteur3D(1,-1,1)); //1
 		dessinePenta(point_de_vue,Vecteur3D(-1,-1,1),Vecteur3D(-a,-1/a,0),Vecteur3D(-1,-1,-1),Vecteur3D(0,-a,-1/a),Vecteur3D(0,-a,1/a)); //2
 		dessinePenta(point_de_vue,Vecteur3D(0,-a,1/a),Vecteur3D(0,-a,-1/a),Vecteur3D(1,-1,-1),Vecteur3D(a,-1/a,0),Vecteur3D(1,-1,1)); //3
-		dessinePenta(point_de_vue,Vecteur3D(1/a,0,a),Vecteur3D(1,1,1),Vecteur3D(a,1/a,0),Vecteur3D(a,-1/a,0),Vecteur3D(1,-1,1)); //4 needs to be flipped
+		dessinePenta(point_de_vue,Vecteur3D(1/a,0,a),Vecteur3D(1,-1,1),Vecteur3D(a,-1/a,0),Vecteur3D(a,1/a,0),Vecteur3D(1,1,1)); //4
 		dessinePenta(point_de_vue,Vecteur3D(1/a,0,-a),Vecteur3D(1,1,-1),Vecteur3D(a,1/a,0),Vecteur3D(a,-1/a,0),Vecteur3D(1,-1,-1));  //5
 		dessinePenta(point_de_vue,Vecteur3D(1/a,0,-a),Vecteur3D(1,-1,-1),Vecteur3D(0,-a,-1/a),Vecteur3D(-1,-1,-1),Vecteur3D(-1/a,0,-a)); //6
-		dessinePenta(point_de_vue,Vecteur3D(1/a,0,-a),Vecteur3D(1,1,-1),Vecteur3D(0,a,-1/a),Vecteur3D(-1,1,-1),Vecteur3D(-1/a,0,-a)); //7
+		dessinePentai(point_de_vue,Vecteur3D(1/a,0,-a),Vecteur3D(1,1,-1),Vecteur3D(0,a,-1/a),Vecteur3D(-1,1,-1),Vecteur3D(-1/a,0,-a)); //7
 		dessinePenta(point_de_vue,Vecteur3D(-1,-1,-1),Vecteur3D(-a,-1/a,0),Vecteur3D(-a,1/a,0),Vecteur3D(-1,1,-1),Vecteur3D(-1/a,0,-a)); //8
 		dessinePenta(point_de_vue,Vecteur3D(-1,1,1),Vecteur3D(-a,1/a,0),Vecteur3D(-a,-1/a,0),Vecteur3D(-1,-1,1),Vecteur3D(-1/a,0,a)); //9
-		dessinePenta(point_de_vue,Vecteur3D(-1,1,1),Vecteur3D(-1/a,0,a), Vecteur3D(1/a,0,a),Vecteur3D(1,1,1),Vecteur3D(0,a,1/a));  //10 needs to be flipped
-		dessinePenta(point_de_vue,Vecteur3D(-1,1,1),Vecteur3D(-a,1/a,0),Vecteur3D(-1,1,-1),Vecteur3D(0,a,-1/a),Vecteur3D(0,a,1/a)); //11
-		dessinePenta(point_de_vue,Vecteur3D(1,1,-1),Vecteur3D(0,a,-1/a),Vecteur3D(0,a,1/a),Vecteur3D(1,1,1),Vecteur3D(a,1/a,0)); //12 needs to be flipped
+		dessinePenta(point_de_vue,Vecteur3D(-1,1,1),Vecteur3D(-1/a,0,a), Vecteur3D(1/a,0,a),Vecteur3D(1,1,1),Vecteur3D(0,a,1/a));  //10
+		dessinePenta(point_de_vue,Vecteur3D(-1,1,1),Vecteur3D(0,a,1/a),Vecteur3D(0,a,-1/a),Vecteur3D(-1,1,-1),Vecteur3D(-a,1/a,0)); //11
+		dessinePenta(point_de_vue,Vecteur3D(1,1,-1),Vecteur3D(0,a,-1/a),Vecteur3D(0,a,1/a),Vecteur3D(1,1,1),Vecteur3D(a,1/a,0)); //12
 }
 void VueOpenGL::dessineDalle (QMatrix4x4 const& point_de_vue, Dalle dalle,double x, double y, double z)
 {
