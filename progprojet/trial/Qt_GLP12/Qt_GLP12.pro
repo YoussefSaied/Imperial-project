@@ -4,9 +4,8 @@ QMAKE_CXXFLAGS += -std=c++11
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = simulation1
-
 LIBS += -L../general -lgeneral
-LIBS += -L/usr/include/GL -lglut
+LIBS += -lopengl32
 PRE_TARGETDEPS += ../general/libgeneral.a
 
 INCLUDEPATH += ../general
