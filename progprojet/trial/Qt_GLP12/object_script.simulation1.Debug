@@ -1,6 +1,7 @@
 INPUT(
 ./debug\main_qt_glP12P9.o
 ./debug\glwidgetP12P9.o
+./debug\Window.o
 ./debug\glsphere.o
 ./debug\glcylinder.o
 ./debug\vue_opengl.o
@@ -16,4 +17,6 @@ INPUT(
 ./debug\Sphere.o
 ./debug\Vecteur3D.o
 ./debug\qrc_resource.o
+./debug\moc_glwidgetP12P9.o
+./debug\moc_Window.o
 );

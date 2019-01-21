@@ -18,9 +18,9 @@ int main(int argc, char * argv[])
 {
     QApplication a(argc, argv);
     Window w;
-    Magnet M1(Position(1, 0, 0), Vecteur3D(1, 0, 0));
-    Magnet M2(Position(0, 1, 0), Vecteur3D(0, 1, 0));
-    Magnet M3(Position(0, 0, 3), Vecteur3D(0, 0, 1));
+//    Magnet M1(Position(0, 0, 1), Vecteur3D(0, 0, 1));
+  //  Magnet M2(Position(0, 1, 0), Vecteur3D(0, 1, 0));
+    //Magnet M3(Position(1, 7, 1), Vecteur3D(0, 1, 0));
 
     /*MagnetE M2(Position(2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air);
      * MagnetE M3(Position(-2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air,1 , Vecteur3D(1,1,1));
@@ -40,14 +40,14 @@ int main(int argc, char * argv[])
     // All the magnets :D
     // int num = 0;
 
-    /*for (int i = 0; i < (dode.vertipositions()).size(); ++i) {
+    for (int i = 0; i < (dode.vertipositions()).size(); ++i) {
         int si = ((dode.vertipositions())[i]).size();
         for (int j = 0; j < si; ++j) {
             Vecteur3D p(0, 0, 0);
             p = ((dode.vertipositions())[i][j] + (dode.vertipositions())[i][(j + 1) % si]) / 2;
-            /*++num;
-               cout << i << "," << j << num << ":  ";
-               cout << p << endl;
+            //++num;
+              // cout << i << "," << j << num << ":  ";
+               //cout << p << endl;
             // For the axe
             Vecteur3D v1(0, 1, 0);
             Vecteur3D v2(0, 1, 0);
@@ -66,7 +66,7 @@ int main(int argc, char * argv[])
             Magnet M(p, axe);
             (w.glWidget)->addMagnet(M);
         }
-       }*/
+       }
 
     /*w.addMagnet(M2);
        w.addMagnet(M3);
@@ -79,10 +79,10 @@ int main(int argc, char * argv[])
     (w.glWidget)->addObstacle(c1);
     (w.glWidget)->addObstacle(c2);
     (w.glWidget)->addObstacle(c3);
-    // (w.glWidget)->addObstacle(dode);
-    (w.glWidget)->addMagnet(M1);
-    (w.glWidget)->addMagnet(M2);
-    (w.glWidget)->addMagnet(M3);
+    (w.glWidget)->addObstacle(dode);
+//    (w.glWidget)->addMagnet(M1);
+//    (w.glWidget)->addMagnet(M2);
+//    (w.glWidget)->addMagnet(M3);
     // w.addObstacle(dode);
     // w.addObstacle(dalle_obstacled);
     // w.addObstacle((b.dalle6())[3]);

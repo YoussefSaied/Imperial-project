@@ -148,6 +148,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent * event)
 
 //
 // ======================================================================
+
 void GLWidget::timerEvent(QTimerEvent * event)
 {
     Q_UNUSED(event);

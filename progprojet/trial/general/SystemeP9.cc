@@ -59,26 +59,17 @@ void SystemeP9:: evolue1(double dt)
 {
     double newdt(dt);
 
-<<<<<<< HEAD
-    for(size_t i(0); i<tab_ptr_Magnets.size()-1; ++i) {
+    for(size_t i(0); i<tab_ptr_Magnets.size(); ++i) {
         //ext. field
 //        tab_ptr_Magnets[i]->addTorque(H);
-        cout <<"torqueinit: " <<tab_ptr_Magnets[i]->torque<<endl;
         for(size_t j(0); j<tab_ptr_Magnets.size(); ++j) {
         //magnet interactions
-=======
-    for (size_t i(0); i < tab_ptr_Magnets.size() - 1; ++i) {
-        // ext. field
-        //        tab_ptr_Magnets[i]->addTorque(H);
-
-        for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
-            // magnet interactions
->>>>>>> 8371481fbd9f7dc609f50f17b008347ff2ae4654
+        if (i != j)
+        {
             tab_ptr_Magnets[i]->addTorque(tab_ptr_Magnets[j]);
             tab_ptr_Magnets[i]->addBfield(tab_ptr_Magnets[j]);
+          }
         }
-        cout <<"torquefin: " <<tab_ptr_Magnets[i]->torque<<endl;
-
         // Magnet movement
         tab_ptr_Magnets[i]->move(dt);
     }// fin for Magnet
