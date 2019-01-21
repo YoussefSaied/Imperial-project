@@ -8,8 +8,17 @@ using namespace std;
 void SystemeP9:: addMagnet(Magnet const& nouveau_Magnet )
 {
     // faire des tests de compatibilité
+    bool exists = 0;
+    for(auto const& ptr_Magnet : tab_ptr_Magnets)
+    {
+      if ((ptr_Magnet->position - nouveau_Magnet->position).distance() < 0.01)
+      {  exists = 1; }
+    }
+    if ( !exists)
+    {
     tab_ptr_Magnets.push_back(nouveau_Magnet.copie());
     (*(tab_ptr_Magnets.back())).set_support(support);
+    }
 }
 
 ostream& SystemeP9:: display(ostream& c) const

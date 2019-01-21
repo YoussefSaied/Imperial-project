@@ -6,9 +6,8 @@
 #include "Magnet.h"
 
 using namespace std;
-
-Magnet :: Magnet(Position const& position, SupportADessin* support, Vecteur3D axis, bool selected, double torque, double oldtorque, Vecteur3D Bfield,
-  double charge, double radius, double length, double mass, double angle, double omega, int rotations):
+Magnet :: Magnet(Position const& position, Vecteur3D axis, double charge, double mass, double radius, double length,  bool selected, double torque, double oldtorque, Vecteur3D Bfield,
+   double angle, double omega, int rotations,SupportADessin* support):
     Dessinable(position,support), axis(axis), torque(torque), Bfield(Bfield), oldtorque(oldtorque),radius(radius), length(length),mass(mass), angle(angle), omega(omega), rotations(rotations) {}
 
 

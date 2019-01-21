@@ -15,9 +15,9 @@ class Magnet : public Dessinable
 
 public:
     // constructeurs et destructeurs
-    Magnet(Position const& position,SupportADessin* support=&Texte1, Vecteur3D axis=Vecteur3D(0,0,1), bool selected=0, double torque=0, double oldtorque=0,
-      Vecteur3D Bfield=Vecteur3D(0,0,0), double charge = 1.0, double radius=0.1, double length = 1.0, double mass = 1.0,
-           double angle = 0, double omega = 0, int rotations=0);
+    Magnet(Position const& position, Vecteur3D axis=Vecteur3D(0,0,1), double charge = 1.0, double mass = 1.0,
+     double radius=0.1, double length = 1.0, bool selected=0, double torque=0, double oldtorque=0,
+      Vecteur3D Bfield=Vecteur3D(0,0,0), double angle = 0, double omega = 0, int rotations=0,SupportADessin* support=&Texte1);
     virtual ~Magnet() {}
 
     //derived attributes

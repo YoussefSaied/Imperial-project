@@ -17,7 +17,7 @@ class Systeme: public Dessinable
 public:
 
     // constructeurs et destructeurs
-    Systeme(SupportADessin * support = &Texte1, Medium m = air) : Dessinable(Position(), support),
+    Systeme(SupportADessin * support = &Texte1 ) : Dessinable(Position(), support),
         H(0, 0, 0)
     { }
 

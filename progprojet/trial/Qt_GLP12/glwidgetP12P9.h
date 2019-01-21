@@ -29,8 +29,9 @@ public:
     }
 
     void addMagnet(Magnet const& nouveau_Magnet)
-    {
+    {    
         system_tab[0]->addMagnet(nouveau_Magnet);
+
     }
 
     void addObstacle(Obstacle const& nouveau_obstacle)
@@ -38,7 +39,7 @@ public:
         system_tab[0]->ajouteObstacle(nouveau_obstacle);
     }
 
-    
+
 
     // system
     std::vector<std::unique_ptr<Systeme> > system_tab;
