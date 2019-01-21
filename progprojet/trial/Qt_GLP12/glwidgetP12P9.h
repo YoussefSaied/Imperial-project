@@ -29,17 +29,14 @@ public:
     }
 
     void addMagnet(Magnet const& nouveau_Magnet)
-    {    
+    {
         system_tab[0]->addMagnet(nouveau_Magnet);
-
     }
 
     void addObstacle(Obstacle const& nouveau_obstacle)
     {
         system_tab[0]->ajouteObstacle(nouveau_obstacle);
     }
-
-
 
     // system
     std::vector<std::unique_ptr<Systeme> > system_tab;
@@ -98,7 +95,16 @@ public slots:
     {
         // system_tab[0]->selected(mn);
         int siz(((system_tab[0])->tab_ptr_Magnets).size());
+        (system_tab[0]->selectedmagnet) = mn;
         emit magnetselected(mn % siz);
+    }
+
+    void changeangle(double angle)
+    {
+        int mn = (system_tab[0]->selectedmagnet);
+        int siz(((system_tab[0])->tab_ptr_Magnets).size());
+        ((system_tab[0])->tab_ptr_Magnets)[mn]->angle = angle;
+        emit anglechanged((system_tab[0]->selectedmagnet) % siz);
     }
 
 signals:
@@ -107,6 +113,7 @@ signals:
     void ZHChanged(double newz);
     void magnetselected(int mn);
     void evolved(double dt);
+    void anglechanged(double angle);
 
 
     // objets à dessiner, faire évoluer

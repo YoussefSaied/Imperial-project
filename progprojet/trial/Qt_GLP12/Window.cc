@@ -41,8 +41,8 @@ Window::Window()
     connect(magnetselector, SIGNAL(valueChanged(int)), glWidget, SLOT(selectmagnet(int)));
     connect(glWidget, SIGNAL(magnetselected(int)), this, SLOT(setmagnetT(int)));
 
-    // connect(angleselector, SIGNAL(valueChanged(int)), glWidget, SLOT(changeangle(double)));
-    // connect(glwidget, SIGNAL(anglechanged(double)), this, SLOT(setangle(double)))
+    connect(angleselector, SIGNAL(valueChanged(double)), glWidget, SLOT(changeangle(double)));
+    connect(glwidget, SIGNAL(anglechanged(int)), this, SLOT(setangle(int)))
     QGridLayout * mainLayout = new QGridLayout;
     mainLayout->addWidget(glWidget, 0, 0);
     mainLayout->addWidget(labelO, 9, 0);

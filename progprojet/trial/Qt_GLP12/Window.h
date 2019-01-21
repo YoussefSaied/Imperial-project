@@ -50,6 +50,8 @@ public slots:
         labels->setText(qstr);
     }
 
+    void setangleT(int mn){ setmagnetT(mn); }
+
 public:
     QSlider * xSlider;
     QSlider * ySlider;
