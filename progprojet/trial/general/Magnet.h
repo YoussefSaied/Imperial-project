@@ -36,6 +36,7 @@ public:
       {return planevec1()*cos(angle) + planevec2()*sin(angle);}
     Vecteur3D moment() const
       {return orientation()*chargeN()*length;}
+
     double Hamiltonian()
       {return moment() * Bfield;}
     //charge attibutes

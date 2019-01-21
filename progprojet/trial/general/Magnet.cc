@@ -17,7 +17,8 @@ ostream& Magnet:: display(std :: ostream& c) const
       << "axis: " << axis << endl
       << "Rotations: " << rotations << endl
       << "Torque: " << oldtorque << endl
-      << "acc: " << alpha() << endl;
+      << "acc: " << alpha() << endl
+      << "Hamiltonian: " << Hamiltonian() << endl
     return c;
 }
 
