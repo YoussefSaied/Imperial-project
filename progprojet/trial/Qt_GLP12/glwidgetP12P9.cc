@@ -146,11 +146,12 @@ void GLWidget::mouseMoveEvent(QMouseEvent * event)
     }
 }
 
+//
 // ======================================================================
 void GLWidget::timerEvent(QTimerEvent * event)
 {
     Q_UNUSED(event);
-    if (!system_tab.empty()) dt = system_tab.back()->evolue1(dt);
+    if (!system_tab.empty()) system_tab.back()->evolue1(dt);
     time += dt;
     emit evolved(dt);
     updateGL();

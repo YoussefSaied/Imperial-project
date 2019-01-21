@@ -30,7 +30,6 @@ HEADERS += \
     ../general/SupportADessinTexte.h \
     ../general/Systeme.h \
     ../general/SystemeP9.h \
-    ../general/SystemeP12.h \
     ../general/Aleatoire.h \
     ../general/Source.h \
     ../general/Obstacle.h \
@@ -42,8 +41,6 @@ HEADERS += \
     ../general/GrainLJ.h \
     ../general/GrainLJUn.h \
     ../general/GrainLJDeux.h \
-    ../general/Medium.h \
-    ../general/Mediumi.h \
     ../general/Vecteur3D.h
 
 RESOURCES += \

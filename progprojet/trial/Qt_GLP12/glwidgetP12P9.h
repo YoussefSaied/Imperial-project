@@ -6,7 +6,6 @@
 #include "vue_opengl.h"
 #include "Systeme.h"
 #include "SystemeP9.h"
-#include "SystemeP12.h"
 
 class GLWidget : public QGLWidget
 
@@ -39,10 +38,7 @@ public:
         system_tab[0]->ajouteObstacle(nouveau_obstacle);
     }
 
-    void ajouteMediumi(Mediumi const& nouveau_mediumi)
-    {
-        system_tab[0]->ajouteMediumi(nouveau_mediumi);
-    }
+    
 
     // system
     std::vector<std::unique_ptr<Systeme> > system_tab;

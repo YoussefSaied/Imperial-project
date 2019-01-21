@@ -12,8 +12,8 @@ SOURCES += \
     ../general/GrainLJ.cc \
     ../general/Plan.cc \
     ../general/Brique.cc \
-    ../general/Dalle.cc 
-    
+    ../general/Dalle.cc
+
 HEADERS += \
     ../general/SupportADessinTexte.h \
     ../general/dessinable.h \
@@ -26,5 +26,4 @@ HEADERS += \
     ../general/GrainLJ.h \
     ../general/GrainLJUn.h \
     ../general/GrainLJDeux.h \
-    ../general/Medium.h \
     ../general/Vecteur3D.h

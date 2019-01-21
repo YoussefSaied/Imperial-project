@@ -2,8 +2,6 @@
 #include "glwidgetP12P9.h"
 #include "Systeme.h"
 #include "SystemeP9.h"
-#include "SystemeP12.h"
-#include "Medium.h"
 #include "Vecteur3D.h"
 #include "Plan.h"
 #include "Dalle.h"
@@ -20,7 +18,7 @@ int main(int argc, char * argv[])
 {
     QApplication a(argc, argv);
     Window w;
-    MagnetEO M1(Position(2, 2, 0), 0.2, 1);
+		Magnet M1(Position(2,2,0));
 
     /*MagnetE M2(Position(2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air);
      * MagnetE M3(Position(-2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air,1 , Vecteur3D(1,1,1));

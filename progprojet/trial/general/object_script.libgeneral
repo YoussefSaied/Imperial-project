@@ -1,0 +1,13 @@
+CREATE libgeneral.a
+ADDMOD Systeme.o
+ADDMOD SystemeP9.o
+ADDMOD Aleatoire.o
+ADDMOD Plan.o
+ADDMOD Dalle.o
+ADDMOD Brique.o
+ADDMOD Magnet.o
+ADDMOD Vecteur3D.o
+ADDMOD Cylinder.o
+ADDMOD Sphere.o
+ADDMOD SupportADessinTexte.o
+SAVE

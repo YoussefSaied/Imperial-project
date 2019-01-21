@@ -4,102 +4,67 @@
 #include "Vecteur3D.h"
 #include <cmath>
 #include "Magnet.h"
-#include "Obstacle.h"
 
 using namespace std;
 
-
-Magnet :: Magnet(Position const& position, SupportADessin * support, Vitesse const& vitesse, double masse_volumique,
-  double rayon, Vecteur3D const& force, Medium medium, double height, Vecteur3D moment) :
-    Dessinable(position, support), velocity(vitesse), masse_volumique(masse_volumique), radius(rayon), force(force),
-    medium(&medium), height(height), moment(moment){ }
+Magnet :: Magnet(Position const& position, SupportADessin* support, Vecteur3D axis, bool selected, double torque, double oldtorque, Vecteur3D Bfield,
+  double charge, double radius, double length, double mass, double angle, double omega, int rotations):
+    Dessinable(position,support), axis(axis), torque(torque), Bfield(Bfield), oldtorque(oldtorque),radius(radius), length(length),mass(mass), angle(angle), omega(omega), rotations(rotations) {}
 
 
 ostream& Magnet:: display(std :: ostream& c) const
 {
-    c << "Position: " << position << endl
-      << "Velocity: " << velocity << endl
-      << "Force: " << force << endl
-      << "Moment: " << moment << endl
-      << "Radius: " << radius << endl << "Height: " << height << endl
-      << "Volume: " << get_volume() << endl
-      << "Mass: " << calc_mass() << endl;
+    c<<"[ Position: "  << position
+     <<",axis: "       << axis
+     <<",Rotations: "  << rotations
+     <<",Torque: "<< oldtorque
+     <<",acc: " << alpha()
+     <<"]"<<endl;
     return c;
 }
 
-void Magnet :: set_medium(Medium medium)
+
+//plane vectors -- don't need normalise but ok
+Vecteur3D Magnet :: planevec1() const
 {
-    (*this).medium = &medium;
+  if (axis != Vecteur3D(1,0,0))
+    {return (axis ^ Vecteur3D(1,0,0)).normalise();}
+  else
+    {return (axis ^ Vecteur3D(0,1,0)).normalise();}
+}
+Vecteur3D Magnet :: planevec2() const
+{
+return (axis ^ planevec1()).normalise();
 }
 
-Medium * Magnet :: get_medium() const
-{
-    return medium;
+//Torque from magnet2
+void Magnet :: addTorque(unique_ptr<Magnet> const& Magnet2)
+{   Vecteur3D rNN = Magnet2->positionN() - positionN(); //Npole i Npole j
+    torque += ((length/2)*10e-7)*chargeN()* Magnet2->chargeN() * (orientation() ^ rNN).norme()/(rNN.norme()*rNN.norme()*rNN.norme());
+    Vecteur3D rNS = Magnet2->positionS() - positionN(); //Npole i Spole j
+    torque += ((length/2)*10e-7)*chargeN()* Magnet2->chargeS() * (orientation() ^ rNS).norme()/(rNS.norme()*rNS.norme()*rNS.norme());
+    Vecteur3D rSN = Magnet2->positionN() - positionS(); //Spole i Npole j
+    torque += ((length/2)*10e-7)*chargeS()* Magnet2->chargeN() * (orientation() ^ rSN).norme()/(rSN.norme()*rSN.norme()*rSN.norme());
+    Vecteur3D rSS = Magnet2->positionS() - positionS();
+    torque += ((length/2)*10e-7)*chargeS()* Magnet2->chargeS() * (-1*orientation() ^ rSS).norme()/(rSS.norme()*rSS.norme()*rSS.norme());
 }
-
-double Magnet :: get_lambda() const
+void Magnet :: addTorque(Vecteur3D extfield)
 {
-    if (velocity <= 80.0 / 3.0 / radius * ((*medium).Nu()) / ((*medium).Rho())) {
-        return 6.0 * M_PI * radius * ((*medium).Nu());
-    } else { return ((9.0 * M_PI / 40.0 * radius * radius * (*medium).Rho()) * velocity).norme(); }
+    torque = (moment() ^ extfield).norme();
 }
-
-Position Magnet :: get_position() const
+void Magnet :: move(double delta_t)
 {
-    return position;
+  angle += delta_t * omega + 1/2*delta_t*delta_t*alpha();
+  double zeta = (delta_t * gamma())/(2*inertia());
+  omega = (1/(1+zeta))*(omega*(1-zeta)) + (zeta/gamma())*(oldtorque + torque);
+  oldtorque = torque;
+  torque = 0.0;
+  Bfield = Vecteur3D(0,0,0);
 }
-
-double Magnet:: get_volume() const
+void Magnet :: addBfield(unique_ptr<Magnet> const& Magnet2)
 {
-    return (M_PI) *radius * radius * height;
-}
-
-Vecteur3D Magnet:: get_velocity() const
-{
-    return velocity;
-}
-
-void Magnet:: set_velocity(Vecteur3D newV)
-{
-    velocity = newV;
-}
-
-void Magnet:: set_velocity(double newVx, double newVy, double newVz)
-{
-    velocity.set_coord(newVx, newVy, newVz);
-}
-
-void Magnet :: set_radius(double newR)
-{
-    if (newR <= 1e-6) {
-        radius = 1e-6;
-    } else {
-        radius = newR;
-    }
-}
-
-double Magnet :: get_radius() const
-{
-    return radius;
-}
-
-// Your part here:
-
-
-// method to add force
-void Magnet :: ajouteForce()
-{
-    /*force+= (((calc_mass())*g - (get_lambda())*velocity) + (-1* (get_volume()*g*((*medium).Rho())))
-            );*/
-}
-
-// method to update the coordinates and velocity of the Magnet after a specified period of time
-bool Magnet:: bouger(double temps)
-{
-    velocity += (((temps / (calc_mass())) * (force)));
-
-    position += (temps * velocity);
-
-    force = 0.0;
-    return (temps * velocity) > radius / 2;
+  Vecteur3D rN = Magnet2->positionN() - position;
+  Vecteur3D rS = Magnet2->positionS() - position;
+  Bfield += 10e-7 * Magnet2->chargeN() * rN/(rN.norme()*rN.norme());
+  Bfield += 10e-7 * Magnet2->chargeS() * rS/(rS.norme()*rS.norme());
 }

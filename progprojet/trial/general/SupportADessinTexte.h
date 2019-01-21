@@ -13,18 +13,15 @@ public:
 
     //methodes
 
-  	virtual void dessine(SystemeP12 const& S ) override;
     virtual void dessine(SystemeP9 const& S ) override;
     virtual void dessine(Plan const& P) override;
     virtual void dessine(Dalle const& d) override;
     virtual void dessine(Sphere const& s)override;
     virtual void dessine(Brique const& b) override;
 		virtual void dessine(Dodec const& d) override;
-	virtual void dessine(Mediumi const& M)override;
 	virtual void dessine(Cylinder const& c) override;
 	//virtual void dessine(Magnet const& M) override;
-	virtual void dessine(MagnetE const& M) override;
-	virtual void dessine(MagnetEO const& M) override;
+	virtual void dessine(Magnet const& M) override;
 
 private:
     std::ostream& flot;
