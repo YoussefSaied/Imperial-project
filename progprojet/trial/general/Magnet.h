@@ -2,7 +2,6 @@
 #define _USE_MATH_DEFINES
 #include "Vecteur3D.h"
 #include <iostream>
-#include "Medium.h"
 #include "Dessinable.h"
 #include "SupportADessin.h"
 #include "Obstacle.h"
@@ -16,77 +15,87 @@ class Magnet : public Dessinable
 
 public:
     // constructeurs et destructeurs
-    Magnet(Position const& position, SupportADessin* support, Vitesse const& vitesse, double masse_volumique, double rayon,
-          Vecteur3D const& force = Vecteur3D(), Medium medium = water,double height = 1.0, Vecteur3D moment=Vecteur3D(1,0,0));
+    Magnet(Position const& position,SupportADessin* support=&Texte1, Vecteur3D axis=Vecteur3D(0,0,1), bool selected=0, double torque=0, double oldtorque=0,
+      Vecteur3D Bfield=Vecteur3D(0,0,0), double charge = 1.0, double radius=0.1, double length = 1.0, double mass = 1.0,
+           double angle = 0, double omega = 0, int rotations=0);
     virtual ~Magnet() {}
 
+    //derived attributes
+    double inertia() const
+      {return mass*length*length/12;}
+    double gamma() const
+        {return inertia();}
+    double alpha() const//angular acceleration
+      {return (1/inertia())*torque - gamma()*omega;}
 
-    // manipulateurs
 
-    void set_medium(Medium medium = water);
+    //orientation attributes (unit vectors)
+    Vecteur3D planevec1() const;
+    Vecteur3D planevec2() const; //check they form a right handed coord system -- should be fine
+    Vecteur3D orientation() const
+      {return planevec1()*cos(angle) + planevec2()*sin(angle);}
+    Vecteur3D moment() const
+      {return orientation()*chargeN()*length;}
+    double Hamiltonian()
+      {return moment() * Bfield;}
+    //charge attibutes
+    Vecteur3D positionN()
+      {return position + orientation() * length/2;}
+    Vecteur3D positionS()
+      {return position - orientation() * length/2;}
+    double chargeN() const
+      {return charge;}
+    double chargeS() const
+      {return charge*-1;}
 
-    Medium* get_medium() const; // retourne le medium dans le quelle le Magnet est
-
-    double get_volume() const;
-
-    double get_lambda()const;
-
-    Position get_position() const;
-
-    Vitesse get_velocity() const;
-
-    void set_velocity(Vitesse newV);
-
-    void set_velocity(double newVx, double newVy, double newVz);
-
-    void set_radius(double newR);
-
-    double get_radius() const;
+      //axis
+    double get_axerheight() const {return radius*6;}
+    double get_axerradius() const {return length/20;}
 
     void set_support(SupportADessin* s){ support = s; }
 
-		Vecteur3D get_moment() const {return moment;}
+		double get_length() const {return length;}
 
-		double get_height() const {return height;}
+    virtual void addTorque(std::unique_ptr<Magnet> const& Magnet2);
+    virtual void addBfield(std::unique_ptr<Magnet> const& Magnet2);
+    virtual void addTorque(Vecteur3D extfield);
+    virtual void addBfield(Vecteur3D extfield) {Bfield = extfield;}
+    virtual void move(double delta_t);
+    virtual void dessine() const override {if (support != nullptr) support->dessine(*this);}
 
 
     // methodes
 
-    virtual void dessine() const override =0;
-
-    virtual bool bouger(double temps); //update the coordinates and velocity of the Magnet after a period of time
 
     //method to display the Magnet's data
     std :: ostream& display(std :: ostream& sortie ) const;
 
-    // method to calculate the mass of the Magnet
-    double calc_mass()const
-    {
-        return (get_volume()*masse_volumique);
-    }
-
-	// methodes pour ajouter les force qui agissent sur le Magnet, ces forces viennes des autres Magnets, des obstacles, gravité, archimède...
-    virtual void ajouteForce();
-
-    virtual Vecteur3D ajouteForce(std:: unique_ptr<Magnet> const& Magnet2) =0;
-
-    virtual void ajouteForce(std:: unique_ptr<Obstacle> const& obstacle1) =0;
-    virtual void ajouteForce(Obstacle const& obstacle1) =0;
-
-    virtual void ajouteForce(Vecteur3D const& vector1) = 0;
-
     // copie polymorphique
-    virtual std::unique_ptr<Magnet> copie() const = 0;
+    std:: unique_ptr<Magnet> cloneMe() const { return std::unique_ptr<Magnet>(new Magnet(*this)); }
 
-protected:
-    Vitesse velocity;
-    double masse_volumique;
+    virtual std::unique_ptr<Magnet> copie() const { return cloneMe(); }
+
+
+    double torque;
+    double oldtorque;
+    Vecteur3D Bfield;
     double radius;
-		double height;
-    Vecteur3D force;
-    Medium* medium;
-		Vecteur3D moment;
-
-
-
+		double length;
+    double omega;
+    double charge;
+    double angle;
+    double mass;
+    Vecteur3D axis;
+    int rotations;
+    bool selected;
 };
+/*for rotor model (separation >> length of magnets):
+      solve 2nd order ODE for alpha with Verlet using a linear damping coef.
+      approximate interactions to be exclusive to nearest neighbour
+      determine nearest neighbour??
+for dumbbell model (separation ~ length of magnets):
+      solve 2nd order ODE for alpha with Verlet using a linear damping coef.
+
+  dumbbell model is probably easier to implement initially as it does not require
+  us to find nearest neighbours, however computation might be slow
+*/

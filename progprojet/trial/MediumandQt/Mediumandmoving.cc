@@ -1,7 +1,6 @@
 #include <QApplication>
 #include "glwidget.h"
 #include "Systeme.h"
-#include "Medium.h"
 #include "Vecteur3D.h"
 #include "Plan.h"
 #include "Dalle.h"
@@ -9,9 +8,7 @@
 #include "Sphere.h"
 #include "Brique.h"
 #include "Cylinder.h"
-#include "Mediumi.h"
 #include "SystemeP9.h"
-#include "SystemeP12.h"
 #include <iostream>
 using namespace std;
 

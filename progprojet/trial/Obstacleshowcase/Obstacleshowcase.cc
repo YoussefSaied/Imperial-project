@@ -4,7 +4,6 @@
 #include "GrainLJ.h"
 #include "GrainLJUn.h"
 #include "GrainLJDeux.h"
-#include "Medium.h"
 #include "Vecteur3D.h"
 #include "Plan.h"
 #include "Dalle.h"
@@ -13,9 +12,7 @@
 #include "Sphere.h"
 #include "Brique.h"
 #include "Cylinder.h"
-#include "Mediumi.h"
 #include "SystemeP9.h"
-#include "SystemeP12.h"
 #include <iostream>
 using namespace std;
 
@@ -33,7 +30,6 @@ int main(int argc, char* argv[])
     Sphere sphere_obstacle(Position(17.0, 14.0, 5.0), 10.0, true);
     Sphere sphere_obstacle2(Position(2.0, 14.0, -1.0), 4.0, true);
 		Cylinder cylindre_obstacle(Position(-15.0, 14.0,2.0), Vecteur3D(0,1,0), 4, 7);
-    //Mediumi brique_obstacle(dalle_obstacled, 5.0);
     Brique brique_obstacle(dalle_obstacled, 5.0);
     Source source(Position(0.5,0,20), grainLJUn2, Vitesse(100,200,500), 50.2, 0.25, 30.27, true );
     Source source2(Position(5.5,14,20), grainLJDeux1, Vitesse(), 5.2, 0.25, 30.27, true );
@@ -43,7 +39,6 @@ int main(int argc, char* argv[])
     (w.s).ajouteGrain(grainLJUn3);
     (w.s).ajouteGrain(grainLJDeux1);
     (w.s).ajouteObstacle(plan_obstacle);
-    //(w.s).ajouteMediumi(brique_obstacle);
     (w.s).ajouteObstacle(brique_obstacle);
     (w.s).ajouteObstacle(sphere_obstacle);
     (w.s).ajouteObstacle(sphere_obstacle2);

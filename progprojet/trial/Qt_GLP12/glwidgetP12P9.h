@@ -6,7 +6,6 @@
 #include "vue_opengl.h"
 #include "Systeme.h"
 #include "SystemeP9.h"
-#include "SystemeP12.h"
 
 class GLWidget : public QGLWidget
 /* La fenêtre hérite de QGLWidget ;
@@ -28,7 +27,6 @@ public:
 
 	void addObstacle(Obstacle const& nouveau_obstacle){system_tab[0]->ajouteObstacle(nouveau_obstacle);}
 
-	void ajouteMediumi(Mediumi const& nouveau_mediumi){system_tab[0]->ajouteMediumi(nouveau_mediumi);}
   // objets à dessiner, faire évoluer
 
 private:

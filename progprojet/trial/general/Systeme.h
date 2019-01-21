@@ -4,24 +4,21 @@
 #include <iostream>
 #include "Dessinable.h"
 #include <memory>
-#include "Medium.h"
 #include "SupportADessin.h"
 #include "SupportADessinTexte.h"
 #include "Vecteur3D.h"
-#include "Mediumi.h"
 #include "Sphere.h"
 #include "Dodec.h"
 #include "Magnet.h"
-#include "MagnetE.h"
-#include "MagnetEO.h"
+
 class Systeme: public Dessinable
 {
     friend class VueOpenGL; //simple solution
 public:
 
     // constructeurs et destructeurs
-    Systeme(SupportADessin* support=&Texte1, Medium m = air):Dessinable(Position(),support),
-												notre_Dalle(Vecteur3D(3,2.5,1),Vecteur3D(0,0,1),Vecteur3D(0,-1,0),0.1,0.1, true),ptr_medium(&m)
+    Systeme(SupportADessin* support=&Texte1):Dessinable(Position(),support),
+												notre_Dalle(Vecteur3D(3,2.5,1),Vecteur3D(0,0,1),Vecteur3D(0,-1,0),0.1,0.1, true)
 												{notre_Dalle.set_support(support);}
 
     virtual ~Systeme() {}
@@ -30,7 +27,7 @@ public:
 	// methodes
 
 
-		virtual double evolue1(double dt=0.001)=0;
+		virtual void evolue1(double dt=0.001) = 0;
 
     virtual std:: ostream& display(std:: ostream& c) const = 0;
 
@@ -38,7 +35,6 @@ public:
 
     void ajouteObstacle(Obstacle const& nouveau_obstacle);
 
-    void ajouteMediumi(Mediumi const& nouveau_mediumi);
 
     virtual std::unique_ptr<Systeme> copie() const =0;
 
@@ -57,8 +53,6 @@ protected:
 
 	// attributs
     std:: vector<std::unique_ptr<Obstacle>> tab_ptr_obstacles;
-    std:: vector<std::unique_ptr<Mediumi>> tab_ptr_mediums;
-    Medium* ptr_medium;
 
 };
 

@@ -1,7 +1,6 @@
 #include <iostream>
 #include "Systeme.h"
 #include "SystemeP9.h"
-#include "Medium.h"
 #include "Vecteur3D.h"
 #include "Plan.h"
 #include <vector>

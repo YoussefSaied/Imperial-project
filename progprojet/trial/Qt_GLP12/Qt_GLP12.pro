@@ -20,14 +20,10 @@ SOURCES += \
     ../general/SupportADessinTexte.cc \
     ../general/Systeme.cc \
     ../general/SystemeP9.cc \
-    ../general/SystemeP12.cc \
     ../general/Aleatoire.cc \
     ../general/Magnet.cc \
-    ../general/MagnetE.cc \
-    ../general/MagnetEO.cc \
     ../general/Plan.cc \
     ../general/Dalle.cc \
-    ../general/Mediumi.cc \
     ../general/Brique.cc \
     ../general/Dodec.cc \
     ../general/Sphere.cc \
@@ -45,19 +41,14 @@ HEADERS += \
     ../general/SupportADessinTexte.h \
     ../general/Systeme.h \
     ../general/SystemeP9.h \
-    ../general/SystemeP12.h \
     ../general/Aleatoire.h \
     ../general/Magnet.h \
-    ../general/MagnetE.h \
-    ../general/MagnetEO.h \
     ../general/Obstacle.h \
     ../general/Plan.h \
     ../general/Dalle.h \
     ../general/Brique.h \
     ../general/Dodec.h \
     ../general/Sphere.h \
-    ../general/Medium.h \
-    ../general/Mediumi.h \
     ../general/Vecteur3D.h
 
 RESOURCES += \

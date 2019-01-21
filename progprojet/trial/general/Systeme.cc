@@ -11,11 +11,6 @@ void Systeme:: ajouteObstacle(Obstacle const& nouveau_obstacle)
 }
 
 
-void Systeme:: ajouteMediumi(Mediumi const& nouveau_mediumi){
-	tab_ptr_mediums.push_back(nouveau_mediumi.cloneMe());
-	(*(tab_ptr_mediums.back())).set_support(support);
-}
-
 
 // externe
 ostream& operator<<(ostream& sortie, Systeme const& systeme)

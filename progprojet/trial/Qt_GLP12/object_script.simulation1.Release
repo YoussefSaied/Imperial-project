@@ -7,14 +7,10 @@ INPUT(
 ./release\SupportADessinTexte.o
 ./release\Systeme.o
 ./release\SystemeP9.o
-./release\SystemeP12.o
 ./release\Aleatoire.o
 ./release\Magnet.o
-./release\MagnetE.o
-./release\MagnetEO.o
 ./release\Plan.o
 ./release\Dalle.o
-./release\Mediumi.o
 ./release\Brique.o
 ./release\Dodec.o
 ./release\Sphere.o

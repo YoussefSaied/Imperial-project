@@ -17,10 +17,8 @@ SOURCES += \
     ../general/Dalle.cc \
     ../general/Sphere.cc \
 	../general/SystemeP9.cc \
-	../general/Mediumi.cc \
     ../general/Brique.cc \
     ../general/SystemeP12.cc\
-		../general/Mediumi.cc
 
 HEADERS += \
     ../general/SupportADessinTexte.h \
@@ -36,10 +34,8 @@ HEADERS += \
     ../general/GrainLJ.h \
     ../general/GrainLJUn.h \
     ../general/GrainLJDeux.h \
-    ../general/Medium.h \
     ../general/Vecteur3D.h \
     ../general/Sphere.h \
     ../general/SystemeP9.h \
     ../general/SystemeP12.h \
     ../general/Brique.h \
-    ../general/Mediumi.h

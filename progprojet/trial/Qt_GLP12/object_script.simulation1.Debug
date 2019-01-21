@@ -7,14 +7,10 @@ INPUT(
 ./debug\SupportADessinTexte.o
 ./debug\Systeme.o
 ./debug\SystemeP9.o
-./debug\SystemeP12.o
 ./debug\Aleatoire.o
 ./debug\Magnet.o
-./debug\MagnetE.o
-./debug\MagnetEO.o
 ./debug\Plan.o
 ./debug\Dalle.o
-./debug\Mediumi.o
 ./debug\Brique.o
 ./debug\Dodec.o
 ./debug\Sphere.o
