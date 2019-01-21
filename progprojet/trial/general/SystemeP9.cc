@@ -68,6 +68,7 @@ void SystemeP9:: evolue1(double dt)
         //magnet interactions
             tab_ptr_Magnets[i]->addTorque(tab_ptr_Magnets[j]);
             tab_ptr_Magnets[i]->addBfield(tab_ptr_Magnets[j]);
+            cout <<"torque: " <<tab_ptr_Magnets[i]->torque<<endl;
         }
         // Magnet movement
         tab_ptr_Magnets[i]->move(dt);
