@@ -17,14 +17,15 @@ class Systeme : public Dessinable
 public:
 
     // constructeurs et destructeurs
-    Systeme(SupportADessin * support = &Texte1) : Dessinable(Position(), support),
-        H(0, 0, 0)
+    Systeme(SupportADessin * support = &Texte1, int selectmagnet = 0) : Dessinable(Position(), support),
+        H(0, 0, 0), selectedmagnet(selectedmagnet)
     { }
 
     virtual ~Systeme(){ }
 
     Vecteur3D H; // external magnetic field
     std:: vector<std::unique_ptr<Magnet> > tab_ptr_Magnets;
+    int selectedmagnet;
 
     // methodes
 

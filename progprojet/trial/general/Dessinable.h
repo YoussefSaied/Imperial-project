@@ -5,23 +5,24 @@
 class Dessinable
 {
 public:
-	//constructeur et destructeur
-	Dessinable(Position position = Position(), SupportADessin* support = &Texte1 ): position(position), support(support) {}
-    virtual ~Dessinable() {}
+    // constructeur et destructeur
+    Dessinable(Position position = Position(), SupportADessin * support = &Texte1) : position(position),
+        support(support){ }
 
-    //methodes
+    virtual ~Dessinable(){ }
+
+    // methodes
     virtual void dessine() const = 0;
 
     Vecteur3D get_position() const { return position; }
 
-    void set_position(Position newPosition) { position=newPosition; }
+    void set_position(Position newPosition){ position = newPosition; }
 
-    SupportADessin* get_support() const { return support; }
+    SupportADessin * get_support() const { return support; }
 
-	void set_support(SupportADessin* s) { support =s; }
+    void set_support(SupportADessin * s){ support = s; }
 
 
-protected:
-    Vecteur3D position; //possition du centre de l'objet dessinable
-    SupportADessin* support;
+    Vecteur3D position; // possition du centre de l'objet dessinable
+    SupportADessin * support;
 };
