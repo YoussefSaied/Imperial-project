@@ -18,7 +18,7 @@ int main(int argc, char * argv[])
 {
     QApplication a(argc, argv);
     Window w;
-		Magnet M1(Position(2,2,0));
+    // Magnet M1(Position(2, 2, 0));
 
     /*MagnetE M2(Position(2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air);
      * MagnetE M3(Position(-2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air,1 , Vecteur3D(1,1,1));
@@ -37,7 +37,7 @@ int main(int argc, char * argv[])
     (w.glWidget)->addMagnet(M1);
     // All the magnets :D
 
-    /*for (int i = 0; i < (dode.vertipositions()).size(); ++i) {
+    for (int i = 0; i < (dode.vertipositions()).size(); ++i) {
         int si = ((dode.vertipositions())[i]).size()
           for (int j = 0; j < si; ++j) {
             Vecteur3D p(0, 0, 0);
@@ -52,12 +52,14 @@ int main(int argc, char * argv[])
             v2 = ((dode.vertipositions())[i][(j + 1) % si] - (dode.vertipositions())[i][(j + 2) % si]);
             // for v3 :
             v3 = v1 ^ v2;
-            double alph; // angle of rotation arctan(2)
-            v4 = v3.rotate(alph, v1);
-            axe = v4^v1;
+            double alph = atan(2); // angle of rotation arctan(2)
+            v4  = v3.rotate(alph, v1);
+            axe = v4 ^ v1;
             // add magnet here.
+            Magnet M(p, axe);
+            (w.glWidget)->addMagnet(M);
         }
-       }*/
+    }
 
     /*w.addMagnet(M2);
        w.addMagnet(M3);

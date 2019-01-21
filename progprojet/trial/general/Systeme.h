@@ -11,24 +11,25 @@
 #include "Dodec.h"
 #include "Magnet.h"
 
-class Systeme: public Dessinable
+class Systeme : public Dessinable
 {
     friend class VueOpenGL; // simple solution
 public:
 
     // constructeurs et destructeurs
-    Systeme(SupportADessin * support = &Texte1 ) : Dessinable(Position(), support),
+    Systeme(SupportADessin * support = &Texte1) : Dessinable(Position(), support),
         H(0, 0, 0)
     { }
 
     virtual ~Systeme(){ }
 
     Vecteur3D H; // external magnetic field
+    std:: vector<std::unique_ptr<Magnet> > tab_ptr_Magnets;
 
     // methodes
 
 
-		virtual void evolue1(double dt=0.001) = 0;
+    virtual void evolue1(double dt = 0.001) = 0;
 
     virtual std:: ostream& display(std:: ostream& c) const = 0;
 
@@ -50,9 +51,8 @@ public:
     Systeme (Systeme const&) = delete;
 
 
-	// attributs
-    std:: vector<std::unique_ptr<Obstacle>> tab_ptr_obstacles;
-
+    // attributs
+    std:: vector<std::unique_ptr<Obstacle> > tab_ptr_obstacles;
 };
 
 // externe
