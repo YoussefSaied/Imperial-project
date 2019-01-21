@@ -6,19 +6,19 @@
 #include "Sphere.h"
 #include "Brique.h"
 #include "Cylinder.h"
-//#include <GL/glut.h>
+// #include <GL/glut.h>
 using namespace std;
 
 //               = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 
 
-void VueOpenGL::dessine(Magnet const& M )
+void VueOpenGL::dessine(Magnet const& M)
 {
-	//rotate
-		Vecteur3D axer(M.orientation()^Vecteur3D(0,0,1));
-		double angle= acos(M.orientation()*Vecteur3D(0,0,1));
-		Vecteur3D axer2(M.axis^Vecteur3D(0,0,1));
-		double angle2= acos(M.axis*Vecteur3D(0,0,1));
+    // rotate
+    Vecteur3D axer(M.orientation() ^ Vecteur3D(0, 0, 1));
+    double angle = acos(M.orientation() * Vecteur3D(0, 0, 1));
+    Vecteur3D axer2(M.axis ^ Vecteur3D(0, 0, 1));
+    double angle2 = acos(M.axis * Vecteur3D(0, 0, 1));
 
     // std::cout << "angleMM:" << axer << angle <<-1*angle*180/M_PI<<" "<<axer.get_x()<<'\n';
 
@@ -40,17 +40,17 @@ void VueOpenGL::dessine(Magnet const& M )
 
     QMatrix4x4 matrice2;
 
-		//matrice2.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
-		matrice2.setToIdentity();
-		matrice2.translate((M.get_position()).get_x(),(M.get_position()).get_y(),(M.get_position()).get_z());
-		if(axer != 0) matrice2.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
-		matrice2.translate(0,0,-1*M.length/2);
-		prog.setUniformValue("vue_modele", matrice_vue * matrice2);
-		prog.setAttributeValue(CouleurId, 0.7, 0, 0);  // met la couleur
-		cylinder.set_dimension(M.radius,M.length/2);
-		cylinder.initialize();
-		cylinder.draw(prog, SommetId);
-		glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+    // matrice2.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
+    matrice2.setToIdentity();
+    matrice2.translate((M.get_position()).get_x(), (M.get_position()).get_y(), (M.get_position()).get_z());
+    if (axer != 0) matrice2.rotate(-1 * angle * 180 / M_PI, axer.get_x(), axer.get_y(), axer.get_z());
+    matrice2.translate(0, 0, -1 * M.length / 2);
+    prog.setUniformValue("vue_modele", matrice_vue * matrice2);
+    prog.setAttributeValue(CouleurId, 0.7, 0, 0); // met la couleur
+    cylinder.set_dimension(M.radius, M.length / 2);
+    cylinder.initialize();
+    cylinder.draw(prog, SommetId);
+    glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
@@ -126,13 +126,14 @@ void VueOpenGL::dessine(Dodec const& d)
     dessineDodec(matrice);
 }
 
-void VueOpenGL::dessine(Cylinder const& c){
-
+void VueOpenGL::dessine(Cylinder const& c)
+{
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
     QMatrix4x4 matrice;
     // std::cout << "angle:" << axer << angle <<(c.get_vecteur_1()).norme()<< "produ"<< c.get_vecteur_1()*Vecteur3D(0,0,1)<<'\n';
     // std::cout << "2 vectors:" << c.get_vecteur_1()<< Vecteur3D(0,0,1)<<'\n';
-
+    Vecteur3D axer(Vecteur3D(0, 0, 1) ^ (c.get_vecteur_1()).normalise());
+    double angle = acos((c.get_vecteur_1() * Vecteur3D(0, 0, 1)) / ((c.get_vecteur_1()).norme()));
 
     matrice.translate((c.get_position()).get_x(), (c.get_position()).get_y(), (c.get_position()).get_z());
 
@@ -153,8 +154,8 @@ void VueOpenGL::dessine(Cylinder const& c){
 
 void VueOpenGL::dessine(SystemeP9 const& S)
 {
-    if(!(S.tab_ptr_Magnets).empty()) {
-        for(auto const& ptr_Magnet : (S.tab_ptr_Magnets)) {
+    if (!(S.tab_ptr_Magnets).empty()) {
+        for (auto const& ptr_Magnet : (S.tab_ptr_Magnets)) {
             (*ptr_Magnet).dessine();
         }
     }
@@ -164,6 +165,7 @@ void VueOpenGL::dessine(SystemeP9 const& S)
         }
     }
 }
+
 //               = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 void VueOpenGL::init()
 {
@@ -403,7 +405,9 @@ void VueOpenGL::dessineDalle(QMatrix4x4 const& point_de_vue, Dalle dalle, double
 
 void VueOpenGL::dessinePlan(QMatrix4x4 const& point_de_vue, Plan p)
 {
-    Dalle d(p.get_position() - 2 * 100 * ((p.get_vecteur_1()).GS1() + ((p.get_vecteur_1()).GS1()).GS1() ), p.get_vecteur_1(), ((p.get_vecteur_1()).GS1()), 4*100, 4*100);
+    Dalle d(
+        p.get_position() - 2 * 100 * ((p.get_vecteur_1()).GS1() + ((p.get_vecteur_1()).GS1()).GS1() ),
+        p.get_vecteur_1(), ((p.get_vecteur_1()).GS1()), 4 * 100, 4 * 100);
     prog.setUniformValue("vue_modele", matrice_vue * point_de_vue);
     dessineDalle(point_de_vue, d, 0.5, 0.3, 0.6);
     glBegin(GL_LINES);

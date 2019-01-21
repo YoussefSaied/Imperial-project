@@ -10,7 +10,6 @@
 #include "vue_opengl.h"
 #include "Systeme.h"
 #include "SystemeP9.h"
-#include "SystemeP12.h"
 #include "glwidgetP12P9.h"
 #include <string>
 #include <sstream>
