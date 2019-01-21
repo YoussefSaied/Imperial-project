@@ -15,6 +15,7 @@ CONFIG += qt debug
 SOURCES += \
     main_qt_glP12P9.cc \
     glwidgetP12P9.cc \
+    Window.cc \
     ../MediumandQt/glsphere.cc \
     ../MediumandQt/glcylinder.cc \
     ../MediumandQt/vue_opengl.cc \
@@ -37,6 +38,7 @@ SOURCES += \
 
 HEADERS += \
     glwidgetP12P9.h \
+    Window.h \
     ../MediumandQt/vertex_shader.h \
     ../MediumandQt/vue_opengl.h \
     ../MediumandQt/glsphere.h \

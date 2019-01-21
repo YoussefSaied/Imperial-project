@@ -1,64 +1,156 @@
 #ifndef GLWIDGET_H
 #define GLWIDGET_H
 
-#include <QGLWidget>        // Classe pour faire une fenêtre OpenGL
-#include <QTime>            // Classe pour gérer le temps
+#include <QGLWidget> // Classe pour faire une fenêtre OpenGL
+#include <QTime>     // Classe pour gérer le temps
 #include "vue_opengl.h"
 #include "Systeme.h"
 #include "SystemeP9.h"
 #include "SystemeP12.h"
 
 class GLWidget : public QGLWidget
+
 /* La fenêtre hérite de QGLWidget ;
  * les événements (clavier, souris, temps) sont des méthodes virtuelles à redéfinir.
  */
 {
 public:
-  GLWidget(QWidget* parent = nullptr)
-    : QGLWidget(parent), sysm(&vue)
-  {
-		system_tab.push_back(sysm.copie());
-	}
-  virtual ~GLWidget() {}
-	void set_systeme(Systeme const& sys){
-		system_tab.push_back(sys.copie());
-		system_tab.back()->set_support(&vue);}
+    GLWidget(QWidget * parent = nullptr)
+        : QGLWidget(parent), sysm(&vue)
+    {
+        system_tab.push_back(sysm.copie());
+    }
 
-	void addMagnet(Magnet const& nouveau_Magnet){system_tab[0]->addMagnet(nouveau_Magnet);}
+    virtual ~GLWidget(){ }
 
-	void addObstacle(Obstacle const& nouveau_obstacle){system_tab[0]->ajouteObstacle(nouveau_obstacle);}
+    void set_systeme(Systeme const& sys)
+    {
+        system_tab.push_back(sys.copie());
+        system_tab.back()->set_support(&vue);
+    }
 
-	void ajouteMediumi(Mediumi const& nouveau_mediumi){system_tab[0]->ajouteMediumi(nouveau_mediumi);}
-  // objets à dessiner, faire évoluer
+    void addMagnet(Magnet const& nouveau_Magnet)
+    {
+        system_tab[0]->addMagnet(nouveau_Magnet);
+    }
+
+    void addObstacle(Obstacle const& nouveau_obstacle)
+    {
+        system_tab[0]->ajouteObstacle(nouveau_obstacle);
+    }
+
+    void ajouteMediumi(Mediumi const& nouveau_mediumi)
+    {
+        system_tab[0]->ajouteMediumi(nouveau_mediumi);
+    }
+
+    // system
+    std::vector<std::unique_ptr<Systeme> > system_tab;
+    SystemeP9 sysm;
+    double time = 0.0;
+public slots:
+    void setXH(double x)
+    {
+        if (x != (system_tab[0]->H).get_x()) {
+            (system_tab[0]->H).setx(x);
+            emit XHChanged(x);
+        }
+    }
+
+    void setYH(double y)
+    {
+        if (y != (system_tab[0]->H).get_y()) {
+            (system_tab[0]->H).sety(y);
+            emit YHChanged(y);
+        }
+    }
+
+    void setZH(double z)
+    {
+        if (z != (system_tab[0]->H).get_z()) {
+            (system_tab[0]->H).setz(z);
+            emit ZHChanged(z);
+        }
+    }
+
+    void setXH(int x)
+    {
+        if (x != (system_tab[0]->H).get_x()) {
+            (system_tab[0]->H).setx(x);
+            emit XHChanged(x);
+        }
+    }
+
+    void setYH(int y)
+    {
+        if (y != (system_tab[0]->H).get_y()) {
+            (system_tab[0]->H).sety(y);
+            emit YHChanged(y);
+        }
+    }
+
+    void setZH(int z)
+    {
+        if (z != (system_tab[0]->H).get_z()) {
+            (system_tab[0]->H).setz(z);
+            emit ZHChanged(z);
+        }
+    }
+
+    void selectmagnet(int mn)
+    {
+        // system_tab[0]->selected(mn);
+        int siz(((system_tab[0])->tab_ptr_Magnets).size());
+        emit magnetselected(mn % siz);
+    }
+
+signals:
+    void XHChanged(double newx);
+    void YHChanged(double newy);
+    void ZHChanged(double newz);
+    void magnetselected(int mn);
+    void evolved(double dt);
+
+
+    // objets à dessiner, faire évoluer
 
 private:
-  // Les 3 méthodes clés de la classe QGLWidget à réimplémenter
-  virtual void initializeGL()                  override;
-  virtual void resizeGL(int width, int height) override;
-  virtual void paintGL()                       override;
+    Q_OBJECT
 
-  // Méthodes de gestion d'évènements
-  virtual void keyPressEvent(QKeyEvent* event) override;
-  virtual void timerEvent(QTimerEvent* event)  override;
-	virtual void mousePressEvent(QMouseEvent* event) override;
-	virtual void mouseMoveEvent(QMouseEvent* event)  override;
+    // Les 3 méthodes clés de la classe QGLWidget à réimplémenter
+    virtual void initializeGL()                  override;
+    virtual void resizeGL(int width, int height) override;
+    virtual void paintGL()                       override;
+    QSize minimumSizeHint() const
+    {
+        return QSize(50, 50);
+    }
 
-	// position de la souris
-	QPointF lastMousePosition;
-  // Méthodes de gestion interne
-  void pause();
+    QSize sizeHint() const
 
-  // Vue : ce qu'il faut donner au contenu pour qu'il puisse se dessiner sur la vue
-  VueOpenGL vue;
+    {
+        return QSize(800, 600);
+    }
 
-  // Timer
-  int timerId;
-	double dt = (5.0/10000.0);
-  // pour faire évoluer les objets avec le bon "dt"
-  QTime chronometre;
-	std::vector<std::unique_ptr<Systeme>> system_tab;
-	SystemeP9 sysm;
+    // Méthodes de gestion d'évènements
+    virtual void keyPressEvent(QKeyEvent * event) override;
+    virtual void timerEvent(QTimerEvent * event)  override;
+    virtual void mousePressEvent(QMouseEvent * event) override;
+    virtual void mouseMoveEvent(QMouseEvent * event)  override;
 
+    // position de la souris
+    QPointF lastMousePosition;
+    // Méthodes de gestion interne
+    void pause();
+    // Vue : ce qu'il faut donner au contenu pour qu'il puisse se dessiner sur la vue
+    VueOpenGL vue;
+
+    // Timer
+    int timerId;
+    double dt = 0.05;
+
+    // pour faire évoluer les objets avec le bon "dt"
+    QTime chronometre;
 };
 
 #endif // GLWIDGET_H

@@ -106,7 +106,7 @@ void GLWidget::keyPressEvent(QKeyEvent* event)
   case Qt::Key_Space:
     pause();
     break;
-	case Qt::Key_9:
+	/*case Qt::Key_9:
 	    s.notre_Dalle.set_vitesse(	//s.notre_Dalle.get_velocity()+
 			Vecteur3D(0,0,200)	);
 	    break;
@@ -133,7 +133,7 @@ void GLWidget::keyPressEvent(QKeyEvent* event)
 	case Qt::Key_0:
 	    s.notre_Dalle.set_vitesse(	//s.notre_Dalle.get_position()+
 			Vecteur3D(0,0,0)	);
-	    break;
+	    break;*/
   };
 
   updateGL(); // redessine
@@ -173,8 +173,7 @@ void GLWidget::mouseMoveEvent(QMouseEvent* event)
 void GLWidget::timerEvent(QTimerEvent* event)
 {
   Q_UNUSED(event);
-  dt = s.evolue1(s.notre_Dalle, dt);
-	(s.notre_Dalle).bouger(dt);
+  dt = s.evolue1(dt);
 
   updateGL();
 }
