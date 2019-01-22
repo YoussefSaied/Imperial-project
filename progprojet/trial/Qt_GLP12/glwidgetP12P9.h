@@ -93,9 +93,9 @@ public slots:
 
     void selectmagnet(int mn)
     {
-        // system_tab[0]->selected(mn);
+        system_tab[0]->selected(mn);
         int siz(((system_tab[0])->tab_ptr_Magnets).size());
-        (system_tab[0]->selectedmagnet) = mn;
+        // (system_tab[0]->selectedmagnet) = mn;
         emit magnetselected(mn % siz);
     }
 
@@ -107,13 +107,21 @@ public slots:
         emit anglechanged((system_tab[0]->selectedmagnet) % siz);
     }
 
+    void flipmagnet()
+    {
+        int mn = (system_tab[0]->selectedmagnet);
+        int siz(((system_tab[0])->tab_ptr_Magnets).size());
+        ((system_tab[0])->tab_ptr_Magnets)[mn]->angle += M_PI;
+        emit anglechanged((system_tab[0]->selectedmagnet) % siz);
+    }
+
 signals:
     void XHChanged(double newx);
     void YHChanged(double newy);
     void ZHChanged(double newz);
     void magnetselected(int mn);
     void evolved(double dt);
-    void anglechanged(double angle);
+    void anglechanged(int mn);
 
 
     // objets à dessiner, faire évoluer

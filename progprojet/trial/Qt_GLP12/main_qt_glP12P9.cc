@@ -18,9 +18,9 @@ int main(int argc, char * argv[])
 {
     QApplication a(argc, argv);
     Window w;
-//    Magnet M1(Position(0, 0, 1), Vecteur3D(0, 0, 1));
-  //  Magnet M2(Position(0, 1, 0), Vecteur3D(0, 1, 0));
-    //Magnet M3(Position(1, 7, 1), Vecteur3D(0, 1, 0));
+    //    Magnet M1(Position(0, 0, 1), Vecteur3D(0, 0, 1));
+    //  Magnet M2(Position(0, 1, 0), Vecteur3D(0, 1, 0));
+    // Magnet M3(Position(1, 7, 1), Vecteur3D(0, 1, 0));
 
     /*MagnetE M2(Position(2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air);
      * MagnetE M3(Position(-2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air,1 , Vecteur3D(1,1,1));
@@ -31,7 +31,8 @@ int main(int argc, char * argv[])
      * MagnetE M8(Position(-2,2,4), Vitesse(), 1.0, 0.2, Vecteur3D(), air);
      * Dalle dalle_obstacled(Position(0, 0, 0), Vecteur3D(0, 0.0, 1.0), Vecteur3D(0.0, 1.0, 0.0), 4, 4);
      * Brique b(dalle_obstacled, 4.0);*/
-    Dodec dode(Vecteur3D(0, 0, 0), 1, Vecteur3D(0, -0.763932, 1.23607), false);
+    // Dodec dode(Vecteur3D(0, 0, 3), 4, Vecteur3D(0, -0.763932, 1.23607), false);
+    Dodec dode(Vecteur3D(0, 0, 3), 1, Vecteur3D(0, 0, 1.23607), false);
     Cylinder c1(Position(0, 10, 0), Vecteur3D(0, 7, 0), 1, 1);
     Cylinder c2(Position(10, 0, 0), Vecteur3D(7, 0, 0), 1, 1);
     Cylinder c3(Position(0, 0, 10), Vecteur3D(0, 0, 1), 1, 1);
@@ -45,9 +46,10 @@ int main(int argc, char * argv[])
         for (int j = 0; j < si; ++j) {
             Vecteur3D p(0, 0, 0);
             p = ((dode.vertipositions())[i][j] + (dode.vertipositions())[i][(j + 1) % si]) / 2;
-            //++num;
-              // cout << i << "," << j << num << ":  ";
-               //cout << p << endl;
+            // p += dode.position;
+            // ++num;
+            // cout << i << "," << j << num << ":  ";
+            // cout << p << endl;
             // For the axe
             Vecteur3D v1(0, 1, 0);
             Vecteur3D v2(0, 1, 0);
@@ -66,7 +68,7 @@ int main(int argc, char * argv[])
             Magnet M(p, axe);
             (w.glWidget)->addMagnet(M);
         }
-       }
+    }
 
     /*w.addMagnet(M2);
        w.addMagnet(M3);
@@ -80,9 +82,9 @@ int main(int argc, char * argv[])
     (w.glWidget)->addObstacle(c2);
     (w.glWidget)->addObstacle(c3);
     (w.glWidget)->addObstacle(dode);
-//    (w.glWidget)->addMagnet(M1);
-//    (w.glWidget)->addMagnet(M2);
-//    (w.glWidget)->addMagnet(M3);
+    //    (w.glWidget)->addMagnet(M1);
+    //    (w.glWidget)->addMagnet(M2);
+    //    (w.glWidget)->addMagnet(M3);
     // w.addObstacle(dode);
     // w.addObstacle(dalle_obstacled);
     // w.addObstacle((b.dalle6())[3]);

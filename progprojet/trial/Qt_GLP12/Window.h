@@ -23,7 +23,7 @@ public:
     GLWidget * glWidget;
     QSlider * createSlider();
     QSpinBox * createSpin();
-    QDoubleSpinBox * createdoubleSpin();
+    QDoubleSpinBox * createdoubleSpin(double step = 0.01);
 
 public slots:
     void updatelabelO(double x = 1)
@@ -59,6 +59,9 @@ public:
     QLabel * labelO;
     QSpinBox * magnetselector;
     QDoubleSpinBox * angleselector;
+    QDoubleSpinBox * xselector;
+    QDoubleSpinBox * yselector;
+    QDoubleSpinBox * zselector;
     QPushButton * flipangle;
 };
 

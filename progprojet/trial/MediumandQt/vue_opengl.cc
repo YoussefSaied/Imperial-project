@@ -31,7 +31,10 @@ void VueOpenGL::dessine(Magnet const& M)
     if (axer2 != 0) matrice3.rotate(-1 * angle2 * 180 / M_PI, axer2.get_x(), axer2.get_y(), axer2.get_z());
     matrice3.translate(0, 0, -0.5 * M.get_axerheight());
     prog.setUniformValue("vue_modele", matrice_vue * matrice3);
-    prog.setAttributeValue(CouleurId, 0.4, 0.25, 0.12); // met la couleur
+    // if (!M.selected)
+    prog.setAttributeValue(CouleurId, 0.4, 0.25, 0.12);
+    // else
+    //    prog.setAttributeValue(CouleurId, 0.7, 0.7, 0.7);  // met la couleur
     cylinder.set_dimension(M.get_axerradius(), M.get_axerheight());
     cylinder.initialize();
     cylinder.draw(prog, SommetId);
@@ -46,7 +49,10 @@ void VueOpenGL::dessine(Magnet const& M)
     if (axer != 0) matrice2.rotate(-1 * angle * 180 / M_PI, axer.get_x(), axer.get_y(), axer.get_z());
     matrice2.translate(0, 0, -1 * M.length / 2);
     prog.setUniformValue("vue_modele", matrice_vue * matrice2);
-    prog.setAttributeValue(CouleurId, 0.7, 0, 0); // met la couleur
+    // if (!M.selected)
+    prog.setAttributeValue(CouleurId, 0.7, 0, 0);
+    // else
+    //    prog.setAttributeValue(CouleurId, 0, 0.7, 0);  // met la couleur
     cylinder.set_dimension(M.radius, M.length / 2);
     cylinder.initialize();
     cylinder.draw(prog, SommetId);
@@ -67,7 +73,10 @@ void VueOpenGL::dessine(Magnet const& M)
     // cylinder.set_dimension(M.get_radius(),M.get_height()/2);
     // cylinder.initialize();
     // cylinder.draw(prog, SommetId);
-    dessineCylinder(matrice, 0, 0, 0.7);
+    if (!M.selected)
+        dessineCylinder(matrice, 0, 0, 0.7);
+    else
+        dessineCylinder(matrice, 0.75, 0.75, 0.75);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 } // VueOpenGL::dessine
 
