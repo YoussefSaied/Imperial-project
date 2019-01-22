@@ -9,15 +9,8 @@ using namespace std;
 Magnet :: Magnet(Position const& position, Vecteur3D axis, double charge, double mass, double radius, double length,
   bool selected, double torque, double oldtorque, Vecteur3D Bfield,
   double angle, double omega, int rotations, SupportADessin * support) :
-<<<<<<< HEAD
     Dessinable(position, support), axis(axis.normalise()), torque(torque), Bfield(Bfield), oldtorque(oldtorque), radius(radius),
     length(length), charge(charge),mass(mass), angle(angle), omega(omega), rotations(rotations){ }
-=======
-    Dessinable(position, support), axis(axis.normalise()), charge(charge), torque(torque), Bfield(Bfield), oldtorque(
-        oldtorque), radius(
-        radius),
-    length(length), mass(mass), angle(angle), omega(omega), rotations(rotations){ }
->>>>>>> e05fbba21f48dce5e0fb51fd4da9de8593209d85
 
 
 ostream& Magnet:: display(std :: ostream& c) const
@@ -44,12 +37,8 @@ Vecteur3D Magnet :: planevec2() const
 }
 // Torque from magnet2
 void Magnet :: addTorque(unique_ptr<Magnet> const& Magnet2)
-<<<<<<< HEAD
+
 {   double pow = 1;
-=======
-{
-    double pow    = 1e-2;
->>>>>>> e05fbba21f48dce5e0fb51fd4da9de8593209d85
     Vecteur3D rNN = Magnet2->positionN() - positionN(); // Npole i Npole j
     torque += ((length / 2) * pow) * chargeN() * Magnet2->chargeN() * (axis*(orientation() ^ rNN))
       / (rNN.norme() * rNN.norme() * rNN.norme());
@@ -57,11 +46,7 @@ void Magnet :: addTorque(unique_ptr<Magnet> const& Magnet2)
     torque += ((length / 2) * pow) * chargeN() * Magnet2->chargeS() * (axis*(orientation() ^ rNS))
       / (rNS.norme() * rNS.norme() * rNS.norme());
     Vecteur3D rSN = Magnet2->positionN() - positionS(); // Spole i Npole j
-<<<<<<< HEAD
     torque += ((length / 2) * pow) * chargeS() * Magnet2->chargeN() * (axis*(-1*orientation() ^ rSN))
-=======
-    torque += ((length / 2) * pow) * chargeS() * Magnet2->chargeN() * (-1 * orientation() ^ rSN).norme()
->>>>>>> e05fbba21f48dce5e0fb51fd4da9de8593209d85
       / (rSN.norme() * rSN.norme() * rSN.norme());
     Vecteur3D rSS = Magnet2->positionS() - positionS();
     torque += ((length / 2) * pow) * chargeS() * Magnet2->chargeS() * (axis*(-1 * orientation() ^ rSS))
