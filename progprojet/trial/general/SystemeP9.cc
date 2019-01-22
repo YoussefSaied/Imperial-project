@@ -61,7 +61,7 @@ void SystemeP9:: evolue1(double dt)
 
     for(size_t i(0); i<tab_ptr_Magnets.size(); ++i) {
         //ext. field
-//        tab_ptr_Magnets[i]->addTorque(H);
+        tab_ptr_Magnets[i]->addTorque(H);
         for(size_t j(0); j<tab_ptr_Magnets.size(); ++j) {
         //magnet interactions
         if (i != j)
