@@ -18,7 +18,7 @@ public:
 
     // constructeurs et destructeurs
     Systeme(SupportADessin * support = &Texte1, int selectmagnet = 0) : Dessinable(Position(), support),
-        H(0, 0, 0), selectedmagnet(selectedmagnet)
+        H(0, 0, 0), selectedmagnet(selectmagnet)
     { }
 
     virtual ~Systeme(){ }
@@ -38,6 +38,12 @@ public:
 
     void ajouteObstacle(Obstacle const& nouveau_obstacle);
 
+    virtual void selected(int nm)
+    {
+        tab_ptr_Magnets[(nm % tab_ptr_Magnets.size())]->selected = 1;
+        tab_ptr_Magnets[selectedmagnet]->selected = 0;
+        selectedmagnet = (nm % tab_ptr_Magnets.size());
+    }
 
     virtual std::unique_ptr<Systeme> copie() const = 0;
 
@@ -45,8 +51,6 @@ public:
 
     // virtual std::unique_ptr<Systeme> P12toP9() const =0;
 
-
-public:
 
     // delete
     Systeme (Systeme const&) = delete;

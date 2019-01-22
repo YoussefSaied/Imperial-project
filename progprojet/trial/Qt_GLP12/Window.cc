@@ -40,9 +40,9 @@ Window::Window()
     connect(zSlider, SIGNAL(valueChanged(int)), glWidget, SLOT(setZH(int)));
     connect(magnetselector, SIGNAL(valueChanged(int)), glWidget, SLOT(selectmagnet(int)));
     connect(glWidget, SIGNAL(magnetselected(int)), this, SLOT(setmagnetT(int)));
-
+    connect(flipangle, SIGNAL(clicked()), glWidget, SLOT(flipmagnet()));
     connect(angleselector, SIGNAL(valueChanged(double)), glWidget, SLOT(changeangle(double)));
-    connect(glWidget, SIGNAL(anglechanged(int)), this, SLOT(setangle(int)));
+    connect(glWidget, SIGNAL(anglechanged(int)), this, SLOT(setangleT(int)));
     QGridLayout * mainLayout = new QGridLayout;
     mainLayout->addWidget(glWidget, 0, 0);
     mainLayout->addWidget(labelO, 9, 0);
