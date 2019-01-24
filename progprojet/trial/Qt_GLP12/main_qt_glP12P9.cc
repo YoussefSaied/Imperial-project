@@ -90,7 +90,6 @@ int main(int argc, char * argv[])
     // w.addObstacle((b.dalle6())[3]);
     // w.addObstacle((b.dalle6())[4]);
     // cout << endl << "number of magnets" << (((w.glWidget)->system_tab[0])->tab_ptr_Magnets).size() << endl;
-
     w.show();
 
     /*double b = (1 + sqrt(5)) / 2;

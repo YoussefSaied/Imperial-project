@@ -159,7 +159,7 @@ private:
 
     // Timer
     int timerId;
-    double dt = 0.05;
+    double dt = 0.005;
 
     // pour faire évoluer les objets avec le bon "dt"
     QTime chronometre;
