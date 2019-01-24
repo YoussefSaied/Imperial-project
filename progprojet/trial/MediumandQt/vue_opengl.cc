@@ -6,7 +6,6 @@
 #include "Sphere.h"
 #include "Brique.h"
 #include "Cylinder.h"
-// #include <GL/glut.h>
 using namespace std;
 
 //               = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
@@ -327,16 +326,17 @@ void VueOpenGL::dessinePenta(QMatrix4x4 const& point_de_vue, Vecteur3D x1, Vecte
 {
     Vecteur3D c(0, 0, 0);
     c = (x1 + x2 + x3 + x4 + x5) / 5;
-    prog.setUniformValue("vue_modele", matrice_vue * point_de_vue);
-    glBegin(GL_TRIANGLE_FAN);
-    prog.setAttributeValue(CouleurId, 1.0, 0.0, 1.0); // magenta
-    // prog.setAttributeValue(SommetId,c.get_x(), c.get_y(), c.get_z());
-    prog.setAttributeValue(SommetId, x1.get_x(), x1.get_y(), x1.get_z());
-    prog.setAttributeValue(SommetId, x2.get_x(), x2.get_y(), x2.get_z());
-    prog.setAttributeValue(SommetId, x3.get_x(), x3.get_y(), x3.get_z());
-    prog.setAttributeValue(SommetId, x4.get_x(), x4.get_y(), x4.get_z());
-    prog.setAttributeValue(SommetId, x5.get_x(), x5.get_y(), x5.get_z());
-    glEnd();
+
+    /*prog.setUniformValue("vue_modele", matrice_vue * point_de_vue);
+       glBegin(GL_TRIANGLE_FAN);
+       prog.setAttributeValue(CouleurId, 1.0, 0.0, 1.0); // magenta
+       // prog.setAttributeValue(SommetId,c.get_x(), c.get_y(), c.get_z());
+       prog.setAttributeValue(SommetId, x1.get_x(), x1.get_y(), x1.get_z());
+       prog.setAttributeValue(SommetId, x2.get_x(), x2.get_y(), x2.get_z());
+       prog.setAttributeValue(SommetId, x3.get_x(), x3.get_y(), x3.get_z());
+       prog.setAttributeValue(SommetId, x4.get_x(), x4.get_y(), x4.get_z());
+       prog.setAttributeValue(SommetId, x5.get_x(), x5.get_y(), x5.get_z());
+       glEnd();*/
     // draw lines glBegin(GL_LINES);
     dessineLine(point_de_vue, x1, x2);
     dessineLine(point_de_vue, x2, x3);
