@@ -14,9 +14,9 @@ class Magnet : public Dessinable
 {
 public:
     // constructeurs et destructeurs
-    Magnet(Position const& position, Vecteur3D axis = Vecteur3D(0, 0, 1), double charge = 2.0, double mass = 20.0,
-      double radius = 0.05, double length = 0.5, bool selected = 0, double torque = 0, double oldtorque = 0,
-      Vecteur3D Bfield = Vecteur3D(0, 0, 0), double angle = 0, double omega = 0, int rotations = 0,
+    Magnet(Position const& position, Vecteur3D axis = Vecteur3D(0, 0, 1), double angle = 0, double charge = 2.0, double mass = 0.3e-3,
+      double radius = 0.75e-3, double length = 1.9e-2, bool selected = 0, double torque = 0, double oldtorque = 0,
+      Vecteur3D Bfield = Vecteur3D(0, 0, 0), double omega = 0, int rotations = 0,
       SupportADessin * support = &Texte1);
     virtual ~Magnet(){ }
 
@@ -25,11 +25,12 @@ public:
     { return mass * length * length / 12; }
 
     double gamma() const
-    { return 5*inertia(); }
+    { return inertia(); }
 
     double alpha() const// angular acceleration
-    { return (1 / inertia()) * torque - gamma() * omega; }
-
+    { return (torque/inertia()) - (gamma()/inertia()) *omega; }
+    double displ_alpha() const// angular acceleration
+    { return (oldtorque/inertia()) - (gamma()/inertia()) *omega; }
 
     // orientation attributes (unit vectors)
     Vecteur3D planevec1() const;
@@ -41,7 +42,7 @@ public:
     { return orientation() * chargeN() * length; }
 
     double Hamiltonian() const
-    { return moment() * Bfield; }
+    { return moment() * Bfield + 0.5*inertia()*omega*omega; }
 
     // charge attibutes
     Vecteur3D positionN()

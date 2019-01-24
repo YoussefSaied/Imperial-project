@@ -45,48 +45,48 @@ public:
 public slots:
     void setXH(double x)
     {
-        if (x != (system_tab[0]->H).get_x()) {
-            (system_tab[0]->H).setx(x);
+        if (x*1e-4 != (system_tab[0]->H).get_x()) {
+            (system_tab[0]->H).setx(x*1e-4);
             emit XHChanged(x);
         }
     }
 
     void setYH(double y)
     {
-        if (y != (system_tab[0]->H).get_y()) {
-            (system_tab[0]->H).sety(y);
+        if (y*1e-4 != (system_tab[0]->H).get_y()) {
+            (system_tab[0]->H).sety(y*1e-4);
             emit YHChanged(y);
         }
     }
 
     void setZH(double z)
     {
-        if (z != (system_tab[0]->H).get_z()) {
-            (system_tab[0]->H).setz(z);
+        if (z*1e-4 != (system_tab[0]->H).get_z()) {
+            (system_tab[0]->H).setz(z*1e-4);
             emit ZHChanged(z);
         }
     }
 
     void setXH(int x)
     {
-        if (x != (system_tab[0]->H).get_x()) {
-            (system_tab[0]->H).setx(x);
+        if (x*1e-4 != (system_tab[0]->H).get_x()) {
+            (system_tab[0]->H).setx(x*1e-4);
             emit XHChanged(x);
         }
     }
 
     void setYH(int y)
     {
-        if (y != (system_tab[0]->H).get_y()) {
-            (system_tab[0]->H).sety(y);
+        if (y*1e-4 != (system_tab[0]->H).get_y()) {
+            (system_tab[0]->H).sety(y*1e-4);
             emit YHChanged(y);
         }
     }
 
     void setZH(int z)
     {
-        if (z != (system_tab[0]->H).get_z()) {
-            (system_tab[0]->H).setz(z);
+        if (z*1e-4 != (system_tab[0]->H).get_z()) {
+            (system_tab[0]->H).setz(z*1e-4);
             emit ZHChanged(z);
         }
     }
@@ -159,7 +159,7 @@ private:
 
     // Timer
     int timerId;
-    double dt = 0.005;
+    double dt = 0.0001;
 
     // pour faire évoluer les objets avec le bon "dt"
     QTime chronometre;

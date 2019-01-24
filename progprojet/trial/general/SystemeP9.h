@@ -16,8 +16,10 @@ class SystemeP9 : public Systeme
     friend class VueOpenGL;
 public:
 
+    double Energy;
+
     // constructeur et destructeur
-    SystemeP9(SupportADessin * support) : Systeme(support){ }
+    SystemeP9(SupportADessin * support) : Systeme(support), Energy(0){ }
 
     SystemeP9(){ }
 

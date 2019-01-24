@@ -10,18 +10,18 @@ Window::Window()
     updatelabelO();
     // H= blabla, correlation, time
     // connect evolve to H
-    connect(glWidget, SIGNAL(XHChanged(double)), this, SLOT(updatelabelO(double)));
-    connect(glWidget, SIGNAL(YHChanged(double)), this, SLOT(updatelabelO(double)));
-    connect(glWidget, SIGNAL(ZHChanged(double)), this, SLOT(updatelabelO(double)));
-    connect(glWidget, SIGNAL(evolved(double)), this, SLOT(updatelabelO(double)));
+    connect(glWidget, SIGNAL(XHChanged(double)), this, SLOT(updatelabelO()));
+    connect(glWidget, SIGNAL(YHChanged(double)), this, SLOT(updatelabelO()));
+    connect(glWidget, SIGNAL(ZHChanged(double)), this, SLOT(updatelabelO()));
+    connect(glWidget, SIGNAL(evolved(double)), this, SLOT(updatelabelO()));
     // connect evolve with update
 
     QLabel * labelx = new QLabel(this);
-    labelx->setText("Hx");
+    labelx->setText("Hx (x10^-4)");
     QLabel * labely = new QLabel(this);
-    labely->setText("Hy");
+    labely->setText("Hy (x10^-4)");
     QLabel * labelz = new QLabel(this);
-    labelz->setText("Hz");
+    labelz->setText("Hz (x10^-4)");
     QLabel * labela = new QLabel(this);
     labela->setText("Change Angle:");
 
