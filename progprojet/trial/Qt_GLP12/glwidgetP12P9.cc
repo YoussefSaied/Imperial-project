@@ -44,7 +44,7 @@ void GLWidget::paintGL()
 void GLWidget::keyPressEvent(QKeyEvent * event)
 {
     constexpr double petit_angle(5.0); // en degrés
-    constexpr double petit_pas(1.0);
+    constexpr double petit_pas(1.0e-2);
 
     switch (event->key()) {
         case Qt::Key_Left:
@@ -163,7 +163,7 @@ void GLWidget::pause()
 {
     if (timerId == 0) {
         // dans ce cas le timer ne tourne pas alors on le lance
-        timerId = startTimer(dt * 1000);
+        timerId = startTimer(dt * 10000);
         chronometre.restart();
     } else {
         // le timer tourne alors on l'arrête

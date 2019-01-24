@@ -26,7 +26,7 @@ public:
     QDoubleSpinBox * createdoubleSpin(double step = 0.01);
 
 public slots:
-    void updatelabelO(double x = 1)
+    void updatelabelO()
     {
         // do that at the system level
         std::string s = "Graphical Window, H=  ";

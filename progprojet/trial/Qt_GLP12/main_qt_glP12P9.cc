@@ -18,9 +18,9 @@ int main(int argc, char * argv[])
 {
     QApplication a(argc, argv);
     Window w;
-    //    Magnet M1(Position(0, 0, 1), Vecteur3D(0, 0, 1));
-    //  Magnet M2(Position(0, 1, 0), Vecteur3D(0, 1, 0));
-    // Magnet M3(Position(1, 7, 1), Vecteur3D(0, 1, 0));
+        Magnet M1(Position(0, 0, 0), Vecteur3D(0, 1, 0));
+        Magnet M2(Position(0, 0, 0 + M1.length * 1.2), Vecteur3D(0,1, 0),0.5);
+        Magnet M3(Position(0, 0, 0 + M1.length *1.4), Vecteur3D(0, 1, 0));
 
     /*MagnetE M2(Position(2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air);
      * MagnetE M3(Position(-2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air,1 , Vecteur3D(1,1,1));
@@ -40,7 +40,7 @@ int main(int argc, char * argv[])
 
     // All the magnets :D
     // int num = 0;
-
+/*
     for (int i = 0; i < (dode.vertipositions()).size(); ++i) {
         int si = ((dode.vertipositions())[i]).size();
         for (int j = 0; j < si; ++j) {
@@ -69,7 +69,7 @@ int main(int argc, char * argv[])
             (w.glWidget)->addMagnet(M);
         }
     }
-
+*/
     /*w.addMagnet(M2);
        w.addMagnet(M3);
        w.addMagnet(M4);
@@ -82,9 +82,9 @@ int main(int argc, char * argv[])
     (w.glWidget)->addObstacle(c2);
     (w.glWidget)->addObstacle(c3);
     (w.glWidget)->addObstacle(dode);
-    //    (w.glWidget)->addMagnet(M1);
-    //    (w.glWidget)->addMagnet(M2);
-    //    (w.glWidget)->addMagnet(M3);
+        (w.glWidget)->addMagnet(M1);
+        (w.glWidget)->addMagnet(M2);
+//        (w.glWidget)->addMagnet(M3);
     // w.addObstacle(dode);
     // w.addObstacle(dalle_obstacled);
     // w.addObstacle((b.dalle6())[3]);

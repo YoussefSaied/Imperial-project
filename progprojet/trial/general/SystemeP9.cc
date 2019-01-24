@@ -58,7 +58,7 @@ unique_ptr<Systeme> SystemeP9 ::copie() const
 void SystemeP9:: evolue1(double dt)
 {
     double newdt(dt);
-
+    Energy= 0;
     for(size_t i(0); i<tab_ptr_Magnets.size(); ++i) {
         //ext. field
         tab_ptr_Magnets[i]->addTorque(H);
@@ -71,6 +71,7 @@ void SystemeP9:: evolue1(double dt)
           }
         }
         // Magnet movement
+        Energy += tab_ptr_Magnets[i]->Hamiltonian();
         tab_ptr_Magnets[i]->move(dt);
     }// fin for Magnet
 }

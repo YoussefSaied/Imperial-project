@@ -6,9 +6,10 @@
 #include "Magnet.h"
 
 using namespace std;
-Magnet :: Magnet(Position const& position, Vecteur3D axis, double charge, double mass, double radius, double length,
+Magnet :: Magnet(Position const& position, Vecteur3D axis, double angle,
+  double charge, double mass, double radius, double length,
   bool selected, double torque, double oldtorque, Vecteur3D Bfield,
-  double angle, double omega, int rotations, SupportADessin * support) :
+   double omega, int rotations, SupportADessin * support) :
     Dessinable(position, support), axis(axis.normalise()), torque(torque), Bfield(Bfield), oldtorque(oldtorque), radius(radius),
     length(length), charge(charge),mass(mass), angle(angle), omega(omega), rotations(rotations){ }
 
@@ -17,10 +18,16 @@ ostream& Magnet:: display(std :: ostream& c) const
 {
     c << "Position: " << position << endl
       << "axis: " << axis << endl
-      << "Rotations: " << rotations << endl
+      << "omega: " << omega << endl
       << "Torque: " << oldtorque << endl
-      << "angle: " << angle << endl
-      << "orientation: " << orientation() << endl;
+      << "realTorque: " << displ_alpha()*inertia() << endl
+      << "acc: " << displ_alpha() << endl
+      <<"angle: " << std::fmod(angle,2*M_PI) << endl
+      << "orientation: " << orientation() << endl
+      <<"inertia: "<<inertia() << endl
+      <<"gamma: "<<gamma() << endl
+      <<"Hamiltonian: "<<Hamiltonian() <<endl;
+
     return c;
 }
 
@@ -38,17 +45,20 @@ Vecteur3D Magnet :: planevec2() const
 // Torque from magnet2
 void Magnet :: addTorque(unique_ptr<Magnet> const& Magnet2)
 
-{   double pow = 1;
-    Vecteur3D rNN = Magnet2->positionN() - positionN(); // Npole i Npole j
+{   double pow = 1e-7;
+    Vecteur3D rNN = -1*(Magnet2->positionN() - positionN()); // Npole i Npole j
     torque += ((length / 2) * pow) * chargeN() * Magnet2->chargeN() * (axis*(orientation() ^ rNN))
       / (rNN.norme() * rNN.norme() * rNN.norme());
-    Vecteur3D rNS = Magnet2->positionS() - positionN(); // Npole i Spole j
+
+    Vecteur3D rNS = -1*(Magnet2->positionS() - positionN()); // Npole i Spole j
     torque += ((length / 2) * pow) * chargeN() * Magnet2->chargeS() * (axis*(orientation() ^ rNS))
       / (rNS.norme() * rNS.norme() * rNS.norme());
-    Vecteur3D rSN = Magnet2->positionN() - positionS(); // Spole i Npole j
+
+    Vecteur3D rSN = -1*(Magnet2->positionN() - positionS()); // Spole i Npole j
     torque += ((length / 2) * pow) * chargeS() * Magnet2->chargeN() * (axis*(-1*orientation() ^ rSN))
       / (rSN.norme() * rSN.norme() * rSN.norme());
-    Vecteur3D rSS = Magnet2->positionS() - positionS();
+
+    Vecteur3D rSS = -1*(Magnet2->positionS() - positionS());
     torque += ((length / 2) * pow) * chargeS() * Magnet2->chargeS() * (axis*(-1 * orientation() ^ rSS))
       / (rSS.norme() * rSS.norme() * rSS.norme());
 }
@@ -72,6 +82,6 @@ void Magnet :: addBfield(unique_ptr<Magnet> const& Magnet2)
 {
     Vecteur3D rN = Magnet2->positionN() - position;
     Vecteur3D rS = Magnet2->positionS() - position;
-    Bfield += 10e-7 * Magnet2->chargeN() * rN / (rN.norme() * rN.norme());
-    Bfield += 10e-7 * Magnet2->chargeS() * rS / (rS.norme() * rS.norme());
+    Bfield += 1e-7 * Magnet2->chargeN() * rN / (rN.norme() * rN.norme());
+    Bfield += 1e-7 * Magnet2->chargeS() * rS / (rS.norme() * rS.norme());
 }
