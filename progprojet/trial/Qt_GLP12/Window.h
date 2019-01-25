@@ -33,6 +33,7 @@ public slots:
         std::stringstream ss;
         ss << (glWidget->system_tab[0])->H;
         ss << ", time: " << glWidget->time;
+        ss << ", Hamiltonian: " << (glWidget->system_tab[0])->Energy;
         s += ss.str();
         QString qstr = QString::fromStdString(s);
         labelO->setText(qstr);
