@@ -7,7 +7,13 @@
 void GLWidget::initializeGL()
 {
     vue.init();
-    timerId = startTimer(dt * 1000);
+    if (dt > 0.001) {
+        timerId = startTimer(dt * 1000);
+    } else {
+        timerId = startTimer(1);
+    }
+    chronometre.restart();
+    // pause();
 }
 
 // ======================================================================
@@ -37,14 +43,14 @@ void GLWidget::resizeGL(int width, int height)
 void GLWidget::paintGL()
 {
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    if (!system_tab.empty()) system_tab.back()->dessine();
+    if (!system_tab.empty()) { system_tab.back()->dessine(); }
 }
 
 // ======================================================================
 void GLWidget::keyPressEvent(QKeyEvent * event)
 {
     constexpr double petit_angle(5.0); // en degrés
-    constexpr double petit_pas(1.0e-2);
+    constexpr double petit_pas(5.0e-1);
 
     switch (event->key()) {
         case Qt::Key_Left:
@@ -152,8 +158,15 @@ void GLWidget::mouseMoveEvent(QMouseEvent * event)
 void GLWidget::timerEvent(QTimerEvent * event)
 {
     Q_UNUSED(event);
-    if (!system_tab.empty()) system_tab.back()->evolue1(dt);
-    time += dt;
+
+    if (dt > 0.001) {
+        if (!system_tab.empty()) { system_tab.back()->evolue1(dt); }
+        (system_tab.back()->time) += dt;
+    } else {
+        int n(0.001 / dt);
+        if (!system_tab.empty()) { system_tab.back()->evolue1(dt, n); }
+        (system_tab.back()->time) += n * dt;
+    }
     emit evolved(dt);
     updateGL();
 }
@@ -163,7 +176,9 @@ void GLWidget::pause()
 {
     if (timerId == 0) {
         // dans ce cas le timer ne tourne pas alors on le lance
-        timerId = startTimer(dt * 10000);
+        if (dt > 0.001) {
+            timerId = startTimer(dt * 1000);
+        } else { timerId = startTimer(1); }
         chronometre.restart();
     } else {
         // le timer tourne alors on l'arrête

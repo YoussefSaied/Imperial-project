@@ -17,8 +17,8 @@ class Systeme : public Dessinable
 public:
 
     // constructeurs et destructeurs
-    Systeme(SupportADessin * support = &Texte1, int selectmagnet = 0) : Dessinable(Position(), support),
-        H(0, 0, 0), selectedmagnet(selectmagnet)
+    Systeme(SupportADessin * support = &Texte1, double f = 1, int selectmagnet = 0) : Dessinable(Position(), support),
+        H(0, 0, 0), selectedmagnet(selectmagnet), Energy(0), time(0), f(1), n(1)
     { }
 
     virtual ~Systeme(){ }
@@ -26,17 +26,22 @@ public:
     Vecteur3D H; // external magnetic field
     std:: vector<std::unique_ptr<Magnet> > tab_ptr_Magnets;
     int selectedmagnet;
+    double Energy;
+    double time;
+    double f;
+    int n;
 
     // methodes
 
 
     virtual void evolue1(double dt = 0.001) = 0;
-
+    virtual void evolue1(double dt, unsigned int nb_repet) = 0;
+    virtual void evolue1(double dt, double t, bool d) = 0; // evolution du système selon le 1er temps t
     virtual std:: ostream& display(std:: ostream& c) const = 0;
 
     virtual void addMagnet(Magnet const& new_Magnet) = 0;
 
-    void ajouteObstacle(Obstacle const& nouveau_obstacle);
+    void addObstacle(Obstacle const& nouveau_obstacle);
 
     virtual void selected(int nm)
     {

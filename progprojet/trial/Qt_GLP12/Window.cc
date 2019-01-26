@@ -24,6 +24,8 @@ Window::Window()
     labelz->setText("Hz (x10^-4)");
     QLabel * labela = new QLabel(this);
     labela->setText("Change Angle:");
+    QLabel * labelom = new QLabel(this);
+    labelom->setText("Change Omega:");
 
     xSlider        = createSlider();
     ySlider        = createSlider();
@@ -36,6 +38,7 @@ Window::Window()
     labels->setText("Change Magnet");
     angleselector = createdoubleSpin();
     flipangle     = new QPushButton("Flip", this);
+    omegato0      = new QPushButton("0", this);
 
 
     connect(xSlider, SIGNAL(valueChanged(int)), glWidget, SLOT(setXH(int)));
@@ -48,6 +51,7 @@ Window::Window()
     connect(magnetselector, SIGNAL(valueChanged(int)), glWidget, SLOT(selectmagnet(int)));
     connect(glWidget, SIGNAL(magnetselected(int)), this, SLOT(setmagnetT(int)));
     connect(flipangle, SIGNAL(clicked()), glWidget, SLOT(flipmagnet()));
+    connect(omegato0, SIGNAL(clicked()), glWidget, SLOT(omegato0()));
     connect(angleselector, SIGNAL(valueChanged(double)), glWidget, SLOT(changeangle(double)));
     connect(glWidget, SIGNAL(anglechanged(int)), this, SLOT(setangleT(int)));
     QGridLayout * mainLayout = new QGridLayout;
@@ -66,6 +70,8 @@ Window::Window()
     mainLayout->addWidget(magnetselector, 0, 6);
     mainLayout->addWidget(labela, 9, 5);
     mainLayout->addWidget(flipangle, 9, 7);
+    mainLayout->addWidget(labelom, 8, 5);
+    mainLayout->addWidget(omegato0, 8, 7);
     mainLayout->addWidget(angleselector, 9, 6);
 
     setLayout(mainLayout);

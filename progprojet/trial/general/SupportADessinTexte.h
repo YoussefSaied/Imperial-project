@@ -7,21 +7,21 @@
 class SupportADessinTexte : public SupportADessin
 {
 public:
-	//constructeur et destructeur
-    SupportADessinTexte(std::ostream& flot) : flot(flot) {}
-    virtual ~SupportADessinTexte() {}
+    // constructeur et destructeur
+    SupportADessinTexte(std::ostream& flot) : flot(flot){ }
 
-    //methodes
+    virtual ~SupportADessinTexte(){ }
 
-    virtual void dessine(SystemeP9 const& S ) override;
+    // methodes
+
+    virtual void dessine(SystemeP9 const& S) override;
     virtual void dessine(Plan const& P) override;
     virtual void dessine(Dalle const& d) override;
-    virtual void dessine(Sphere const& s)override;
+    virtual void dessine(Sphere const& s) override;
     virtual void dessine(Brique const& b) override;
-		virtual void dessine(Dodec const& d) override;
-	virtual void dessine(Cylinder const& c) override;
-	//virtual void dessine(Magnet const& M) override;
-	virtual void dessine(Magnet const& M) override;
+    virtual void dessine(Dodec const& d) override;
+    virtual void dessine(Cylinder const& c) override;
+    virtual void dessine(Magnet const& M) override;
 
 private:
     std::ostream& flot;

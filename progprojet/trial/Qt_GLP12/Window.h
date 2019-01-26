@@ -32,7 +32,7 @@ public slots:
         std::string s = "Graphical Window, H=  ";
         std::stringstream ss;
         ss << (glWidget->system_tab[0])->H;
-        ss << ", time: " << glWidget->time;
+        ss << ", time: " << (glWidget->system_tab[0])->time;
         ss << ", Hamiltonian: " << (glWidget->system_tab[0])->Energy;
         s += ss.str();
         QString qstr = QString::fromStdString(s);
@@ -64,6 +64,7 @@ public:
     QDoubleSpinBox * yselector;
     QDoubleSpinBox * zselector;
     QPushButton * flipangle;
+    QPushButton * omegato0;
 };
 
 // double spinbox for moment, angle (double connected)
