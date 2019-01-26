@@ -69,6 +69,7 @@ void Magnet :: addTorque(unique_ptr<Magnet> const& Magnet2)
 
 void Magnet :: addTorque(Vecteur3D extfield)
 {
+    // again consistency
     torque += axis * (moment() ^ extfield);
 }
 
