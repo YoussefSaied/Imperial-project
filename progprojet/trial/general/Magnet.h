@@ -70,6 +70,8 @@ public:
 
     virtual void addTorque(std::unique_ptr<Magnet> const& Magnet2);
     virtual void addBfield(std::unique_ptr<Magnet> const& Magnet2);
+    virtual void addpotBN(std::unique_ptr<Magnet> const& Magnet2);
+    virtual void addpotBS(std::unique_ptr<Magnet> const& Magnet2);
     virtual void addTorque(Vecteur3D extfield);
     virtual void addBfield(Vecteur3D extfield){ Bfield = extfield; }
 
