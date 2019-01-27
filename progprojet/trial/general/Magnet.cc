@@ -95,12 +95,24 @@ void Magnet :: addTorque(Vecteur3D extfield)
     // again consistency
     torque += axis * (moment() ^ extfield);
 }
-
+/*
 void Magnet :: move(double delta_t)
 {
     angle += delta_t * omega + 1 / 2 * delta_t * delta_t * alpha();
     double zeta = (delta_t * gamma()) / (2 * inertia());
     omega     = (1 / (1 + zeta)) * ((omega * (1 - zeta)) + (delta_t / (2 * inertia())) * (oldtorque + torque));
+    oldtorque = torque;
+    torque    = 0.0;
+    Bfield    = Vecteur3D(0, 0, 0);
+    potBN = 0;
+    potBS = 0;
+}
+*/
+void Magnet :: move(double delta_t)
+{
+    double omega_half = omega + 0.5*delta_t*alpha(torque, omega);
+    angle += delta_t * omega + 1 / 2 * delta_t * delta_t * alpha(torque, omega);
+    omega += 0.5*delta_t*(alpha(torque, omega) + alpha(oldtorque, omega_half));
     oldtorque = torque;
     torque    = 0.0;
     Bfield    = Vecteur3D(0, 0, 0);

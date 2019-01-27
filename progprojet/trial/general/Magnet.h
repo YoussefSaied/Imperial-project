@@ -28,8 +28,8 @@ public:
     double gamma() const
     { return f * inertia(); }
 
-    double alpha() const// angular acceleration
-    { return (torque / inertia()) - (gamma() / inertia()) * omega; }
+    double alpha(double T, double W) const// angular acceleration
+    { return (1/inertia())*(T - gamma()*W); }
 
     double displ_alpha() const// angular acceleration
     { return (oldtorque / inertia()) - (gamma() / inertia()) * omega; }
