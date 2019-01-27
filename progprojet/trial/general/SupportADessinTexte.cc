@@ -13,49 +13,46 @@
 using namespace std;
 
 
-void SupportADessinTexte :: dessine(Magnet const& M  )
+void SupportADessinTexte :: dessine(Magnet const& M)
 {
-		M.Magnet::display(cout);
+    M.Magnet::display(flot);
 }
 
-
-void SupportADessinTexte :: dessine(Plan const& P  )
+void SupportADessinTexte :: dessine(Plan const& P)
 {
-    P.display(cout);
-}
-void SupportADessinTexte :: dessine(Dalle const& d  )
-{
-    d.display(cout);
+    P.display(flot);
 }
 
-void SupportADessinTexte :: dessine(SystemeP9 const& S )
+void SupportADessinTexte :: dessine(Dalle const& d)
 {
-    S.display(cout);
+    d.display(flot);
 }
-/*
-void SupportADessinTexte :: dessine(SystemeP12 const& S )
+
+void SupportADessinTexte :: dessine(SystemeP9 const& S)
 {
-    S.display(cout);
+    S.display(flot);
 }
-*/
+
 void SupportADessinTexte :: dessine(Sphere const& s)
 {
-    s.display(cout);
+    s.display(flot);
 }
+
 void SupportADessinTexte :: dessine(Brique const& b)
 {
     vector<Dalle> d6;
     d6 = (b.dalle6());
-    for(auto d : d6) {
+    for (auto d : d6) {
         d.dessine();
     }
 }
+
 void SupportADessinTexte :: dessine(Dodec const& d)
 {
-d.display(cout);
+    d.display(flot);
 }
 
 void SupportADessinTexte :: dessine(Cylinder const& c)
 {
-    c.display(cout);
+    c.display(flot);
 }

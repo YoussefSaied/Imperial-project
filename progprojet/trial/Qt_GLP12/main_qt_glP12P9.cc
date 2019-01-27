@@ -18,9 +18,9 @@ int main(int argc, char * argv[])
 {
     QApplication a(argc, argv);
     Window w;
-        Magnet M1(Position(0, 0, 0), Vecteur3D(0, 1, 0));
-        Magnet M2(Position(0, 0, 0 + M1.length * 1.2), Vecteur3D(0,1, 0),0.5);
-        Magnet M3(Position(0, 0, 0 + M1.length *1.4), Vecteur3D(0, 1, 0));
+    Magnet M1(Position(0, 0, 0), Vecteur3D(0, 1, 0));
+    Magnet M2(Position(0, 0, 0 + M1.length * 1.2), Vecteur3D(0, 1, 0));
+    Magnet M3(Position(0 + M1.length * 1.039, 0, 0 + M1.length * 0.6), Vecteur3D(0, 1, 0));
 
     /*MagnetE M2(Position(2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air);
      * MagnetE M3(Position(-2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air,1 , Vecteur3D(1,1,1));
@@ -32,7 +32,7 @@ int main(int argc, char * argv[])
      * Dalle dalle_obstacled(Position(0, 0, 0), Vecteur3D(0, 0.0, 1.0), Vecteur3D(0.0, 1.0, 0.0), 4, 4);
      * Brique b(dalle_obstacled, 4.0);*/
     // Dodec dode(Vecteur3D(0, 0, 3), 4, Vecteur3D(0, -0.763932, 1.23607), false);
-    Dodec dode(Vecteur3D(0, 0, 3), 1, Vecteur3D(0, 0, 1.23607), false);
+    Dodec dode(Vecteur3D(0, 0, 0), 3e-2, Vecteur3D(0, 0, 1.23607), false);
     Cylinder c1(Position(0, 10, 0), Vecteur3D(0, 7, 0), 1, 1);
     Cylinder c2(Position(10, 0, 0), Vecteur3D(7, 0, 0), 1, 1);
     Cylinder c3(Position(0, 0, 10), Vecteur3D(0, 0, 1), 1, 1);
@@ -41,6 +41,10 @@ int main(int argc, char * argv[])
     // All the magnets :D
     // int num = 0;
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> cff416ee80816ffa3a0e82c3a8e22aab2013d9bb
     for (int i = 0; i < (dode.vertipositions()).size(); ++i) {
         int si = ((dode.vertipositions())[i]).size();
         for (int j = 0; j < si; ++j) {
@@ -70,6 +74,10 @@ int main(int argc, char * argv[])
         }
     }
 
+<<<<<<< HEAD
+=======
+
+>>>>>>> cff416ee80816ffa3a0e82c3a8e22aab2013d9bb
     /*w.addMagnet(M2);
        w.addMagnet(M3);
        w.addMagnet(M4);
@@ -82,9 +90,15 @@ int main(int argc, char * argv[])
     (w.glWidget)->addObstacle(c2);
     (w.glWidget)->addObstacle(c3);
     (w.glWidget)->addObstacle(dode);
+<<<<<<< HEAD
   //      (w.glWidget)->addMagnet(M1);
     //    (w.glWidget)->addMagnet(M2);
 //        (w.glWidget)->addMagnet(M3);
+=======
+    // (w.glWidget)->addMagnet(M1);
+    // (w.glWidget)->addMagnet(M2);
+    // (w.glWidget)->addMagnet(M3);
+>>>>>>> cff416ee80816ffa3a0e82c3a8e22aab2013d9bb
     // w.addObstacle(dode);
     // w.addObstacle(dalle_obstacled);
     // w.addObstacle((b.dalle6())[3]);

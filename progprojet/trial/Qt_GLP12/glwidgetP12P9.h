@@ -35,58 +35,57 @@ public:
 
     void addObstacle(Obstacle const& nouveau_obstacle)
     {
-        system_tab[0]->ajouteObstacle(nouveau_obstacle);
+        system_tab[0]->addObstacle(nouveau_obstacle);
     }
 
     // system
     std::vector<std::unique_ptr<Systeme> > system_tab;
     SystemeP9 sysm;
-    double time = 0.0;
 public slots:
     void setXH(double x)
     {
-        if (x*1e-4 != (system_tab[0]->H).get_x()) {
-            (system_tab[0]->H).setx(x*1e-4);
+        if (x * 1e-4 != (system_tab[0]->H).get_x()) {
+            (system_tab[0]->H).setx(x * 1e-4);
             emit XHChanged(x);
         }
     }
 
     void setYH(double y)
     {
-        if (y*1e-4 != (system_tab[0]->H).get_y()) {
-            (system_tab[0]->H).sety(y*1e-4);
+        if (y * 1e-4 != (system_tab[0]->H).get_y()) {
+            (system_tab[0]->H).sety(y * 1e-4);
             emit YHChanged(y);
         }
     }
 
     void setZH(double z)
     {
-        if (z*1e-4 != (system_tab[0]->H).get_z()) {
-            (system_tab[0]->H).setz(z*1e-4);
+        if (z * 1e-4 != (system_tab[0]->H).get_z()) {
+            (system_tab[0]->H).setz(z * 1e-4);
             emit ZHChanged(z);
         }
     }
 
     void setXH(int x)
     {
-        if (x*1e-4 != (system_tab[0]->H).get_x()) {
-            (system_tab[0]->H).setx(x*1e-4);
+        if (x * 1e-4 != (system_tab[0]->H).get_x()) {
+            (system_tab[0]->H).setx(x * 1e-4);
             emit XHChanged(x);
         }
     }
 
     void setYH(int y)
     {
-        if (y*1e-4 != (system_tab[0]->H).get_y()) {
-            (system_tab[0]->H).sety(y*1e-4);
+        if (y * 1e-4 != (system_tab[0]->H).get_y()) {
+            (system_tab[0]->H).sety(y * 1e-4);
             emit YHChanged(y);
         }
     }
 
     void setZH(int z)
     {
-        if (z*1e-4 != (system_tab[0]->H).get_z()) {
-            (system_tab[0]->H).setz(z*1e-4);
+        if (z * 1e-4 != (system_tab[0]->H).get_z()) {
+            (system_tab[0]->H).setz(z * 1e-4);
             emit ZHChanged(z);
         }
     }
@@ -112,6 +111,14 @@ public slots:
         int mn = (system_tab[0]->selectedmagnet);
         int siz(((system_tab[0])->tab_ptr_Magnets).size());
         ((system_tab[0])->tab_ptr_Magnets)[mn]->angle += M_PI;
+        emit anglechanged((system_tab[0]->selectedmagnet) % siz);
+    }
+
+    void omegato0()
+    {
+        int mn = (system_tab[0]->selectedmagnet);
+        int siz(((system_tab[0])->tab_ptr_Magnets).size());
+        ((system_tab[0])->tab_ptr_Magnets)[mn]->omega = 0;
         emit anglechanged((system_tab[0]->selectedmagnet) % siz);
     }
 

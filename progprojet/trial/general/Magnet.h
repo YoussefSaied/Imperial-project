@@ -14,10 +14,11 @@ class Magnet : public Dessinable
 {
 public:
     // constructeurs et destructeurs
-    Magnet(Position const& position, Vecteur3D axis = Vecteur3D(0, 0, 1), double angle = 0, double charge = 2.0, double mass = 0.3e-3,
+    Magnet(Position const& position, Vecteur3D axis = Vecteur3D(0, 0, 1), double angle = 0, double charge = 2.0,
+      double mass = 0.3e-3,
       double radius = 0.75e-3, double length = 1.9e-2, bool selected = 0, double torque = 0, double oldtorque = 0,
       Vecteur3D Bfield = Vecteur3D(0, 0, 0), double omega = 0, int rotations = 0,
-      SupportADessin * support = &Texte1);
+      SupportADessin * support = &Texte1, double f = 0);
     virtual ~Magnet(){ }
 
     // derived attributes
@@ -25,12 +26,13 @@ public:
     { return mass * length * length / 12; }
 
     double gamma() const
-    { return inertia(); }
+    { return f * inertia(); }
 
     double alpha() const// angular acceleration
-    { return (torque/inertia()) - (gamma()/inertia()) *omega; }
+    { return (torque / inertia()) - (gamma() / inertia()) * omega; }
+
     double displ_alpha() const// angular acceleration
-    { return (oldtorque/inertia()) - (gamma()/inertia()) *omega; }
+    { return (oldtorque / inertia()) - (gamma() / inertia()) * omega; }
 
     // orientation attributes (unit vectors)
     Vecteur3D planevec1() const;
@@ -42,7 +44,7 @@ public:
     { return orientation() * chargeN() * length; }
 
     double Hamiltonian() const
-    { return moment() * Bfield + 0.5*inertia()*omega*omega; }
+    { return moment() * Bfield + 0.5 * inertia() * omega * omega; }
 
     // charge attibutes
     Vecteur3D positionN()
@@ -72,7 +74,7 @@ public:
     virtual void addBfield(Vecteur3D extfield){ Bfield = extfield; }
 
     virtual void move(double delta_t);
-    virtual void dessine() const override { if (support != nullptr) support->dessine(*this); }
+    virtual void dessine() const override { if (support != nullptr) { support->dessine(*this); } }
 
 
     // methodes
@@ -99,6 +101,7 @@ public:
     Vecteur3D axis;
     int rotations;
     bool selected;
+    double f;
 };
 
 /*for rotor model (separation >> length of magnets):

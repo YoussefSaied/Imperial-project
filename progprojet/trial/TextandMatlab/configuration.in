@@ -1,0 +1,9 @@
+% Physique :
+dt = 0.001
+timesim = 102
+f=0
+nb_repet= 200
+
+% Numérique :
+
+output = output
