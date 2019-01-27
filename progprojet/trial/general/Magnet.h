@@ -31,6 +31,11 @@ public:
     double alpha(double T, double W) const// angular acceleration
     { return (1/inertia())*(T - gamma()*W); }
 
+    double alpha1(double T) const// angular acceleration
+    { return (1/inertia())*T; }
+    double alpha2(double W) const// angular acceleration
+    { return (-1/inertia())*gamma()*W; }
+
     double displ_alpha() const// angular acceleration
     { return (oldtorque / inertia()) - (gamma() / inertia()) * omega; }
 

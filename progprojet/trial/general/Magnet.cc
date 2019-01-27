@@ -110,9 +110,10 @@ void Magnet :: move(double delta_t)
 */
 void Magnet :: move(double delta_t)
 {
+    angle += delta_t * omega + 0.5 * delta_t * delta_t * alpha(torque, omega);
+
     double omega_half = omega + 0.5*delta_t*alpha(torque, omega);
-    angle += delta_t * omega + 1 / 2 * delta_t * delta_t * alpha(torque, omega);
-    omega += 0.5*delta_t*(alpha(torque, omega) + alpha(oldtorque, omega_half));
+    omega += 0.5*delta_t*(alpha1(torque) + alpha1(oldtorque) + alpha2(omega_half));
     oldtorque = torque;
     torque    = 0.0;
     Bfield    = Vecteur3D(0, 0, 0);
