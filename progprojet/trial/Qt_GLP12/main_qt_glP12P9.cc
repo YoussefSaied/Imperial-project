@@ -41,10 +41,7 @@ int main(int argc, char * argv[])
     // All the magnets :D
     // int num = 0;
 
-<<<<<<< HEAD
-=======
 
->>>>>>> cff416ee80816ffa3a0e82c3a8e22aab2013d9bb
     for (int i = 0; i < (dode.vertipositions()).size(); ++i) {
         int si = ((dode.vertipositions())[i]).size();
         for (int j = 0; j < si; ++j) {
@@ -74,10 +71,7 @@ int main(int argc, char * argv[])
         }
     }
 
-<<<<<<< HEAD
-=======
 
->>>>>>> cff416ee80816ffa3a0e82c3a8e22aab2013d9bb
     /*w.addMagnet(M2);
        w.addMagnet(M3);
        w.addMagnet(M4);
@@ -90,15 +84,9 @@ int main(int argc, char * argv[])
     (w.glWidget)->addObstacle(c2);
     (w.glWidget)->addObstacle(c3);
     (w.glWidget)->addObstacle(dode);
-<<<<<<< HEAD
-  //      (w.glWidget)->addMagnet(M1);
-    //    (w.glWidget)->addMagnet(M2);
-//        (w.glWidget)->addMagnet(M3);
-=======
     // (w.glWidget)->addMagnet(M1);
     // (w.glWidget)->addMagnet(M2);
     // (w.glWidget)->addMagnet(M3);
->>>>>>> cff416ee80816ffa3a0e82c3a8e22aab2013d9bb
     // w.addObstacle(dode);
     // w.addObstacle(dalle_obstacled);
     // w.addObstacle((b.dalle6())[3]);

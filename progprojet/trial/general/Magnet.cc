@@ -53,7 +53,6 @@ void Magnet :: addTorque(unique_ptr<Magnet> const& Magnet2)
     Vecteur3D rNN = -1 * (Magnet2->positionN() - positionN()); // Npole i Npole j
     torque += ((length / 2) * pow) * chargeN() * Magnet2->chargeN() * (axis * (orientation() ^ rNN))
       / (rNN.norme() * rNN.norme() * rNN.norme());
-
     Vecteur3D rNS = -1 * (Magnet2->positionS() - positionN()); // Npole i Spole j
     torque += ((length / 2) * pow) * chargeN() * Magnet2->chargeS() * (axis * (orientation() ^ rNS))
       / (rNS.norme() * rNS.norme() * rNS.norme());
@@ -65,6 +64,30 @@ void Magnet :: addTorque(unique_ptr<Magnet> const& Magnet2)
     Vecteur3D rSS = -1 * (Magnet2->positionS() - positionS()); // Spole i Spole j
     torque += ((length / 2) * pow) * chargeS() * Magnet2->chargeS() * (axis * (-1 * orientation() ^ rSS))
       / (rSS.norme() * rSS.norme() * rSS.norme());
+}
+void Magnet :: addpotBN(unique_ptr<Magnet> const& Magnet2)
+{
+    Vecteur3D rN = Magnet2->positionN() - positionN();
+    Vecteur3D rS = Magnet2->positionS() - positionN();
+    potBN -= 1e-7 * Magnet2->chargeN() / rN.norme() ;
+    potBN -= 1e-7 * Magnet2->chargeS() / rS.norme();
+}
+void Magnet :: addpotBS(unique_ptr<Magnet> const& Magnet2)
+{
+    Vecteur3D rN = Magnet2->positionN() - positionS();
+    Vecteur3D rS = Magnet2->positionS() - positionS();
+    potBS -= 1e-7 * Magnet2->chargeN() / rN.norme() ;
+    potBS -= 1e-7 * Magnet2->chargeS() / rS.norme();
+}
+
+void Magnet :: addBfield(unique_ptr<Magnet> const& Magnet2)
+{
+    // for consistency maybe use the same model as addforce even beter would be
+    // having addBfieldN and addBfieldS and use these in addforce
+    Vecteur3D rN = Magnet2->positionN() - position;
+    Vecteur3D rS = Magnet2->positionS() - position;
+    Bfield += 1e-7 * Magnet2->chargeN() * rN / (rN.norme() * rN.norme() * rN.norme());
+    Bfield += 1e-7 * Magnet2->chargeS() * rS / (rS.norme() * rS.norme() * rS.norme());
 }
 
 void Magnet :: addTorque(Vecteur3D extfield)
@@ -81,14 +104,6 @@ void Magnet :: move(double delta_t)
     oldtorque = torque;
     torque    = 0.0;
     Bfield    = Vecteur3D(0, 0, 0);
-}
-
-void Magnet :: addBfield(unique_ptr<Magnet> const& Magnet2)
-{
-    // for consistency maybe use the same model as addforce even beter would be
-    // having addBfieldN and addBfieldS and use these in addforce
-    Vecteur3D rN = Magnet2->positionN() - position;
-    Vecteur3D rS = Magnet2->positionS() - position;
-    Bfield += 1e-7 * Magnet2->chargeN() * rN / (rN.norme() * rN.norme() * rN.norme());
-    Bfield += 1e-7 * Magnet2->chargeS() * rS / (rS.norme() * rS.norme() * rS.norme());
+    potBN = 0;
+    potBS = 0;
 }

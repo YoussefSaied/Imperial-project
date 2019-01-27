@@ -44,7 +44,7 @@ public:
     { return orientation() * chargeN() * length; }
 
     double Hamiltonian() const
-    { return moment() * Bfield + 0.5 * inertia() * omega * omega; }
+    { return potBN + potBS + 0.5 * inertia() * omega * omega; }
 
     // charge attibutes
     Vecteur3D positionN()

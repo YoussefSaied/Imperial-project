@@ -5,6 +5,8 @@ greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
 TARGET = simulation1
 LIBS += -L../general -lgeneral
+win32:LIBS += -lopengl32
+
 PRE_TARGETDEPS += ../general/libgeneral.a
 
 INCLUDEPATH += ../general
