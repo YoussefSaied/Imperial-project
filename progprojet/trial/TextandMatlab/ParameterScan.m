@@ -30,7 +30,7 @@ executable = 'simulationt';
 input = 'configuration.in';
 
 
-nsimul = 20;
+nsimul = 5;
 
 
 % Indiquer ici les valeurs des parametres a scanner :
@@ -149,7 +149,7 @@ if(strcmp(paramstr,'f'))
     line([1 1], [0.1 0.8]);
     line([0.7 1.2], [0.5 0.5]);
     line([0.832382 0.832382], [0.1 0.8]);
-    pV0 = polyfit(V0/0.3081,P3(end,:),1)
+    pV0 = polyfit(V0/0.3081,P3(end,:),1);
     pvV0 = polyval(pV0,V0/0.3081);
     plot(V0/0.3081,pvV0,'--')
     xlabel('$V0/E$ [ ]')
