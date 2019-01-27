@@ -12,7 +12,7 @@ Magnet :: Magnet(Position const& position, Vecteur3D axis, double angle,
   double omega, int rotations, SupportADessin * support, double f) :
     Dessinable(position, support), axis(axis.normalise()), torque(torque), Bfield(Bfield), oldtorque(oldtorque), radius(
         radius),
-    length(length), charge(charge), mass(mass), angle(angle), omega(omega), rotations(rotations), f(f){ }
+    length(length), charge(charge), mass(mass), angle(angle), omega(omega), rotations(rotations), f(f), potBN(0),potBS(0) { }
 
 
 ostream& Magnet:: display(std :: ostream& c) const
@@ -100,7 +100,7 @@ void Magnet :: move(double delta_t)
 {
     angle += delta_t * omega + 1 / 2 * delta_t * delta_t * alpha();
     double zeta = (delta_t * gamma()) / (2 * inertia());
-    omega     = (1 / (1 + zeta)) * (omega * (1 - zeta)) + (delta_t / (2 * inertia())) * (oldtorque + torque);
+    omega     = (1 / (1 + zeta)) * ((omega * (1 - zeta)) + (delta_t / (2 * inertia())) * (oldtorque + torque));
     oldtorque = torque;
     torque    = 0.0;
     Bfield    = Vecteur3D(0, 0, 0);

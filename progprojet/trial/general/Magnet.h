@@ -102,6 +102,8 @@ public:
     int rotations;
     bool selected;
     double f;
+    double potBN;
+    double potBS;
 };
 
 /*for rotor model (separation >> length of magnets):
