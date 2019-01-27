@@ -29,19 +29,22 @@ public:
     { return f * inertia(); }
 
     double alpha(double T, double W) const// angular acceleration
-    { return (1/inertia())*(T - gamma()*W); }
+    { return (1 / inertia()) * (T - gamma() * W); }
 
     double alpha1(double T) const// angular acceleration
-    { return (1/inertia())*T; }
+    { return (1 / inertia()) * T; }
+
     double alpha2(double W) const// angular acceleration
-    { return (-1/inertia())*gamma()*W; }
+    { return (-1 / inertia()) * gamma() * W; }
 
     double displ_alpha() const// angular acceleration
     { return (oldtorque / inertia()) - (gamma() / inertia()) * omega; }
 
     // orientation attributes (unit vectors)
     Vecteur3D planevec1() const;
+
     Vecteur3D planevec2() const; // check they form a right handed coord system -- should be fine
+
     Vecteur3D orientation() const
     { return planevec1() * cos(angle) + planevec2() * sin(angle); }
 
@@ -49,7 +52,7 @@ public:
     { return orientation() * chargeN() * length; }
 
     double Hamiltonian() const
-    { return potBN + potBS + 0.5 * inertia() * omega * omega; }
+    { return oldpotBN + oldpotBS + 0.5 * inertia() * omega * omega; } // hamiltonian would never have potential energy
 
     // charge attibutes
     Vecteur3D positionN()
@@ -74,13 +77,25 @@ public:
     double get_length() const { return length; }
 
     virtual void addTorque(std::unique_ptr<Magnet> const& Magnet2);
+
+    virtual void addnewTorque(std::unique_ptr<Magnet> const& Magnet2);
+
     virtual void addBfield(std::unique_ptr<Magnet> const& Magnet2);
+
     virtual void addpotBN(std::unique_ptr<Magnet> const& Magnet2);
+
     virtual void addpotBS(std::unique_ptr<Magnet> const& Magnet2);
+
     virtual void addTorque(Vecteur3D extfield);
-    virtual void addBfield(Vecteur3D extfield){ Bfield = extfield; }
+
+    virtual void addnewTorque(Vecteur3D extfield);
+
+    virtual void addBfield(Vecteur3D extfield){ Bfield += extfield; }
 
     virtual void move(double delta_t);
+
+    virtual void movea(double delta_t){ angle += delta_t * omega + 0.5 * delta_t * delta_t * alpha(torque, omega); }
+
     virtual void dessine() const override { if (support != nullptr) { support->dessine(*this); } }
 
 
@@ -98,6 +113,7 @@ public:
 
     double torque;
     double oldtorque;
+    double newtorque;
     Vecteur3D Bfield;
     double radius;
     double length;
@@ -111,6 +127,8 @@ public:
     double f;
     double potBN;
     double potBS;
+    double oldpotBN;
+    double oldpotBS;
 };
 
 /*for rotor model (separation >> length of magnets):

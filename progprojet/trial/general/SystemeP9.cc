@@ -71,11 +71,28 @@ void SystemeP9:: evolue1(double dt)
                 tab_ptr_Magnets[i]->addBfield(tab_ptr_Magnets[j]);
             }
         }
-        // Magnet movement
-        Energy += tab_ptr_Magnets[i]->Hamiltonian();
-        tab_ptr_Magnets[i]->move(dt);
     }// fin for Magnet
-}
+    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
+        // Magnet movement initial
+        tab_ptr_Magnets[i]->movea(dt);
+    }
+
+    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
+        // ext. field
+        tab_ptr_Magnets[i]->addnewTorque(H);
+        for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
+            // magnet interactions
+            if (i != j) {
+                tab_ptr_Magnets[i]->addnewTorque(tab_ptr_Magnets[j]);
+            }
+        }
+    }
+    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
+        // Magnet movement initial
+        tab_ptr_Magnets[i]->move(dt);
+        Energy += tab_ptr_Magnets[i]->Hamiltonian();
+    }
+} // SystemeP9::evolue1
 
 void SystemeP9:: evolue1(double dt, unsigned int nb_repet)
 {

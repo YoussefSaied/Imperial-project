@@ -30,11 +30,12 @@ executable = 'simulationt';
 input = 'configuration.in';
 
 
-nsimul = 5;
+nsimul = 1;
 
 
 % Indiquer ici les valeurs des parametres a scanner :
-dt = logspace(-1,-2,nsimul);
+%dt = logspace(-1,-2,nsimul);
+dt= 0.1;
 f = linspace(0,100,nsimul);
 
 
@@ -50,7 +51,7 @@ f = linspace(0,100,nsimul);
 
 output = cell(1, nsimul);
 
-tic
+
 for i = 1:nsimul
     tic
     filename = [paramstr, '=', num2str(param(i))];
@@ -61,7 +62,6 @@ for i = 1:nsimul
     disp('Done.')
     toc
 end
-toc
 
 %% Analyse %%
 %%%%%%%%%%%%%

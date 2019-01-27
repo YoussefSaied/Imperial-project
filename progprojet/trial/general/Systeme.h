@@ -52,10 +52,6 @@ public:
 
     virtual std::unique_ptr<Systeme> copie() const = 0;
 
-    // virtual std::unique_ptr<Systeme> P9toP12() const =0;
-
-    // virtual std::unique_ptr<Systeme> P12toP9() const =0;
-
 
     // delete
     Systeme (Systeme const&) = delete;
