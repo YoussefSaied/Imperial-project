@@ -15,71 +15,64 @@ class Magnet : public Dessinable
 public:
     // constructeurs et destructeurs
     Magnet(Position const& position, Vecteur3D axis = Vecteur3D(0, 0, 1), double angle = 0, double charge = 2.0,
-      double mass = 0.3e-3,
-      double radius = 0.75e-3, double length = 1.9e-2, bool selected = 0, double torque = 0, double oldtorque = 0,
-      Vecteur3D Bfield = Vecteur3D(0, 0, 0), double omega = 0, int rotations = 0,
+      double mass = 0.3e-3, double radius = 0.75e-3, double length = 1.9e-2, bool selected = 0,
+      double torque = 0, double oldtorque = 0, Vecteur3D Bfield = Vecteur3D(0, 0, 0), double omega = 0, int rotations = 0,
       SupportADessin * support = &Texte1, double f = 0);
     virtual ~Magnet(){ }
 
     // derived attributes
     double inertia() const
     { return mass * length * length / 12; }
-
     double gamma() const
     { return f * inertia(); }
 
-    double alpha(double T, double W) const// angular acceleration
+    //acceleration (ODE)
+    double alpha(double T, double W) const
     { return (1/inertia())*(T - gamma()*W); }
-
-    double alpha1(double T) const// angular acceleration
+    double alpha1(double T) const
     { return (1/inertia())*T; }
-    double alpha2(double W) const// angular acceleration
+    double alpha2(double W) const
     { return (-1/inertia())*gamma()*W; }
-
-    double displ_alpha() const// angular acceleration
+    double displ_alpha() const
     { return (oldtorque / inertia()) - (gamma() / inertia()) * omega; }
 
     // orientation attributes (unit vectors)
     Vecteur3D planevec1() const;
-    Vecteur3D planevec2() const; // check they form a right handed coord system -- should be fine
+    Vecteur3D planevec2() const;
     Vecteur3D orientation() const
     { return planevec1() * cos(angle) + planevec2() * sin(angle); }
-
     Vecteur3D moment() const
     { return orientation() * chargeN() * length; }
 
+    // charge attibutes
+    Vecteur3D positionN() const
+    { return position + orientation() * length / 2; }
+    Vecteur3D positionS() const
+    { return position - orientation() * length / 2; }
+    double chargeN() const
+    { return charge; }
+    double chargeS() const
+    { return charge; }
+
+     //Hamiltonian
     double Hamiltonian() const
     { return potBN + potBS + 0.5 * inertia() * omega * omega; }
 
-    // charge attibutes
-    Vecteur3D positionN()
-    { return position + orientation() * length / 2; }
-
-    Vecteur3D positionS()
-    { return position - orientation() * length / 2; }
-
-    double chargeN() const
-    { return charge; }
-
-    double chargeS() const
-    { return charge * -1; }
 
     // axis
     double get_axerheight() const { return radius * 6; }
-
     double get_axerradius() const { return length / 20; }
 
     void set_support(SupportADessin * s){ support = s; }
-
     double get_length() const { return length; }
 
-    virtual void addTorque(std::unique_ptr<Magnet> const& Magnet2);
+    virtual void addTorqueN(std::unique_ptr<Magnet> const& Magnet2);
+    virtual void addTorqueS(std::unique_ptr<Magnet> const& Magnet2);
     virtual void addBfield(std::unique_ptr<Magnet> const& Magnet2);
     virtual void addpotBN(std::unique_ptr<Magnet> const& Magnet2);
     virtual void addpotBS(std::unique_ptr<Magnet> const& Magnet2);
     virtual void addTorque(Vecteur3D extfield);
     virtual void addBfield(Vecteur3D extfield){ Bfield = extfield; }
-
     virtual void move(double delta_t);
     virtual void dessine() const override { if (support != nullptr) { support->dessine(*this); } }
 

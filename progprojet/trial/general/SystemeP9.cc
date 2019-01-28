@@ -67,13 +67,13 @@ void SystemeP9:: evolue1(double dt)
         for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
             // magnet interactions
             if (i != j) {
-                tab_ptr_Magnets[i]->addTorque(tab_ptr_Magnets[j]);
-                tab_ptr_Magnets[i]->addBfield(tab_ptr_Magnets[j]);
+                tab_ptr_Magnets[i]->addTorqueN(tab_ptr_Magnets[j]);
+                tab_ptr_Magnets[i]->addTorqueS(tab_ptr_Magnets[j]);
             }
         }
         // Magnet movement
         Energy += tab_ptr_Magnets[i]->Hamiltonian();
-        tab_ptr_Magnets[i]->move(dt);
+        tab_ptr_Magnets[0]->move(dt);
     }// fin for Magnet
 }
 
