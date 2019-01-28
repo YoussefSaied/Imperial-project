@@ -1,6 +1,6 @@
 % Physique :
 dt = 0.001
-timesim = 102
+timesim = 10
 f=0
 nb_repet= 200
 

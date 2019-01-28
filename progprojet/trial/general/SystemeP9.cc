@@ -61,21 +61,44 @@ void SystemeP9:: evolue1(double dt)
 {
     time  += dt;
     Energy = 0;
+
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         // ext. field
-        tab_ptr_Magnets[i]->addTorque(H);
+        if (time > 0.1) {
+            tab_ptr_Magnets[i]->torque = tab_ptr_Magnets[i]->newtorque;
+        } else {
+            tab_ptr_Magnets[i]->addTorque(H);
+            for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
+                // magnet interactions
+                if (i != j) {
+                    tab_ptr_Magnets[i]->addTorque(tab_ptr_Magnets[j]);
+                    tab_ptr_Magnets[i]->addBfield(tab_ptr_Magnets[j]);
+                }
+            }
+        }
+    }// fin for Magnet
+
+    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
+        // Magnet movement initial
+        tab_ptr_Magnets[i]->movea(dt);
+    }
+
+    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
+        // ext. field
+        tab_ptr_Magnets[i]->addnewTorque(H);
         for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
             // magnet interactions
             if (i != j) {
-                tab_ptr_Magnets[i]->addTorqueN(tab_ptr_Magnets[j]);
-                tab_ptr_Magnets[i]->addTorqueS(tab_ptr_Magnets[j]);
+                tab_ptr_Magnets[i]->addnewTorque(tab_ptr_Magnets[j]);
             }
         }
-        // Magnet movement
+    }
+    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
+        // Magnet movement initial
+        tab_ptr_Magnets[i]->move(dt);
         Energy += tab_ptr_Magnets[i]->Hamiltonian();
-        tab_ptr_Magnets[0]->move(dt);
-    }// fin for Magnet
-}
+    }
+} // SystemeP9::evolue1
 
 void SystemeP9:: evolue1(double dt, unsigned int nb_repet)
 {
