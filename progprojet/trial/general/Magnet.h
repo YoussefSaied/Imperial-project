@@ -18,7 +18,7 @@ public:
       double mass = 0.3e-3,
       double radius = 0.75e-3, double length = 1.9e-2, bool selected = 0, double torque = 0, double oldtorque = 0,
       Vecteur3D Bfield = Vecteur3D(0, 0, 0), double omega = 0, int rotations = 0,
-      SupportADessin * support = &Texte1, double f = 0);
+      SupportADessin * support = &Texte1, double f = 1);
     virtual ~Magnet(){ }
 
     // derived attributes
@@ -94,7 +94,10 @@ public:
 
     virtual void move(double delta_t);
 
-    virtual void movea(double delta_t){ angle += delta_t * omega + 0.5 * delta_t * delta_t * alpha(torque, omega); }
+    virtual void movea(double delta_t)
+    {
+        angle += delta_t * omega + 0.5 * delta_t * delta_t * alpha(torque, omega);
+    }
 
     virtual void dessine() const override { if (support != nullptr) { support->dessine(*this); } }
 

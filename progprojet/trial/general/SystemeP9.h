@@ -25,7 +25,7 @@ public:
     virtual void dessine() const override { support->dessine(*this); }
 
     virtual std:: ostream& display(std:: ostream& c) const;
-    virtual void evolue1(double dt = 0.001);                // evolution du système selon le 1er algo avec les ameliorations le long du projet
+    virtual void evolue1(double dt = 0.01);                 // evolution du système selon le 1er algo avec les ameliorations le long du projet
     virtual void evolue1(double dt, unsigned int nb_repet); // evolution du système selon le 1er algo nb_repet fois
     virtual void evolue1(double dt, double t, bool d = 1);  // evolution du système selon le 1er temps t and draw it if choosen
 

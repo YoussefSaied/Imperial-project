@@ -34,7 +34,7 @@ public:
     // methodes
 
 
-    virtual void evolue1(double dt = 0.001) = 0;
+    virtual void evolue1(double dt = 0.01) = 0;
     virtual void evolue1(double dt, unsigned int nb_repet) = 0;
     virtual void evolue1(double dt, double t, bool d) = 0; // evolution du système selon le 1er temps t
     virtual std:: ostream& display(std:: ostream& c) const = 0;

@@ -61,17 +61,23 @@ void SystemeP9:: evolue1(double dt)
 {
     time  += dt;
     Energy = 0;
+
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         // ext. field
-        tab_ptr_Magnets[i]->addTorque(H);
-        for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
-            // magnet interactions
-            if (i != j) {
-                tab_ptr_Magnets[i]->addTorque(tab_ptr_Magnets[j]);
-                tab_ptr_Magnets[i]->addBfield(tab_ptr_Magnets[j]);
+        if (time > 0.1) {
+            tab_ptr_Magnets[i]->torque = tab_ptr_Magnets[i]->newtorque;
+        } else {
+            tab_ptr_Magnets[i]->addTorque(H);
+            for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
+                // magnet interactions
+                if (i != j) {
+                    tab_ptr_Magnets[i]->addTorque(tab_ptr_Magnets[j]);
+                    tab_ptr_Magnets[i]->addBfield(tab_ptr_Magnets[j]);
+                }
             }
         }
     }// fin for Magnet
+
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         // Magnet movement initial
         tab_ptr_Magnets[i]->movea(dt);

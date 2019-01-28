@@ -35,7 +35,7 @@ nsimul = 1;
 
 % Indiquer ici les valeurs des parametres a scanner :
 %dt = logspace(-1,-2,nsimul);
-dt= 0.1;
+dt= 0.0001;
 f = linspace(0,100,nsimul);
 
 
