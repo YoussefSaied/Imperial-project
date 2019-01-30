@@ -96,16 +96,16 @@ void Magnet :: addpotBN(unique_ptr<Magnet> const& Magnet2)
 {
     Vecteur3D rN = Magnet2->positionN() - positionN();
     Vecteur3D rS = Magnet2->positionS() - positionN();
-    potBN -= 1e-7 * Magnet2->chargeN() / rN.norme();
-    potBN -= 1e-7 * Magnet2->chargeS() / rS.norme();
+    potBN -= 1e-7 * chargeN()*Magnet2->chargeN() / rN.norme();
+    potBN -= 1e-7 * chargeN()*Magnet2->chargeS() / rS.norme();
 }
 
 void Magnet :: addpotBS(unique_ptr<Magnet> const& Magnet2)
 {
     Vecteur3D rN = Magnet2->positionN() - positionS();
     Vecteur3D rS = Magnet2->positionS() - positionS();
-    potBS -= 1e-7 * Magnet2->chargeN() / rN.norme();
-    potBS -= 1e-7 * Magnet2->chargeS() / rS.norme();
+    potBS -= 1e-7 * chargeS()*Magnet2->chargeN() / rN.norme();
+    potBS -= 1e-7 * chargeS()*Magnet2->chargeS() / rS.norme();
 }
 
 //VERLET CALCULATIONS

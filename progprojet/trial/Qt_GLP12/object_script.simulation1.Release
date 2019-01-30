@@ -1,5 +1,5 @@
 INPUT(
-./release\maintest_qt_glP12P9.o
+./release\main_qt_glP12P9.o
 ./release\glwidgetP12P9.o
 ./release\Window.o
 ./release\glsphere.o

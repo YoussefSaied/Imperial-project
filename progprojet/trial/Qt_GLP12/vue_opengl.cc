@@ -46,6 +46,7 @@ void VueOpenGL::dessine(Magnet const& M)
     matrice2.setToIdentity();
     matrice2.translate((M.get_position()).get_x(), (M.get_position()).get_y(), (M.get_position()).get_z());
     if (axer != 0) matrice2.rotate(-1 * angle * 180 / M_PI, axer.get_x(), axer.get_y(), axer.get_z());
+    else if (M.orientation() == Vecteur3D(0,0,-1)) matrice2.rotate(-1 * 180, (M.axis).get_x(), (M.axis).get_y(), (M.axis).get_z());
     matrice2.translate(0, 0, -1 * M.length / 2);
     prog.setUniformValue("vue_modele", matrice_vue * matrice2);
     // if (!M.selected)
@@ -64,6 +65,7 @@ void VueOpenGL::dessine(Magnet const& M)
     // matrice.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
     matrice.translate((M.get_position()).get_x(), (M.get_position()).get_y(), (M.get_position()).get_z());
     if (axer != 0) matrice.rotate(-1 * angle * 180 / M_PI, axer.get_x(), axer.get_y(), axer.get_z());
+    else if (M.orientation() == Vecteur3D(0,0,-1)) matrice2.rotate(-1 * 90, (M.axis).get_x(), (M.axis).get_y(), (M.axis).get_z());
 
     // matrice.scale(M.get_radius(),M.get_radius(),M.get_height()/2);
     // matrice.rotate(-90,1,0,0);

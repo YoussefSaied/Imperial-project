@@ -33,12 +33,12 @@ executable = 'simulationt';
 input = 'configuration.in';
 
 
-nsimul = 1;
+nsimul = 10;
 
 
 % Indiquer ici les valeurs des parametres a scanner :
-%dt = logspace(-1,-2,nsimul);
-dt= 0.01;
+dt = linspace(0.01,0.1,nsimul);
+%dt= 0.01;
 f = linspace(0,100,nsimul);
 
 
@@ -59,7 +59,7 @@ for i = 1:nsimul
     tic
     filename = [paramstr, '=', num2str(param(i))];
     output{i} = [filename];
-    eval(sprintf('!%s%s %s %s=%.15g output=%s', repertoire, executable, input, paramstr, param(i), output{i}));
+    %eval(sprintf('!%s%s %s %s=%.15g output=%s', repertoire, executable, input, paramstr, param(i), output{i}));
     % Variante pour scanner Nx et Ny en meme temps:
     % eval(sprintf('!%s%s %s %s=%.15g %s=%.15g output=%s', repertoire, executable, input, [paramstr,'x'], param(i), [paramstr,'y'], param(i), output{i}));
     disp('Done.')
@@ -71,15 +71,24 @@ end
 
 if(strcmp(paramstr,'dt'))
 
+%     t= zeros(200,1);
+%     H= zeros(200,1);
+%     for i = 1:nsimul
+%     filename = [output{i}];
+%     data = load([filename]);
+%     t = [t ,data(:,1)];
+%     H= [H,data(:,2)];
+%     end
     t= zeros(200,1);
-    H= zeros(200,1);
+    angle= zeros(200,1);
     for i = 1:nsimul
     filename = [output{i}];
     data = load([filename]);
     t = [t ,data(:,1)];
-    H= [H,data(:,2)];
+    angle= [angle,data(:,2)];
     end
-
+    t(:,1) = [];
+    angle(:,1) = [];
 
     filename = [output{nsimul}];
     data = load([filename]);
@@ -115,11 +124,12 @@ end
 if(strcmp(paramstr,'dt'))
 
 figure
-plot(t,H)
+plot(dt.^2,mod(angle(10,:),2*pi))
 grid on
-xlabel('$t$ [s]');
-ylabel('$H$ [J]');
-
+% xlabel('$t$ [s]');
+% ylabel('$H$ [J]');
+xlabel('$dt^2$ [s^2]');
+ylabel('$angle(10)$ []');
 
 end
 

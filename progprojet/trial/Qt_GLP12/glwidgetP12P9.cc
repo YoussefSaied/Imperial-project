@@ -13,7 +13,7 @@ void GLWidget::initializeGL()
         timerId = startTimer(1);
     }
     chronometre.restart();
-    // pause();
+    pause();
 }
 
 // ======================================================================

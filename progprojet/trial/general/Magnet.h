@@ -53,7 +53,7 @@ public:
 
     // ENERGY
     double Hamiltonian() const
-    { return oldpotBN + oldpotBS + 0.5 * inertia() * omega * omega; } // hamiltonian would never have potential energy???
+    { return oldpotBN + oldpotBS + 0.5 * inertia() * omega * omega; } 
 
     // charge attibutes
     Vecteur3D positionN()
@@ -90,7 +90,7 @@ public:
 
     virtual void addpotBS(std::unique_ptr<Magnet> const& Magnet2);
 
-    virtual void addpotB(unique_ptr<Magnet> const& Magnet2)
+    virtual void addpotB(std::unique_ptr<Magnet> const& Magnet2)
     {
       addpotBN(Magnet2);
       addpotBS(Magnet2);
