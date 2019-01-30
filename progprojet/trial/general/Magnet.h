@@ -28,7 +28,7 @@ public:
     double gamma() const
     { return f * inertia(); }
 
-    //ACCELERATION
+    // ACCELERATION
     double accel(double T, double W) const// angular acceleration
     { return (1 / inertia()) * (T - gamma() * W); }
 
@@ -51,7 +51,7 @@ public:
     Vecteur3D moment() const
     { return orientation() * chargeN() * length; }
 
-    //ENERGY
+    // ENERGY
     double Hamiltonian() const
     { return oldpotBN + oldpotBS + 0.5 * inertia() * omega * omega; } // hamiltonian would never have potential energy???
 
@@ -77,7 +77,7 @@ public:
 
     double get_length() const { return length; }
 
-    //CALC METHODS
+    // CALC METHODS
     double torquecalc(Vecteur3D r, int chargeM2 = 1) const;
 
     virtual void addTorque(std::unique_ptr<Magnet> const& Magnet2);
@@ -103,6 +103,7 @@ public:
     {
         angle += delta_t * omega + 0.5 * delta_t * delta_t * accel(torque, omega);
     }
+
     virtual void moveomega(double delta_t);
 
     virtual void dessine() const override { if (support != nullptr) { support->dessine(*this); } }
