@@ -9,7 +9,9 @@
 % Note : pour relancer l'analyse des resultats sans relancer
 % les simulations, utiliser "Run Section"
 % 
-% LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6 matlab
+% LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6 matlab 
+%search run c++ in matlab
+% 
 % Ce script Matlab automatise la production de resultats
 % lorsqu'on doit faire une serie de simulations en
 % variant un des parametres d'entree.

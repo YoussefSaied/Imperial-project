@@ -17,8 +17,8 @@ class Systeme : public Dessinable
 public:
 
     // constructeurs et destructeurs
-    Systeme(SupportADessin * support = &Texte1, double f = 1, int selectmagnet = 0) : Dessinable(Position(), support),
-        H(0, 0, 0), selectedmagnet(selectmagnet), Energy(0), time(0), f(1), n(1)
+    Systeme(SupportADessin * support = &Texte1, int selectmagnet = 0) : Dessinable(Position(), support),
+        H(0, 0, 0), selectedmagnet(selectmagnet), Energy(0), time(0), algo(0), n(1)
     { }
 
     virtual ~Systeme(){ }
@@ -28,7 +28,8 @@ public:
     int selectedmagnet;
     double Energy;
     double time;
-    double f;
+    int algo;
+//double f;
     int n;
 
     // methodes

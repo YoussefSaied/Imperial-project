@@ -1,4 +1,3 @@
-//USE FOR OLDER ALGO
 #include "SystemeP9.h"
 #include "Systeme.h"
 #include <iostream>
@@ -34,10 +33,10 @@ ostream& SystemeP9:: display(ostream& c) const
 
     /*for (auto const& ptr_Magnet : tab_ptr_Magnets) {
         (*ptr_Magnet).dessine();
-      } //////////////////////////////////
+       }*/
     c << time << " " << Energy;
     c << endl;
-    return c;*/
+    return c;
 }
 
 unique_ptr<SystemeP9> SystemeP9 :: cloneme() const
@@ -62,9 +61,7 @@ void SystemeP9:: evolue1(double dt)
 {
     time  += dt;
     Energy = 0;
-    algo = 3; //1=BU, 2=move, 3=newtorquemove
-    if (algo <= 2)
-    {
+
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         // ext. field
             tab_ptr_Magnets[i]->addTorque(H);
@@ -77,48 +74,12 @@ void SystemeP9:: evolue1(double dt)
                 }
             }
         }
-
-    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
-        // Magnet movement initial
-        if (algo == 1)
-        {tab_ptr_Magnets[i]->VerletBU(dt);}
-        else
-        {tab_ptr_Magnets[i]->move(dt);}
-        Energy += tab_ptr_Magnets[i]->Hamiltonian();
-    }
-  }
-  else {
-    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
-        // ext. field
-        if (time > 0.1) {
-            tab_ptr_Magnets[i]->torque = tab_ptr_Magnets[i]->newtorque;
-        } else {
-            tab_ptr_Magnets[i]->addTorque(H);
-            for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
-                // magnet interactions
-                if (i != j) {
-                    tab_ptr_Magnets[i]->addTorque(tab_ptr_Magnets[j]);
-                    tab_ptr_Magnets[i]->addBfield(tab_ptr_Magnets[j]);
-                }
-            }
-        }
 }
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         // Magnet movement initial
-        tab_ptr_Magnets[i]->moveangle(dt);
+        tab_ptr_Magnets[i]->moveold(dt);
+        Energy += tab_ptr_Magnets[i]->Hamiltonian();
     }
-
-    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
-        // ext. field
-        tab_ptr_Magnets[i]->addnewTorque(H);
-        for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
-            // magnet interactions
-            if (i != j) {
-                tab_ptr_Magnets[i]->addnewTorque(tab_ptr_Magnets[j]);
-            }
-        }
-    }
-  }
 }
 
 
@@ -130,7 +91,7 @@ void SystemeP9:: evolue1(double dt)
 
 
 
-// some crap
+/* some crap
 void SystemeP9:: evolue1(double dt, unsigned int nb_repet)
 {
     for (unsigned int i(0); i < nb_repet; ++i) {
@@ -153,8 +114,6 @@ void SystemeP9:: evolue1(double dt, double t, bool d)
     }
 }
 
-/*
-//USE FOR NEWTORQUE ALGO
 #include "SystemeP9.h"
 #include "Systeme.h"
 #include <iostream>
@@ -190,7 +149,7 @@ ostream& SystemeP9:: display(ostream& c) const
 
     /*for (auto const& ptr_Magnet : tab_ptr_Magnets) {
         (*ptr_Magnet).dessine();
-      }
+       }
     c << time << " " << Energy;
     c << endl;
     return c;
@@ -236,7 +195,7 @@ void SystemeP9:: evolue1(double dt)
 }
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         // Magnet movement initial
-        tab_ptr_Magnets[i]->moveangle(dt);
+        tab_ptr_Magnets[i]->movea(dt);
     }
 
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
@@ -251,7 +210,7 @@ void SystemeP9:: evolue1(double dt)
     }
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         // Magnet movement initial
-        tab_ptr_Magnets[i]->moveomega(dt);
+        tab_ptr_Magnets[i]->move(dt);
         Energy += tab_ptr_Magnets[i]->Hamiltonian();
     }
 } // SystemeP9::evolue1
@@ -274,6 +233,8 @@ void SystemeP9:: evolue1(double dt, unsigned int nb_repet)
         evolue1(dt);
     }
 }
+
+
 
 
 
