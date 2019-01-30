@@ -21,7 +21,7 @@ ostream& Magnet:: display(std :: ostream& c) const
       << "axis: " << axis << endl
       << "omega: " << omega << endl
  //  << "Torque: " << oldtorque << endl
-  //    << "realTorque: " << displ_accel() * inertia() << endl
+      << "realTorque: " << displ_accel() * inertia() << endl
       << "acc: " << displ_accel() << endl
       << "angle: " << std::fmod(angle, 2 * M_PI) << endl
       << "orientation: " << orientation() << endl

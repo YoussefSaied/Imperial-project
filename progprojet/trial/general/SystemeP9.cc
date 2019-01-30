@@ -119,6 +119,26 @@ void SystemeP9:: evolue1(double dt)
     }
 } // SystemeP9::evolue1
 
+    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
+        // ext. field
+        tab_ptr_Magnets[i]->addnewTorque(H);
+        for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
+            // magnet interactions
+            if (i != j) {
+                tab_ptr_Magnets[i]->addnewTorque(tab_ptr_Magnets[j]);
+            }
+        }
+    }
+for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
+    // Magnet movement initial
+    tab_ptr_Magnets[i]->moveomega(dt);
+    Energy += tab_ptr_Magnets[i]->Hamiltonian();
+}
+}
+
+
+
+
 // SystemeP9::evolue1
 
 
