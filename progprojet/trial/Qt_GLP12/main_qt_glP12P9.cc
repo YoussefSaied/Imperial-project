@@ -18,9 +18,15 @@ int main(int argc, char * argv[])
 {
     QApplication a(argc, argv);
     Window w;
-    Magnet M1(Position(0, 0, 0), Vecteur3D(0, 1, 0));
-    Magnet M2(Position(0, 0, 0 + M1.length * 1.2), Vecteur3D(0, 1, 0));
-    Magnet M3(Position(0 + M1.length * 1.039, 0, 0 + M1.length * 0.6), Vecteur3D(0, 1, 0));
+    Vecteur3D v1(1, 0, 0);
+    Vecteur3D v2(1, 0, 0);
+    Vecteur3D v3(1, 0, 0);
+    v2 = v1.rotate(M_PI / 3 * 2, Vecteur3D(0, 0, 1));
+    v3 = v1.rotate(M_PI / 3 * 4, Vecteur3D(0, 0, 1));
+
+    Magnet M1(Position(0, 0, 0), v2);
+    Magnet M2(Position(0 + M1.length * 1.2, 0, 0), v3);
+    Magnet M3(Position(0 + M1.length * 0.6, 0 + M1.length * 1.039, 0), v1);
 
     /*MagnetE M2(Position(2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air);
      * MagnetE M3(Position(-2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air,1 , Vecteur3D(1,1,1));
