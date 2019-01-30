@@ -29,7 +29,7 @@ public:
     double Energy;
     double time;
     int algo;
-//double f;
+    double f;
     int n;
 
     // methodes

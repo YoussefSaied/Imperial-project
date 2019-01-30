@@ -42,7 +42,7 @@ int main(int argc, char * argv[])
     // int num = 0;
 
 
-    for (int i = 0; i < (dode.vertipositions()).size(); ++i) {
+    /*for (int i = 0; i < (dode.vertipositions()).size(); ++i) {
         int si = ((dode.vertipositions())[i]).size();
         for (int j = 0; j < si; ++j) {
             Vecteur3D p(0, 0, 0);
@@ -69,7 +69,7 @@ int main(int argc, char * argv[])
             Magnet M(p, axe);
             s.addMagnet(M);
         }
-    }
+       }*/
 
 
     /*w.addMagnet(M2);
@@ -80,13 +80,13 @@ int main(int argc, char * argv[])
        w.addMagnet(M7);
        w.addMagnet(M8);*/
     // w.addObstacle(b);
-    s.addObstacle(c1);
-    s.addObstacle(c2);
-    s.addObstacle(c3);
-    s.addObstacle(dode);
-    // s.addMagnet(M1);
-    // s.addMagnet(M2);
-    // s.addMagnet(M3);
+    // s.addObstacle(c1);
+    // s.addObstacle(c2);
+    // s.addObstacle(c3);
+    // s.addObstacle(dode);
+    s.addMagnet(M1);
+    s.addMagnet(M2);
+    s.addMagnet(M3);
     // w.addObstacle(dode);
     // w.addObstacle(dalle_obstacled);
     // w.addObstacle((b.dalle6())[3]);
