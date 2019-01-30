@@ -26,7 +26,8 @@ set(groot, 'defaultTextInterpreter', 'latex');
 set(groot, 'defaultAxesFontSize', 18);
 
 %% Parametres %%
-repertoire = './';
+%repertoire = './';
+repertoire = '/';
 executable = 'simulationt';
 
 input = 'configuration.in';
