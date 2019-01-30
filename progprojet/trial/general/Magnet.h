@@ -90,6 +90,12 @@ public:
 
     virtual void addpotBS(std::unique_ptr<Magnet> const& Magnet2);
 
+    virtual void addpotB(unique_ptr<Magnet> const& Magnet2)
+    {
+      addpotBN(Magnet2);
+      addpotBS(Magnet2);
+    }
+
     virtual void addTorque(Vecteur3D extfield);
 
     virtual void addnewTorque(Vecteur3D extfield);
