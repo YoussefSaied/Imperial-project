@@ -78,7 +78,7 @@ void SystemeP9:: evolue1(double dt)
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         // Magnet movement initial
         tab_ptr_Magnets[i]->moveold(dt);
-        Energy += tab_ptr_Magnets[i]->Hamiltonian();
+        Energy += tab_ptr_Magnets[i]->Kinetic();
     }
 }
 
@@ -211,7 +211,7 @@ void SystemeP9:: evolue1(double dt)
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         // Magnet movement initial
         tab_ptr_Magnets[i]->move(dt);
-        Energy += tab_ptr_Magnets[i]->Hamiltonian();
+        Energy += tab_ptr_Magnets[i]->Kinetic();
     }
 } // SystemeP9::evolue1
 

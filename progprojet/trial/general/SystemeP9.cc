@@ -83,7 +83,7 @@ void SystemeP9:: evolue1(double dt)
             if (algo == 1)
             { tab_ptr_Magnets[i]->VerletBU(dt); } else
             { tab_ptr_Magnets[i]->move(dt); }
-            Energy += tab_ptr_Magnets[i]->Hamiltonian();
+            Energy += tab_ptr_Magnets[i]->Kinetic();
         }
     } else {
         for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
@@ -121,7 +121,12 @@ void SystemeP9:: evolue1(double dt)
         for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
             // Magnet movement initial
             tab_ptr_Magnets[i]->moveomega(dt);
-            Energy += tab_ptr_Magnets[i]->Hamiltonian();
+            Energy += tab_ptr_Magnets[i]->Kinetic();
+            int k=i+1;
+            while (k<tab_ptr_Magnets.size()){
+              Energy += tab_ptr_Magnets[k]->potB();
+              k++;
+            }
         }
     }
 } // SystemeP9::evolue1
@@ -249,7 +254,7 @@ void SystemeP9:: evolue1(double dt, double t, bool d)
    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
     // Magnet movement initial
     tab_ptr_Magnets[i]->moveomega(dt);
-    Energy += tab_ptr_Magnets[i]->Hamiltonian();
+    Energy += tab_ptr_Magnets[i]->Kinetic();
    }
    } // SystemeP9::evolue1
 

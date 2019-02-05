@@ -9,9 +9,9 @@ using namespace std;
 Magnet :: Magnet(Position const& position, Vecteur3D axis, double angle,
   double charge, double mass, double radius, double length,
   bool selected, double torque, double oldtorque, Vecteur3D Bfield,
-  double omega, int rotations, SupportADessin * support, double f) :
+  double omega, int rotations, double speed, SupportADessin * support, double f) :
     Dessinable(position, support), axis(axis.normalise()), torque(torque), Bfield(Bfield), newtorque(oldtorque),
-    oldtorque(oldtorque), radius(radius), length(length), charge(charge), mass(mass), angle(angle),
+    oldtorque(oldtorque), radius(radius), length(length), charge(charge), mass(mass), angle(angle), speed(speed),
     omega(omega), rotations(rotations), f(f), potBN(0), potBS(0), oldpotBN(0), oldpotBS(0){ }
 
 
@@ -20,14 +20,16 @@ ostream& Magnet:: display(std :: ostream& c) const
     c << "Position: " << position << endl
       << "axis: " << axis << endl
       << "omega: " << omega << endl
- //  << "Torque: " << oldtorque << endl
+      << "real omega: " << speed << endl
+      << "Torque: " << torque << endl
+      << "Bfield: " << oldpotBN+oldpotBS << endl
       << "realTorque: " << displ_accel() * inertia() << endl
       << "acc: " << displ_accel() << endl
       << "angle: " << std::fmod(angle, 2 * M_PI) << endl
       << "orientation: " << orientation() << endl
       << "inertia: " << inertia() << endl
       << "gamma: " << gamma() << endl
-      << "Hamiltonian: " << Hamiltonian() << endl;
+      << "Kinetic Energy: " << Kinetic() << endl;
 
     return c;
 }
@@ -49,8 +51,8 @@ Vecteur3D Magnet :: planevec2() const
 double Magnet :: torquecalc(Vecteur3D r, int chargeM2) const
 {
   double pow    = 1e-7;
-  return ((length / 2) * pow) * -1*chargeM2*(charge*charge) * (axis * (orientation() ^ r))
-    / (r.norme() * r.norme() * r.norme());
+  return ((length / 2) * pow) * -1*chargeM2*(charge*charge) *
+  (axis * (orientation() ^ r)) / (r.norme() * r.norme() * r.norme());
 }
 
 void Magnet :: addTorque(unique_ptr<Magnet> const& Magnet2)
@@ -96,16 +98,16 @@ void Magnet :: addpotBN(unique_ptr<Magnet> const& Magnet2)
 {
     Vecteur3D rN = Magnet2->positionN() - positionN();
     Vecteur3D rS = Magnet2->positionS() - positionN();
-    potBN -= 1e-7 * chargeN()*Magnet2->chargeN() / rN.norme();
-    potBN -= 1e-7 * chargeN()*Magnet2->chargeS() / rS.norme();
+    potBN += 1e-7 * chargeN()*Magnet2->chargeN() / rN.norme();
+    potBN += 1e-7 * chargeN()*Magnet2->chargeS() / rS.norme();
 }
 
 void Magnet :: addpotBS(unique_ptr<Magnet> const& Magnet2)
 {
     Vecteur3D rN = Magnet2->positionN() - positionS();
     Vecteur3D rS = Magnet2->positionS() - positionS();
-    potBS -= 1e-7 * chargeS()*Magnet2->chargeN() / rN.norme();
-    potBS -= 1e-7 * chargeS()*Magnet2->chargeS() / rS.norme();
+    potBS += 1e-7 * chargeS()*Magnet2->chargeN() / rN.norme();
+    potBS += 1e-7 * chargeS()*Magnet2->chargeS() / rS.norme();
 }
 
 //VERLET CALCULATIONS
