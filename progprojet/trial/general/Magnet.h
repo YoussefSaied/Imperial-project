@@ -10,11 +10,12 @@
 
 typedef Vecteur3D Position, Vitesse;
 
+//Paula's magnet: charge = 2, radius = 0.75e-3, mass = 0.3e-3, length = 1.9e-2
 class Magnet : public Dessinable
 {
 public:
     // constructeurs et destructeurs
-    Magnet(Position const& position, Vecteur3D axis = Vecteur3D(0, 0, 1), bool movable = 1, double angle = 0,
+    Magnet(Position const& position, Vecteur3D axis = Vecteur3D(0, 0, 1), bool movable = 1, double angle = 0.0001,
       double charge = 2.0, double mass = 0.3e-3, double radius = 0.75e-3, double length = 1.9e-2,
       bool selected = 0, double torque = 0, double oldtorque = 0, Vecteur3D Bfield = Vecteur3D(0, 0, 0),
       double omega = 0, int rotations = 0, SupportADessin * support = &Texte1, double f = 1);
@@ -38,7 +39,7 @@ public:
     { return (-1 / inertia()) * gamma() * W; }
 
     double displ_accel() const// angular acceleration
-    { return (oldtorque / inertia()) - (gamma() / inertia()) * omega; }
+    { return (torque / inertia()) - (gamma() / inertia()) * omega; }
 
     // orientation attributes (unit vectors)
     Vecteur3D planevec1() const;
@@ -51,8 +52,8 @@ public:
     { return orientation() * chargeN() * length; }
 
     // ENERGY
-    double Hamiltonian() const
-    { return oldpotBN + oldpotBS + 0.5 * inertia() * omega * omega; }
+    double Kinetic() const
+    { return 0.5* inertia() * speed*speed; }
 
     // charge attibutes
     Vecteur3D positionN()
@@ -94,6 +95,7 @@ public:
         addpotBN(Magnet2);
         addpotBS(Magnet2);
     }
+    double potB() const {return oldpotBN + oldpotBS;}
 
     virtual void addTorque(Vecteur3D extfield);
 
@@ -108,7 +110,9 @@ public:
     {
         if (movable) {
             angle += delta_t * omega + 0.5 * delta_t * delta_t * accel(torque, omega);
+            speed = omega + 0.5 * delta_t  * accel(torque, omega) * (length/2);
         }
+        
     }
 
     virtual void moveomega(double delta_t);
@@ -136,6 +140,7 @@ public:
     double radius;
     double length;
     bool selected;
+    double speed;
     double torque;
     double oldtorque;
     double newtorque;

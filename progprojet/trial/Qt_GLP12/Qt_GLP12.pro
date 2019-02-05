@@ -13,7 +13,7 @@ PRE_TARGETDEPS += ../general/libgeneral.a
 INCLUDEPATH += ../general
 CONFIG += qt debug
 SOURCES += \
-    main_qt_glP12P9.cc \
+    maintest_qt_glP12P9.cc \
     glwidgetP12P9.cc \
     Window.cc \
     glsphere.cc \

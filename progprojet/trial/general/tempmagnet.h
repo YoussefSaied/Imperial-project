@@ -54,8 +54,8 @@ public:
     double chargeS() const
     { return charge; }
 
-     //Hamiltonian
-    double Hamiltonian() const
+     //Kinetic
+    double Kinetic() const
     { return potBN + potBS + 0.5 * inertia() * omega * omega; }
 
 

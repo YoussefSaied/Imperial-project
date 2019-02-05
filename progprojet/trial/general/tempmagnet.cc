@@ -29,7 +29,7 @@ ostream& Magnet:: display(std :: ostream& c) const
       << "orientation: " << orientation() << endl
       << "inertia: " << inertia() << endl
       << "gamma: " << gamma() << endl
-      << "Hamiltonian: " << Hamiltonian() << endl;
+      << "Kinetic: " << Kinetic() << endl;
 
     return c;
 }
