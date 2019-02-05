@@ -17,10 +17,16 @@ int main(int argc, char * argv[])
 {
     // intitial configuration:
     SystemeP9 s;
-
-    Magnet M1(Position(0, 0, 0), Vecteur3D(0, 1, 0));
-    Magnet M2(Position(0, 0, 0 + M1.length * 2.2), Vecteur3D(0, 1, 0));
-    Magnet M3(Position(0 + M1.length * 1.039, 0, 0 + M1.length * 0.6), Vecteur3D(0, 1, 0));
+    Vecteur3D v1(1, 0, 0);
+    Vecteur3D v2(1, 0, 0);
+    Vecteur3D v3(1, 0, 0);
+    v2 = v1.rotate(M_PI / 3 * 2, Vecteur3D(0, 0, 1));
+    v3 = v1.rotate(M_PI / 3 * 4, Vecteur3D(0, 0, 1));
+    Magnet M1(Position(0, 0, 0), v2);
+    Magnet M2(Position(0 + M1.length * 1.2, 0, 0), v3);
+    Magnet M3(Position(0 + M1.length * 0.6, 0 + M1.length * 1.039, 0), v1);
+    Magnet M4(Position(0, 0, 0), Vecteur3D(0, 1, 0), 0);
+    Magnet M5(Position(0, 0, 0 + M1.length * 2.2), Vecteur3D(0, 1, 0), 1, 1.5);
 
     /*MagnetE M2(Position(2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air);
      * MagnetE M3(Position(-2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air,1 , Vecteur3D(1,1,1));
@@ -84,9 +90,11 @@ int main(int argc, char * argv[])
     // s.addObstacle(c2);
     // s.addObstacle(c3);
     // s.addObstacle(dode);
-    s.addMagnet(M1);
-    s.addMagnet(M2);
-  //  s.addMagnet(M3);
+    // s.addMagnet(M1);
+    // s.addMagnet(M2);
+    // s.addMagnet(M3);
+    // s.addMagnet(M4);
+    s.addMagnet(M5);
     // w.addObstacle(dode);
     // w.addObstacle(dalle_obstacled);
     // w.addObstacle((b.dalle6())[3]);
@@ -135,6 +143,5 @@ int main(int argc, char * argv[])
        cout << endl;
        std::cout << "Please input time of simulation:" << '\n';
        cin >> timesim;*/
-       return a.exec();
-
+    return 0;
 } // main
