@@ -1,17 +1,17 @@
 % Ce script Matlab automatise la production de resultats
 % lorsqu'on doit faire une serie de simulations en
 % variant un des parametres d'entree.
-% 
+%
 % Il utilise les arguments du programme (voir ConfigFile.h)
 % pour remplacer la valeur d'un parametre du fichier d'input
 % par la valeur scannee.
 %
 % Note : pour relancer l'analyse des resultats sans relancer
 % les simulations, utiliser "Run Section"
-% 
-% LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6 matlab 
+%
+% LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libstdc++.so.6 matlab
 %search run c++ in matlab
-% 
+%
 % Ce script Matlab automatise la production de resultats
 % lorsqu'on doit faire une serie de simulations en
 % variant un des parametres d'entree.
@@ -26,12 +26,7 @@ set(groot, 'defaultTextInterpreter', 'latex');
 set(groot, 'defaultAxesFontSize', 18);
 
 %% Parametres %%
-<<<<<<< HEAD
-%repertoire = './';
-%repertoire = '/';
-=======
 repertoire = './';
->>>>>>> 5c810490bfd6581c0a64ab83860ce28646c46477
 executable = 'simulationt';
 
 input = 'configuration.in';
@@ -41,16 +36,10 @@ nsimul = 6;
 
 
 % Indiquer ici les valeurs des parametres a scanner :
-<<<<<<< HEAD
-dt = logspace(0.01,0.1,nsimul);
-%dt= 0.01;
-f = logspace(0,100,nsimul);
-=======
 %dt = linspace(-4,-5,nsimul);
 %dt= 0.01;
 dt = 10^-6 *[1 2 4 8 16 32];
 f = linspace(0,100,nsimul);
->>>>>>> 5c810490bfd6581c0a64ab83860ce28646c46477
 
 
 % Selectionner ici le parametre a scanner

@@ -9,16 +9,10 @@ using namespace std;
 Magnet :: Magnet(Position const& position, Vecteur3D axis, bool movable, double angle,
   double charge, double mass, double radius, double length,
   bool selected, double torque, double oldtorque, Vecteur3D Bfield,
-<<<<<<< HEAD
-  double omega, int rotations,  SupportADessin * support, double f) :
-    Dessinable(position, support), axis(axis.normalise()), torque(torque), Bfield(Bfield), newtorque(oldtorque),
-    oldtorque(oldtorque), radius(radius), length(length), charge(charge), mass(mass), angle(angle),
-=======
   double omega, int rotations, SupportADessin * support, double f) :
     Dessinable(position, support), angle(angle), movable(movable), axis(axis.normalise()),
     charge(charge), mass(mass), radius(radius), length(length), selected(selected),
     torque(torque), oldtorque(oldtorque), newtorque(oldtorque), Bfield(Bfield),
->>>>>>> 5c810490bfd6581c0a64ab83860ce28646c46477
     omega(omega), rotations(rotations), f(f), potBN(0), potBS(0), oldpotBN(0), oldpotBS(0){ }
 
 
@@ -81,10 +75,10 @@ void Magnet :: addnewTorque(unique_ptr<Magnet> const& Magnet2)
     Vecteur3D rSN = (Magnet2->positionN() - positionS()); // Spole i Npole j
     Vecteur3D rSS = (Magnet2->positionS() - positionS()); // Spole i Spole j
 
-    newtorque += torquecalc(rNN, 1);
-    newtorque += torquecalc(rNS, -1);
-    newtorque += torquecalc(rSN, 1);
-    newtorque += torquecalc(rSS, -1);
+    newtorque += torquecalc(rNN, Magnet2->chargeN());
+    newtorque += torquecalc(rNS, Magnet2->chargeS());
+    newtorque += torquecalc(rSN, Magnet2->chargeN());
+    newtorque += torquecalc(rSS, Magnet2->chargeS());
 }
 
 void Magnet :: addTorque(Vecteur3D extfield)
