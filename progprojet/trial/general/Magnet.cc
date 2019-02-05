@@ -9,9 +9,9 @@ using namespace std;
 Magnet :: Magnet(Position const& position, Vecteur3D axis, double angle,
   double charge, double mass, double radius, double length,
   bool selected, double torque, double oldtorque, Vecteur3D Bfield,
-  double omega, int rotations, double speed, SupportADessin * support, double f) :
+  double omega, int rotations,  SupportADessin * support, double f) :
     Dessinable(position, support), axis(axis.normalise()), torque(torque), Bfield(Bfield), newtorque(oldtorque),
-    oldtorque(oldtorque), radius(radius), length(length), charge(charge), mass(mass), angle(angle), speed(speed),
+    oldtorque(oldtorque), radius(radius), length(length), charge(charge), mass(mass), angle(angle),
     omega(omega), rotations(rotations), f(f), potBN(0), potBS(0), oldpotBN(0), oldpotBS(0){ }
 
 
@@ -20,7 +20,6 @@ ostream& Magnet:: display(std :: ostream& c) const
     c << "Position: " << position << endl
       << "axis: " << axis << endl
       << "omega: " << omega << endl
-      << "real omega: " << speed << endl
       << "Torque: " << torque << endl
       << "Bfield: " << oldpotBN+oldpotBS << endl
       << "realTorque: " << displ_accel() * inertia() << endl

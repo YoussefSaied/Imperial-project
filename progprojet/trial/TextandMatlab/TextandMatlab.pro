@@ -3,6 +3,9 @@ QMAKE_CXXFLAGS += -std=c++11
 
 TARGET = simulationt
 LIBS += -L../general -lgeneral
+win32:LIBS += -lopengl32
+win64:LIBS += -lopengl32
+
 PRE_TARGETDEPS += ../general/libgeneral.a
 
 INCLUDEPATH += ../general
@@ -38,4 +41,3 @@ HEADERS += \
     ../general/Dodec.h \
     ../general/Sphere.h \
     ../general/Vecteur3D.h
-

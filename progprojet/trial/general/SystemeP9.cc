@@ -80,12 +80,20 @@ void SystemeP9:: evolue1(double dt)
 
         for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
             // Magnet movement initial
+            if (i == 0){
             if (algo == 1)
             { tab_ptr_Magnets[i]->VerletBU(dt); } else
             { tab_ptr_Magnets[i]->move(dt); }
             Energy += tab_ptr_Magnets[i]->Kinetic();
+            int k=i+1;
+            while (k<tab_ptr_Magnets.size()){
+              Energy += tab_ptr_Magnets[k]->potB();
+              k++;
+            }
         }
-    } else {
+    }
+  }
+   else {
         for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
             // ext. field
             if (time > 0.1) {
