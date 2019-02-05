@@ -26,19 +26,19 @@ set(groot, 'defaultTextInterpreter', 'latex');
 set(groot, 'defaultAxesFontSize', 18);
 
 %% Parametres %%
-%repertoire = './';
-repertoire = '/';
+repertoire = './';
 executable = 'simulationt';
 
 input = 'configuration.in';
 
 
-nsimul = 10;
+nsimul = 6;
 
 
 % Indiquer ici les valeurs des parametres a scanner :
-dt = linspace(0.01,0.1,nsimul);
+%dt = linspace(-4,-5,nsimul);
 %dt= 0.01;
+dt = 10^-6 *[1 2 4 8 16 32];
 f = linspace(0,100,nsimul);
 
 
@@ -124,12 +124,12 @@ end
 if(strcmp(paramstr,'dt'))
 
 figure
-plot(dt.^2,mod(angle(10,:),2*pi))
+scatter(dt,mod(angle(100,:),2*pi))
 grid on
 % xlabel('$t$ [s]');
 % ylabel('$H$ [J]');
-xlabel('$dt^2$ [s^2]');
-ylabel('$angle(10)$ []');
+xlabel('$t$ [s]');
+ylabel('$angle$ [rad]');
 
 end
 

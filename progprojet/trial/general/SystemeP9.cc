@@ -35,8 +35,10 @@ ostream& SystemeP9:: display(ostream& c) const
 
     /*for (auto const& ptr_Magnet : tab_ptr_Magnets) {
         (*ptr_Magnet).dessine();
-       } */
-    c << time << " " << tab_ptr_Magnets[0]->angle;
+       }*/
+
+    int us = tab_ptr_Magnets.size();
+    c << time << " " << tab_ptr_Magnets[us - 1]->angle;
     c << endl;
     return c;
 }

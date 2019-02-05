@@ -14,11 +14,10 @@ class Magnet : public Dessinable
 {
 public:
     // constructeurs et destructeurs
-    Magnet(Position const& position, Vecteur3D axis = Vecteur3D(0, 0, 1), double angle = 0, double charge = 2.0,
-      double mass = 0.3e-3,
-      double radius = 0.75e-3, double length = 1.9e-2, bool selected = 0, double torque = 0, double oldtorque = 0,
-      Vecteur3D Bfield = Vecteur3D(0, 0, 0), double omega = 0, int rotations = 0,
-      SupportADessin * support = &Texte1, double f = 1);
+    Magnet(Position const& position, Vecteur3D axis = Vecteur3D(0, 0, 1), bool movable = 1, double angle = 0,
+      double charge = 2.0, double mass = 0.3e-3, double radius = 0.75e-3, double length = 1.9e-2,
+      bool selected = 0, double torque = 0, double oldtorque = 0, Vecteur3D Bfield = Vecteur3D(0, 0, 0),
+      double omega = 0, int rotations = 0, SupportADessin * support = &Texte1, double f = 1);
     virtual ~Magnet(){ }
 
     // derived attributes
@@ -53,7 +52,7 @@ public:
 
     // ENERGY
     double Hamiltonian() const
-    { return oldpotBN + oldpotBS + 0.5 * inertia() * omega * omega; } 
+    { return oldpotBN + oldpotBS + 0.5 * inertia() * omega * omega; }
 
     // charge attibutes
     Vecteur3D positionN()
@@ -78,7 +77,7 @@ public:
     double get_length() const { return length; }
 
     // CALC METHODS
-    double torquecalc(Vecteur3D r, int chargeM2 = 1) const;
+    double torquecalc(Vecteur3D r, double chargeM2) const;
 
     virtual void addTorque(std::unique_ptr<Magnet> const& Magnet2);
 
@@ -92,8 +91,8 @@ public:
 
     virtual void addpotB(std::unique_ptr<Magnet> const& Magnet2)
     {
-      addpotBN(Magnet2);
-      addpotBS(Magnet2);
+        addpotBN(Magnet2);
+        addpotBS(Magnet2);
     }
 
     virtual void addTorque(Vecteur3D extfield);
@@ -107,7 +106,9 @@ public:
     virtual void move(double delta_t);
     virtual void moveangle(double delta_t)
     {
-        angle += delta_t * omega + 0.5 * delta_t * delta_t * accel(torque, omega);
+        if (movable) {
+            angle += delta_t * omega + 0.5 * delta_t * delta_t * accel(torque, omega);
+        }
     }
 
     virtual void moveomega(double delta_t);
@@ -127,19 +128,20 @@ public:
     virtual std::unique_ptr<Magnet> copie() const { return cloneMe(); }
 
 
+    Vecteur3D axis;
+    bool movable;
+    double angle;
+    double charge;
+    double mass;
+    double radius;
+    double length;
+    bool selected;
     double torque;
     double oldtorque;
     double newtorque;
     Vecteur3D Bfield;
-    double radius;
-    double length;
     double omega;
-    double charge;
-    double angle;
-    double mass;
-    Vecteur3D axis;
     int rotations;
-    bool selected;
     double f;
     double potBN;
     double potBS;
