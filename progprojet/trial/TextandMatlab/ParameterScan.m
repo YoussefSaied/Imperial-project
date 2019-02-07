@@ -27,7 +27,7 @@ set(groot, 'defaultAxesFontSize', 18);
 
 %% Parametres %%
 repertoire = './';
-executable = 'simulationt';
+executable = 'debug/simulationt';
 
 input = 'configuration.in';
 
@@ -43,11 +43,11 @@ f = linspace(0,100,nsimul);
 
 
 % Selectionner ici le parametre a scanner
- paramstr = 'dt';
- param = dt;
+ %paramstr = 'dt\';
+ %param = dt;
 
- %paramstr = 'f';
- %param = f;
+ paramstr = 'f';
+ param = f;
 
 
 %% Simulations %%
@@ -57,9 +57,9 @@ output = cell(1, nsimul);
 
 for i = 1:nsimul
     tic
-    filename = [paramstr, '=', num2str(param(i))];
+    filename = [paramstr, num2str(param(i))];
     output{i} = [filename];
-    eval(sprintf('!%s%s %s %s=%.15g output=%s', executable, input, paramstr, param(i), output{i}));
+    eval(sprintf('!%s%s %s %s=%.15g output=%s',repertoire, executable, input, paramstr, param(i), output{i}));
     % Variante pour scanner Nx et Ny en meme temps:
     % eval(sprintf('!%s%s %s %s=%.15g %s=%.15g output=%s', repertoire, executable, input, [paramstr,'x'], param(i), [paramstr,'y'], param(i), output{i}));
     disp('Done.')
@@ -69,7 +69,7 @@ end
 %% Analyse %%
 %%%%%%%%%%%%%
 
-if(strcmp(paramstr,'dt'))
+if(strcmp(paramstr,'dt\'))
 
 %     t= zeros(200,1);
 %     H= zeros(200,1);
@@ -121,7 +121,7 @@ end
 
 %% Figures
 
-if(strcmp(paramstr,'dt'))
+if(strcmp(paramstr,'dt\'))
 
 figure
 scatter(dt,mod(angle(100,:),2*pi))

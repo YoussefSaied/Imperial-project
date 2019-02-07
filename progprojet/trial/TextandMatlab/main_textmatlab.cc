@@ -93,7 +93,7 @@ int main(int argc, char * argv[])
     // s.addMagnet(M1);
     // s.addMagnet(M2);
     // s.addMagnet(M3);
-    // s.addMagnet(M4);
+    s.addMagnet(M4);
     s.addMagnet(M5);
     // w.addObstacle(dode);
     // w.addObstacle(dalle_obstacled);
@@ -126,7 +126,7 @@ int main(int argc, char * argv[])
     double dt      = configFile.get<double>("dt");
     double timesim = configFile.get<double>("timesim");
     double f       = configFile.get<double>("f");
-    int n = configFile.get<int>("nb_repet");
+    int n          = configFile.get<int>("nb_repet");
 
     // output text file:
     string output = configFile.get<string>("output");

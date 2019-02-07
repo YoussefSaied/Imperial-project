@@ -17,8 +17,8 @@ public:
     // constructeurs et destructeurs
     Magnet(Position const& position, Vecteur3D axis = Vecteur3D(0, 0, 1), bool movable = 1, double angle = 0.0001,
       double charge = 2.0, double mass = 0.3e-3, double radius = 0.75e-3, double length = 1.9e-2,
-      bool selected = 0, double torque = 0, double oldtorque = 0, Vecteur3D Bfield = Vecteur3D(0, 0, 0),
-      double omega = 0, int rotations = 0, SupportADessin * support = &Texte1, double f = 1);
+      bool selected = 0, double torque = 0, double newtorque = 0, Vecteur3D Bfield = Vecteur3D(0, 0, 0),
+      double omega = 0, int rotations = 0, SupportADessin * support = &Texte1, double f = 0);
     virtual ~Magnet(){ }
 
     // derived attributes
@@ -28,6 +28,10 @@ public:
     double gamma() const
     { return f * inertia(); }
 
+    // ENERGY
+    double Kinetic() const
+    { return 0.5* inertia() * omega*omega; }
+
     // ACCELERATION
     double accel(double T, double W) const// angular acceleration
     { return (1 / inertia()) * (T - gamma() * W); }
@@ -36,30 +40,30 @@ public:
     { return (1 / inertia()) * T; }
 
     double dampingaccel(double W) const// angular acceleration
-    { return (-1 / inertia()) * gamma() * W; }
+    { return -1* f * W; }
 
-    double displ_accel() const// angular acceleration
-    { return (torque / inertia()) - (gamma() / inertia()) * omega; }
+    double displ_accel(double T,double W) const// angular acceleration
+    { return (T/ inertia()) - f * W; }
 
     // orientation attributes (unit vectors)
     Vecteur3D planevec1() const;
     Vecteur3D planevec2() const;
+    Vecteur3D zaxis() const
+    {return planevec1()^planevec2();}
 
     Vecteur3D orientation() const
     { return planevec1() * cos(angle) + planevec2() * sin(angle); }
+    //make sure axis forms RH coordinate system
+
 
     Vecteur3D moment() const
     { return orientation() * chargeN() * length; }
 
-    // ENERGY
-    double Kinetic() const
-    { return 0.5* inertia() * omega*omega; }
-
     // charge attibutes
-    Vecteur3D positionN()
+    Vecteur3D positionN() const
     { return position + orientation() * length / 2; }
 
-    Vecteur3D positionS()
+    Vecteur3D positionS() const
     { return position - orientation() * length / 2; }
 
     double chargeN() const
@@ -95,7 +99,7 @@ public:
         addpotBN(Magnet2);
         addpotBS(Magnet2);
     }
-    double potB() const {return oldpotBN + oldpotBS;}
+    double potB() const {return potBN + potBS;}
 
     virtual void addTorque(Vecteur3D extfield);
 
@@ -103,13 +107,17 @@ public:
 
     virtual void addBfield(Vecteur3D extfield){ Bfield += extfield; }
 
+    virtual void reset();
+
+    virtual void resetnew();
 
     virtual void VerletBU(double delta_t);
     virtual void move(double delta_t);
     virtual void moveangle(double delta_t)
     {
-
+      if (movable){
         angle += delta_t * omega + 0.5 * delta_t * delta_t * accel(torque, omega);
+      }
     }
 
     virtual void moveomega(double delta_t);
@@ -145,8 +153,6 @@ public:
     double f;
     double potBN;
     double potBS;
-    double oldpotBN;
-    double oldpotBS;
 };
 
 /*for rotor model (separation >> length of magnets):

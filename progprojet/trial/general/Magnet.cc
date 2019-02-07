@@ -8,30 +8,60 @@
 using namespace std;
 Magnet :: Magnet(Position const& position, Vecteur3D axis, bool movable, double angle,
   double charge, double mass, double radius, double length,
-  bool selected, double torque, double oldtorque, Vecteur3D Bfield,
+  bool selected, double torque, double newtorque, Vecteur3D Bfield,
   double omega, int rotations, SupportADessin * support, double f) :
     Dessinable(position, support), angle(angle), movable(movable), axis(axis.normalise()),
     charge(charge), mass(mass), radius(radius), length(length), selected(selected),
-    torque(torque), oldtorque(oldtorque), newtorque(oldtorque), Bfield(Bfield),
-    omega(omega), rotations(rotations), f(f), potBN(0), potBS(0), oldpotBN(0), oldpotBS(0){ }
+    torque(torque), oldtorque(0), newtorque(newtorque), Bfield(Bfield),
+    omega(omega), rotations(rotations), f(f), potBN(0), potBS(0){ }
 
 
 ostream& Magnet:: display(std :: ostream& c) const
 {
-    c << "Position: " << position << endl
+    c << "Fixed Attributes" << endl
+      << "Position of centre: " << position << endl
       << "axis: " << axis << endl
-      << "omega: " << omega << endl
-      << "Torque: " << torque << endl
-      << "Bfield: " << oldpotBN+oldpotBS << endl
-      << "realTorque: " << displ_accel() * inertia() << endl
-      << "acc: " << displ_accel() << endl
-      << "angle: " << std::fmod(angle, 2 * M_PI) << endl
-      << "orientation: " << orientation() << endl
       << "inertia: " << inertia() << endl
       << "gamma: " << gamma() << endl
-      << "Kinetic Energy: " << Kinetic() << endl;
+      << endl
+      << "Motion" << endl
+      << "angle: " << std::fmod(angle, 2 * M_PI) << endl
+      << "orientation: " << orientation() << endl
+      << endl
+      << "omega: " << omega << endl
+      << endl
+      << "Torque: " << torque << endl
+      << "realTorque: " << displ_accel(newtorque, omega) * inertia() << endl
+      << endl
+      << "acc(T): " << torqueaccel(newtorque) << endl
+      << "acc(W): " << dampingaccel(omega) << endl
+      << "acc(T,W): " << displ_accel(newtorque, omega) << endl
+      << endl
+      << "Energy (*1e7)" << endl
+      << "Kinetic Energy: " << Kinetic()*1e7 << endl
+      << "Potential Energy: " << (potBN+potBS)*1e7 << endl;
 
     return c;
+}
+
+void Magnet :: reset()
+{
+  // reinitialise
+  torque    = 0.0;
+  newtorque = 0.0;
+  Bfield    = Vecteur3D(0, 0, 0);
+  potBN     = 0;
+  potBS     = 0;
+}
+
+void Magnet :: resetnew()
+{
+  // reinitialise
+  torque    = newtorque;
+  newtorque = 0.0;
+  Bfield    = Vecteur3D(0, 0, 0);
+  potBN     = 0;
+  potBS     = 0;
 }
 
 // plane vectors
@@ -48,49 +78,49 @@ Vecteur3D Magnet :: planevec2() const
 }
 
 // TORQUE
-double Magnet :: torquecalc(Vecteur3D r, double chargeM2) const
+double Magnet :: torquecalc(Vecteur3D r, double signM2) const
 {
     double pow = 1e-7;
-    return ((length / 2) * pow) * -1 * chargeM2 * charge * (axis * (orientation() ^ r))
-           / (r.norme() * r.norme() * r.norme());
+    return ((length / 2) * pow) * signM2 * (charge*charge) *
+    (zaxis() * (orientation() ^ r))/ (r.norme() * r.norme() * r.norme());
 }
 
 void Magnet :: addTorque(unique_ptr<Magnet> const& Magnet2)
 {
-    Vecteur3D rNN = (Magnet2->positionN() - positionN()); // Npole i Npole j
-    Vecteur3D rNS = (Magnet2->positionS() - positionN()); // Npole i Spole j
-    Vecteur3D rSN = (Magnet2->positionN() - positionS()); // Spole i Npole j
-    Vecteur3D rSS = (Magnet2->positionS() - positionS()); // Spole i Spole j
+    Vecteur3D rNN = positionN() - Magnet2->positionN(); // Npole i Npole j
+    Vecteur3D rNS = positionN() - Magnet2->positionS(); // Npole i Spole j
+    Vecteur3D rSN = positionS() - Magnet2->positionN(); // Spole i Npole j
+    Vecteur3D rSS = positionS() - Magnet2->positionS(); // Spole i Spole j
 
-    torque += torquecalc(rNN, Magnet2->chargeN());
-    torque += torquecalc(rNS, Magnet2->chargeS());
-    torque += torquecalc(rSN, Magnet2->chargeN());
-    torque += torquecalc(rSS, Magnet2->chargeS());
+    torque += torquecalc(rNN, 1);
+    torque += torquecalc(rNS,-1);
+    torque += torquecalc(rSN, 1);
+    torque += torquecalc(rSS,-1);
 }
 
 void Magnet :: addnewTorque(unique_ptr<Magnet> const& Magnet2)
 {
-    Vecteur3D rNN = (Magnet2->positionN() - positionN()); // Npole i Npole j
-    Vecteur3D rNS = (Magnet2->positionS() - positionN()); // Npole i Spole j
-    Vecteur3D rSN = (Magnet2->positionN() - positionS()); // Spole i Npole j
-    Vecteur3D rSS = (Magnet2->positionS() - positionS()); // Spole i Spole j
+    Vecteur3D rNN = positionN() - Magnet2->positionN(); // Npole i Npole j
+    Vecteur3D rNS = positionN() - Magnet2->positionS(); // Npole i Spole j
+    Vecteur3D rSN = positionS() - Magnet2->positionN(); // Spole i Npole j
+    Vecteur3D rSS = positionS() - Magnet2->positionS(); // Spole i Spole j
 
-    newtorque += torquecalc(rNN, Magnet2->chargeN());
-    newtorque += torquecalc(rNS, Magnet2->chargeS());
-    newtorque += torquecalc(rSN, Magnet2->chargeN());
-    newtorque += torquecalc(rSS, Magnet2->chargeS());
+    newtorque += torquecalc(rNN, 1);
+    newtorque += torquecalc(rNS,-1);
+    newtorque += torquecalc(rSN, 1);
+    newtorque += torquecalc(rSS,-1);
 }
 
 void Magnet :: addTorque(Vecteur3D extfield)
 {
-    // again consistency
-    torque += axis * (moment() ^ extfield);
+    double pow = 1e-7;
+    torque += pow*zaxis() * (moment() ^ extfield);
 }
 
 void Magnet :: addnewTorque(Vecteur3D extfield)
 {
-    // again consistency
-    newtorque += axis * (moment() ^ extfield);
+  double pow = 1e-7;
+  newtorque += pow*zaxis() * (moment() ^ extfield);
 }
 
 // MAGNETIC FIELD
@@ -111,46 +141,26 @@ void Magnet :: addpotBS(unique_ptr<Magnet> const& Magnet2)
 }
 
 // VERLET CALCULATIONS
-
 void Magnet :: VerletBU(double delta_t)
 {
     if (movable) { angle += delta_t * omega + 1 / 2 * delta_t * delta_t * accel(torque, omega); }
     double zeta = (delta_t * gamma()) / (2 * inertia());
     omega     = (1 / (1 + zeta)) * ((omega * (1 - zeta)) + (delta_t / (2 * inertia())) * (oldtorque + torque));
-    oldtorque = torque;
-    torque    = 0.0;
-    Bfield    = Vecteur3D(0, 0, 0);
-    potBN     = 0;
-    potBS     = 0;
 }
 
 void Magnet :: move(double delta_t) // works!!
 {
+  if (movable){
     double omega_half = omega + 0.5 * delta_t * accel(oldtorque, omega);
     omega += 0.5 * delta_t * (torqueaccel(torque) + torqueaccel(oldtorque) + 2 * dampingaccel(omega_half));
-    angle += delta_t * omega + 0.5 * delta_t * delta_t * accel(torque, omega);
-
-    // reinitialise
-    oldtorque = torque;
-    torque    = 0.0;
-    Bfield    = Vecteur3D(0, 0, 0);
-    potBN     = 0;
-    potBS     = 0;
+    angle += delta_t * omega + 0.5 * delta_t * delta_t * accel(torque, omega);}
 }
 
 void Magnet :: moveomega(double delta_t)
 {
+  if (movable){
     double omega_half = omega + 0.5 * delta_t * accel(torque, omega);
-    omega += 0.5 * delta_t * (torqueaccel(torque) + torqueaccel(newtorque) + 2 * dampingaccel(omega_half));
-
-    // reinitialise
-    torque    = 0.0;
-    newtorque = 0.0;
-    Bfield    = Vecteur3D(0, 0, 0);
-    oldpotBN  = potBN;
-    oldpotBS  = potBS;
-    potBN     = 0;
-    potBS     = 0;
+    omega += 0.5 * delta_t * (torqueaccel(torque) + torqueaccel(newtorque) + 2 * dampingaccel(omega_half));}
 }
 
 void Magnet :: addBfield(unique_ptr<Magnet> const& Magnet2)
