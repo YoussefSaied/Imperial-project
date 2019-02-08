@@ -27,7 +27,7 @@ ostream& Magnet:: display(std :: ostream& c) const
       << "gamma: " << gamma() << endl
       << endl
       << "Motion" << endl
-      << "angle: " << std::fmod(angle, 2 * M_PI) << endl
+      << "angle: " << std::fmod(angle, M_PI) << endl
       << "orientation: " << orientation() << endl
       << endl
       << "omega: " << omega << endl

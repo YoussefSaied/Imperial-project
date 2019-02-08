@@ -18,7 +18,7 @@ public:
 
     // constructeurs et destructeurs
     Systeme(SupportADessin * support = &Texte1, int selectmagnet = 0) : Dessinable(Position(), support),
-        H(0.00, 0, 0), selectedmagnet(selectmagnet), KineticEnergy(0), PotentialEnergy(0), time(0), f(0), n(1)
+        H(0.00, 0, 0), selectedmagnet(selectmagnet), KineticEnergy(0), PotentialEnergy(0), time(0), f(1), n(1)
     { }
 
     virtual ~Systeme(){ }

@@ -75,26 +75,30 @@ Window::Window()
     connect(glWidget, SIGNAL(anglechanged(int)), this, SLOT(setangleT(int)));
     QGridLayout * mainLayout = new QGridLayout;
     mainLayout->addWidget(glWidget, 0, 0);
-    mainLayout->addWidget(labelO, 9, 0);
-    mainLayout->addWidget(xSlider, 0, 1);
-    mainLayout->addWidget(xselector, 8, 1);
-    mainLayout->addWidget(labelx, 9, 1);
-    mainLayout->addWidget(ySlider, 0, 2);
-    mainLayout->addWidget(yselector, 8, 2);
-    mainLayout->addWidget(labely, 9, 2);
-    mainLayout->addWidget(zSlider, 0, 3);
-    mainLayout->addWidget(zselector, 8, 3);
-    mainLayout->addWidget(labelz, 9, 3);
+    mainLayout->addWidget(labelO, 1, 0, -1, 1);
+
+    mainLayout->addWidget(chartview, 0, 1, 1, 2);
+    // mainLayout->setColumnStretch(8, 2);
+    mainLayout->setColumnMinimumWidth(1, 400);
+
+    // mainLayout->addWidget(xSlider, 0, 1);
+    mainLayout->addWidget(xselector, 4, 2);
+    mainLayout->addWidget(labelx, 4, 1);
+    // mainLayout->addWidget(ySlider, 0, 2);
+    mainLayout->addWidget(yselector, 3, 2);
+    mainLayout->addWidget(labely, 3, 1);
+    // mainLayout->addWidget(zSlider, 0, 3);
+    mainLayout->addWidget(zselector, 2, 2);
+    mainLayout->addWidget(labelz, 2, 1);
+
     mainLayout->addWidget(labels, 0, 5);
     mainLayout->addWidget(magnetselector, 0, 6);
-    mainLayout->addWidget(labela, 9, 5);
-    mainLayout->addWidget(flipangle, 9, 7);
-    mainLayout->addWidget(labelom, 8, 5);
-    mainLayout->addWidget(omegato0, 8, 7);
-    mainLayout->addWidget(angleselector, 9, 6);
-    mainLayout->addWidget(chartview, 0, 8);
-    mainLayout->setColumnStretch(8, 2);
-    mainLayout->setColumnMinimumWidth(8, 500);
+    mainLayout->addWidget(labela, 4, 5);
+    mainLayout->addWidget(flipangle, 4, 7);
+    mainLayout->addWidget(labelom, 3, 5);
+    mainLayout->addWidget(omegato0, 3, 7);
+    mainLayout->addWidget(angleselector, 4, 6);
+
     setLayout(mainLayout);
 
     xSlider->setValue(0 * 16);
