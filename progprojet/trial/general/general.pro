@@ -5,7 +5,6 @@ TEMPLATE = lib
 CONFIG = staticlib
 
 SOURCES = Systeme.cc\
-SystemeP9.cc\
 Aleatoire.cc \
 Plan.cc \
 Dalle.cc \
@@ -18,7 +17,6 @@ SupportADessinTexte.cc
 
 HEADERS += \
     Systeme.h \
-    SystemeP9.h\
     Aleatoire.h \
     Obstacle.h \
     Plan.h \

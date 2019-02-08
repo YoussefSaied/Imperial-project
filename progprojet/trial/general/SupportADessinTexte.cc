@@ -4,7 +4,7 @@
 #include "Plan.h"
 #include "Dalle.h"
 
-#include "SystemeP9.h"
+#include "Systeme.h"
 #include "Brique.h"
 #include "Dodec.h"
 #include "Sphere.h"
@@ -28,7 +28,7 @@ void SupportADessinTexte :: dessine(Dalle const& d)
     d.display(flot);
 }
 
-void SupportADessinTexte :: dessine(SystemeP9 const& S)
+void SupportADessinTexte :: dessine(Systeme const& S)
 {
     S.display(flot);
 }

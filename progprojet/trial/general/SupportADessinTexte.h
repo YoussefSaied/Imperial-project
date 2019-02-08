@@ -14,7 +14,7 @@ public:
 
     // methodes
 
-    virtual void dessine(SystemeP9 const& S) override;
+    virtual void dessine(Systeme const& S) override;
     virtual void dessine(Plan const& P) override;
     virtual void dessine(Dalle const& d) override;
     virtual void dessine(Sphere const& s) override;

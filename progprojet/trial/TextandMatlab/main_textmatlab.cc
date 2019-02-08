@@ -1,5 +1,4 @@
 #include "Systeme.h"
-#include "SystemeP9.h"
 #include "Vecteur3D.h"
 #include "Plan.h"
 #include "Dalle.h"
@@ -16,7 +15,7 @@ using namespace std;
 int main(int argc, char * argv[])
 {
     // intitial configuration:
-    SystemeP9 s;
+    Systeme s;
     Vecteur3D v1(1, 0, 0);
     Vecteur3D v2(1, 0, 0);
     Vecteur3D v3(1, 0, 0);
@@ -48,9 +47,9 @@ int main(int argc, char * argv[])
     // int num = 0;
 
 
-    /*for (int i = 0; i < (dode.vertipositions()).size(); ++i) {
-        int si = ((dode.vertipositions())[i]).size();
-        for (int j = 0; j < si; ++j) {
+    for (size_t i = 0; i < (dode.vertipositions()).size(); ++i) {
+        size_t si = ((dode.vertipositions())[i]).size();
+        for (size_t j = 0; j < si; ++j) {
             Vecteur3D p(0, 0, 0);
             p = ((dode.vertipositions())[i][j] + (dode.vertipositions())[i][(j + 1) % si]) / 2;
             // p += dode.position;
@@ -71,12 +70,17 @@ int main(int argc, char * argv[])
             double alph = atan(2); // angle of rotation arctan(2)
             v4  = v3.rotate(alph, v1);
             axe = v4 ^ v1;
+
+            // calculate polaraxis:
+            Vecteur3D polaraxis(1, 0, 0);
+            polaraxis = (dode.vertipositions())[i][j] - (dode.vertipositions())[i][(j + 1) % si];
+
             // add magnet here.
-            Magnet M(p, axe);
+            Magnet M(p, axe, 1, 0, polaraxis); // position p, axis a, movable yes, angle_0 0, polaraxis polaraxis
+
             s.addMagnet(M);
         }
-       }*/
-
+    }
 
     /*w.addMagnet(M2);
        w.addMagnet(M3);
@@ -93,8 +97,8 @@ int main(int argc, char * argv[])
     // s.addMagnet(M1);
     // s.addMagnet(M2);
     // s.addMagnet(M3);
-    s.addMagnet(M4);
-    s.addMagnet(M5);
+    // s.addMagnet(M4);
+    //  s.addMagnet(M5);
     // w.addObstacle(dode);
     // w.addObstacle(dalle_obstacled);
     // w.addObstacle((b.dalle6())[3]);
@@ -126,7 +130,7 @@ int main(int argc, char * argv[])
     double dt      = configFile.get<double>("dt");
     double timesim = configFile.get<double>("timesim");
     double f       = configFile.get<double>("f");
-    int n          = configFile.get<int>("nb_repet");
+    int n = configFile.get<int>("nb_repet");
 
     // output text file:
     string output = configFile.get<string>("output");

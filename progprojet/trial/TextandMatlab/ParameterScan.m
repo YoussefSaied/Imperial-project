@@ -32,13 +32,14 @@ executable = 'simulationt';
 input = 'configuration.in';
 
 
-nsimul = 10;
+nsimul = 5;
 
 
 % Indiquer ici les valeurs des parametres a scanner :
 %dt = linspace(-4,-5,nsimul);
 %dt= 0.01;
-dt = 10^-6 *2.^linspace(1,nsimul,nsimul);
+dt = 10^-2 ./2.^linspace(1,nsimul,nsimul);
+%dt = logspace(-4,-6,nsimul)
 f = linspace(0,100,nsimul);
 
 
@@ -81,14 +82,17 @@ if(strcmp(paramstr,'dt'))
 %     end
     t= zeros(199,1);
     angle= zeros(199,1);
+    Energy = zeros(199,1);
     for i = 1:nsimul
     filename = [output{i}];
     data = load([filename]);
     t = [t ,data(:,1)];
     angle= [angle,data(:,2)];
+    Energy= [Energy,data(:,3)];
     end
     t(:,1) = [];
     angle(:,1) = [];
+    Energy(:,1) = [];
 
     filename = [output{nsimul}];
     data = load([filename]);
@@ -124,21 +128,27 @@ end
 if(strcmp(paramstr,'dt'))
 %convergence test:
 figure
-scatter(dt.^2,mod(angle(100,:),2*pi))
+scatter(dt.^2,mod(angle(5,:),2*pi))
+hold on
+%plot([dt(1) dt(nsimul)].^2 ,[mod(angle(5,1),2*pi) mod(angle(5,nsimul),2*pi) ] )
 grid on
-% xlabel('$t$ [s]');
-% ylabel('$H$ [J]');
 xlabel('$dt^2$ [s]');
 ylabel('$angle(100)$ [rad]');
-
+% 
 %cool plot:
 figure
 plot(t,mod(angle,2*pi))
 grid on
-% xlabel('$t$ [s]');
-% ylabel('$H$ [J]');
 xlabel('$t$ [s]');
 ylabel('$angle$ [rad]');
+
+%energy figure:
+figure
+plot(t,abs( Energy - Energy(1,:) ))
+grid on
+xlabel('$t$ [s]');
+ylabel('$|E(t) - E(0)|$ [J]');
+
 end
 
 

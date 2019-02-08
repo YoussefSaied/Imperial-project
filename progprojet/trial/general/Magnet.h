@@ -162,6 +162,7 @@ public:
     double f;
     double potBN;
     double potBS;
+    double BTorque;
 };
 
 /*for rotor model (separation >> length of magnets):

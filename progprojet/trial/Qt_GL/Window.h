@@ -9,7 +9,6 @@
 #include <QGridLayout>
 #include "vue_opengl.h"
 #include "Systeme.h"
-#include "SystemeP9.h"
 #include "glwidget.h"
 #include <string>
 #include <sstream>
@@ -33,9 +32,9 @@ public slots:
     void updatelabelO()
     {
         // do that at the system level
-        std::string s = "Graphical Window, H=  ";
+        std::string s = "Graphical Window, B=  ";
         std::stringstream ss;
-        ss << (glWidget->system_tab[0])->H;
+        ss << (glWidget->system_tab[0])->B;
         ss << ", time: " << (glWidget->system_tab[0])->time;
         ss << ", Hamiltonian: " << (glWidget->system_tab[0])->Energy();
         ss << std::endl;

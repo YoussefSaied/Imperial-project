@@ -1,7 +1,6 @@
 #include <QApplication>
 #include "glwidget.h"
 #include "Systeme.h"
-#include "SystemeP9.h"
 #include "Vecteur3D.h"
 #include "Plan.h"
 #include "Dalle.h"

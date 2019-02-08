@@ -1,6 +1,6 @@
 #pragma once
 class Plan;
-class SystemeP9;
+class Systeme;
 class Dalle;
 class Sphere;
 class Brique;
@@ -12,16 +12,16 @@ class Magnet;
 class SupportADessin
 {
 public:
-    virtual ~SupportADessin() {}
+    virtual ~SupportADessin(){ }
 
 
-    virtual void dessine(SystemeP9 const& S ) = 0;
-    virtual void dessine(Plan const& P ) = 0;
-    virtual void dessine(Dalle const& d) = 0;
-    virtual void dessine(Sphere const& s) = 0;
-    virtual void dessine(Brique const& b) = 0;
-    virtual void dessine(Dodec const& d) = 0;
+    virtual void dessine(Systeme const& S)  = 0;
+    virtual void dessine(Plan const& P)     = 0;
+    virtual void dessine(Dalle const& d)    = 0;
+    virtual void dessine(Sphere const& s)   = 0;
+    virtual void dessine(Brique const& b)   = 0;
+    virtual void dessine(Dodec const& d)    = 0;
     virtual void dessine(Cylinder const& c) = 0;
-		//virtual void dessine(Magnet const& M) = 0;
-		virtual void dessine(Magnet const& M) = 0;
+    // virtual void dessine(Magnet const& M) = 0;
+    virtual void dessine(Magnet const& M) = 0;
 };

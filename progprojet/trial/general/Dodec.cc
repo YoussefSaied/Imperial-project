@@ -20,14 +20,15 @@ unique_ptr<Obstacle> Dodec:: copie() const
 
 bool Dodec:: is_inside(Vecteur3D const& x_i) const
 {
-    if (position.distance(PointPlusProche(x_i)) > position.distance(x_i)) return true;
+    if (position.distance(PointPlusProche(x_i)) > position.distance(x_i)) { return true; }
 
     return false;
 }
 
 Vecteur3D Dodec:: PointPlusProche(Vecteur3D const& x_i) const
 {
-    return Vecteur3D();
+    return x_i;
+    // wrong but not IMP for this simulation; just to remove warning;
 }
 
 vector<vector<Vecteur3D> > Dodec:: vertipositions() const
@@ -81,8 +82,9 @@ vector<vector<Vecteur3D> > Dodec:: vertipositions() const
        }*/
     // scaling
     for (auto& i : vp) {
-        for (auto& j: i)
+        for (auto& j: i) {
             j *= edge;
+        }
     }
 
     // rotate depending vecteur_1 (orientation vector)
@@ -95,15 +97,18 @@ vector<vector<Vecteur3D> > Dodec:: vertipositions() const
     Vecteur3D axer1(axer0 ^ vecteur_1);
     double angle = acos((vecteur_1 * axer0) / ((vecteur_1.norme()) * axer0.norme()));
     for (auto& i : vp) {
-        for (auto& j: i) j = j.rotate(angle, axer1);
+        for (auto& j: i) {
+            j = j.rotate(angle, axer1);
+        }
     }
 
     // translate depending on position;
 
-    for (auto& i : vp)
+    for (auto& i : vp) {
         for (auto& j: i) {
             j += position;
         }
+    }
 
     return vp;
 } // Dodec::vertipositions

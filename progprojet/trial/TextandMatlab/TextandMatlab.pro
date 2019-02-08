@@ -14,7 +14,6 @@ SOURCES += \
     main_textmatlab.cc \
     ../general/SupportADessinTexte.cc \
     ../general/Systeme.cc \
-    ../general/SystemeP9.cc \
     ../general/Aleatoire.cc \
     ../general/Magnet.cc \
     ../general/Plan.cc \
@@ -31,7 +30,6 @@ HEADERS += \
     ../general/SupportADessin.h \
     ../general/SupportADessinTexte.h \
     ../general/Systeme.h \
-    ../general/SystemeP9.h \
     ../general/Aleatoire.h \
     ../general/Magnet.h \
     ../general/Obstacle.h \

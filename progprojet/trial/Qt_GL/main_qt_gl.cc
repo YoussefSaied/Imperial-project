@@ -1,7 +1,6 @@
 #include <QApplication>
 #include "glwidget.h"
 #include "Systeme.h"
-#include "SystemeP9.h"
 #include "Vecteur3D.h"
 #include "Plan.h"
 #include "Dalle.h"
@@ -27,8 +26,8 @@ int main(int argc, char * argv[])
     Magnet M1(Position(0, 0, 0), v2);
     Magnet M2(Position(0 + M1.length * 1.2, 0, 0), v3);
     Magnet M3(Position(0 + M1.length * 0.6, 0 + M1.length * 1.039, 0), v1);
-    //  Magnet M4(Position(0, 0, 0), Vecteur3D(0, 1, 0),0);
-    //  Magnet M5(Position(0, 0, 0 + M1.length * 2.2), Vecteur3D(0, 1, 0), 1);
+    Magnet M4(Position(0, 0, 0), Vecteur3D(0, 1, 0), 0);
+    Magnet M5(Position(0, 0, 0 + M1.length * 2.2), Vecteur3D(0, 1, 0), 1);
 
     /*MagnetE M2(Position(2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air);
      * MagnetE M3(Position(-2,-2,0), Vitesse(), 1.0, 0.2, Vecteur3D(), air,1 , Vecteur3D(1,1,1));
@@ -51,8 +50,8 @@ int main(int argc, char * argv[])
 
 
     /*for (size_t i = 0; i < (dode.vertipositions()).size(); ++i) {
-        int si = ((dode.vertipositions())[i]).size();
-        for (int j = 0; j < si; ++j) {
+        size_t si = ((dode.vertipositions())[i]).size();
+        for (size_t j = 0; j < si; ++j) {
             Vecteur3D p(0, 0, 0);
             p = ((dode.vertipositions())[i][j] + (dode.vertipositions())[i][(j + 1) % si]) / 2;
             // p += dode.position;
@@ -73,8 +72,12 @@ int main(int argc, char * argv[])
             double alph = atan(2); // angle of rotation arctan(2)
             v4  = v3.rotate(alph, v1);
             axe = v4 ^ v1;
+            // calculate polaraxis:
+            Vecteur3D polaraxis(1, 0, 0);
+            polaraxis = (dode.vertipositions())[i][j] - (dode.vertipositions())[i][(j + 1) % si];
+
             // add magnet here.
-            Magnet M(p, axe);
+            Magnet M(p, axe, 1, 0, polaraxis); // position p, axis a, movable yes, angle_0 0, polaraxis polaraxis
             (w.glWidget)->addMagnet(M);
         }
        }

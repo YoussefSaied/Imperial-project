@@ -5,7 +5,7 @@
 #include <QTime>     // Classe pour gérer le temps
 #include "vue_opengl.h"
 #include "Systeme.h"
-#include "SystemeP9.h"
+
 
 class GLWidget : public QGLWidget
 
@@ -40,53 +40,53 @@ public:
 
     // system
     std::vector<std::unique_ptr<Systeme> > system_tab;
-    SystemeP9 sysm;
+    Systeme sysm;
 public slots:
-    void setXH(double x)
+    void setXB(double x)
     {
-        if (x * 1e-4 != (system_tab[0]->H).get_x()) {
-            (system_tab[0]->H).setx(x * 1e-4);
-            emit XHChanged(x);
+        if (x * 1e-6 != (system_tab[0]->B).get_x()) {
+            (system_tab[0]->B).setx(x * 1e-4);
+            emit XBChanged(x);
         }
     }
 
-    void setYH(double y)
+    void setYB(double y)
     {
-        if (y * 1e-4 != (system_tab[0]->H).get_y()) {
-            (system_tab[0]->H).sety(y * 1e-4);
-            emit YHChanged(y);
+        if (y * 1e-6 != (system_tab[0]->B).get_y()) {
+            (system_tab[0]->B).sety(y * 1e-4);
+            emit YBChanged(y);
         }
     }
 
-    void setZH(double z)
+    void setZB(double z)
     {
-        if (z * 1e-4 != (system_tab[0]->H).get_z()) {
-            (system_tab[0]->H).setz(z * 1e-4);
-            emit ZHChanged(z);
+        if (z * 1e-6 != (system_tab[0]->B).get_z()) {
+            (system_tab[0]->B).setz(z * 1e-4);
+            emit ZBChanged(z);
         }
     }
 
-    void setXH(int x)
+    void setXB(int x)
     {
-        if (x * 1e-4 != (system_tab[0]->H).get_x()) {
-            (system_tab[0]->H).setx(x * 1e-4);
-            emit XHChanged(x);
+        if (x * 1e-6 != (system_tab[0]->B).get_x()) {
+            (system_tab[0]->B).setx(x * 1e-4);
+            emit XBChanged(x);
         }
     }
 
-    void setYH(int y)
+    void setYB(int y)
     {
-        if (y * 1e-4 != (system_tab[0]->H).get_y()) {
-            (system_tab[0]->H).sety(y * 1e-4);
-            emit YHChanged(y);
+        if (y * 1e-4 != (system_tab[0]->B).get_y()) {
+            (system_tab[0]->B).sety(y * 1e-4);
+            emit YBChanged(y);
         }
     }
 
-    void setZH(int z)
+    void setZB(int z)
     {
-        if (z * 1e-4 != (system_tab[0]->H).get_z()) {
-            (system_tab[0]->H).setz(z * 1e-4);
-            emit ZHChanged(z);
+        if (z * 1e-4 != (system_tab[0]->B).get_z()) {
+            (system_tab[0]->B).setz(z * 1e-4);
+            emit ZBChanged(z);
         }
     }
 
@@ -123,9 +123,9 @@ public slots:
     }
 
 signals:
-    void XHChanged(double newx);
-    void YHChanged(double newy);
-    void ZHChanged(double newz);
+    void XBChanged(double newx);
+    void YBChanged(double newy);
+    void ZBChanged(double newz);
     void magnetselected(int mn);
     void evolved(double dt);
     void anglechanged(int mn);

@@ -13,7 +13,7 @@ Magnet :: Magnet(Position const& position, Vecteur3D axis, bool movable, double 
     Dessinable(position, support), axis(axis.normalise()), movable(movable), angle(angle),
     charge(charge), mass(mass), radius(radius), length(length), selected(selected),
     torque(torque), oldtorque(0), newtorque(newtorque), Bfield(Bfield),
-    omega(omega), rotations(rotations), f(f), potBN(0), potBS(0)
+    omega(omega), rotations(rotations), f(f), potBN(0), potBS(0), BTorque(0)
 {
     if (polaraxis1 * axis == 0) { polaraxis = polaraxis1.normalise(); } else { polaraxis = planevec1(); }
 }
@@ -34,6 +34,7 @@ ostream& Magnet:: display(std :: ostream& c) const
       << endl
       << "Torque: " << torque << endl
       << "realTorque: " << displ_accel(newtorque, omega) * inertia() << endl
+      << "BTorque: " << BTorque << endl
       << endl
       << "acc(T): " << torqueaccel(newtorque) << endl
       << "acc(W): " << dampingaccel(omega) << endl
@@ -119,14 +120,15 @@ void Magnet :: addnewTorque(unique_ptr<Magnet> const& Magnet2)
 
 void Magnet :: addTorque(Vecteur3D extfield)
 {
-    double pow = 1e-7;
+    double pow = 1;
     torque += pow * zaxis() * (moment() ^ extfield);
 }
 
 void Magnet :: addnewTorque(Vecteur3D extfield)
 {
-    double pow = 1e-7;
+    double pow = 1;
     newtorque += pow * zaxis() * (moment() ^ extfield);
+    BTorque    = pow * zaxis() * (moment() ^ extfield);
 }
 
 // MAGNETIC FIELD

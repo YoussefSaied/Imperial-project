@@ -11,12 +11,10 @@ Window::Window()
     labelO = new QLabel(this);
     updatelabelO();
     // H= blabla, correlation, time
-    // connect evolve to H
-    connect(glWidget, SIGNAL(XHChanged(double)), this, SLOT(updatelabelO()));
-    connect(glWidget, SIGNAL(YHChanged(double)), this, SLOT(updatelabelO()));
-    connect(glWidget, SIGNAL(ZHChanged(double)), this, SLOT(updatelabelO()));
+    connect(glWidget, SIGNAL(XBChanged(double)), this, SLOT(updatelabelO()));
+    connect(glWidget, SIGNAL(YBChanged(double)), this, SLOT(updatelabelO()));
+    connect(glWidget, SIGNAL(ZBChanged(double)), this, SLOT(updatelabelO()));
     connect(glWidget, SIGNAL(evolved(double)), this, SLOT(updatelabelO()));
-    // connect evolve with update
 
 
     // chart
@@ -36,11 +34,11 @@ Window::Window()
 
 
     QLabel * labelx = new QLabel(this);
-    labelx->setText("Hx (x10^-4)");
+    labelx->setText("Bx (x10^-6)");
     QLabel * labely = new QLabel(this);
-    labely->setText("Hy (x10^-4)");
+    labely->setText("By (x10^-6)");
     QLabel * labelz = new QLabel(this);
-    labelz->setText("Hz (x10^-4)");
+    labelz->setText("Bz (x10^-6)");
     QLabel * labela = new QLabel(this);
     labela->setText("Change Angle:");
     QLabel * labelom = new QLabel(this);
@@ -60,12 +58,12 @@ Window::Window()
     omegato0      = new QPushButton("0", this);
 
 
-    connect(xSlider, SIGNAL(valueChanged(int)), glWidget, SLOT(setXH(int)));
-    connect(ySlider, SIGNAL(valueChanged(int)), glWidget, SLOT(setYH(int)));
-    connect(zSlider, SIGNAL(valueChanged(int)), glWidget, SLOT(setZH(int)));
-    connect(xselector, SIGNAL(valueChanged(double)), glWidget, SLOT(setXH(double)));
-    connect(yselector, SIGNAL(valueChanged(double)), glWidget, SLOT(setYH(double)));
-    connect(zselector, SIGNAL(valueChanged(double)), glWidget, SLOT(setZH(double)));
+    connect(xSlider, SIGNAL(valueChanged(int)), glWidget, SLOT(setXB(int)));
+    connect(ySlider, SIGNAL(valueChanged(int)), glWidget, SLOT(setYB(int)));
+    connect(zSlider, SIGNAL(valueChanged(int)), glWidget, SLOT(setZB(int)));
+    connect(xselector, SIGNAL(valueChanged(double)), glWidget, SLOT(setXB(double)));
+    connect(yselector, SIGNAL(valueChanged(double)), glWidget, SLOT(setYB(double)));
+    connect(zselector, SIGNAL(valueChanged(double)), glWidget, SLOT(setZB(double)));
     // 6 connections to H value changed
     connect(magnetselector, SIGNAL(valueChanged(int)), glWidget, SLOT(selectmagnet(int)));
     connect(glWidget, SIGNAL(magnetselected(int)), this, SLOT(setmagnetT(int)));
@@ -131,7 +129,7 @@ QSpinBox * Window::createSpin()
 QDoubleSpinBox * Window::createdoubleSpin(double step)
 {
     QDoubleSpinBox * spin = new QDoubleSpinBox();
-    spin->setRange(0, 10000);
+    spin->setRange(0, 1000000);
     spin->setSingleStep(step);
     return spin;
 }

@@ -1,7 +1,6 @@
 #include "vue_opengl.h"
 #include "vertex_shader.h" // Identifiants Qt de nos différents attributs
 #include "Systeme.h"
-#include "SystemeP9.h"
 #include "Dalle.h"
 #include "Sphere.h"
 #include "Brique.h"
@@ -27,7 +26,7 @@ void VueOpenGL::dessine(Magnet const& M)
     // matrice2.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
     matrice3.setToIdentity();
     matrice3.translate((M.get_position()).get_x(), (M.get_position()).get_y(), (M.get_position()).get_z());
-    if (axer2 != 0) matrice3.rotate(-1 * angle2 * 180 / M_PI, axer2.get_x(), axer2.get_y(), axer2.get_z());
+    if (axer2 != 0) { matrice3.rotate(-1 * angle2 * 180 / M_PI, axer2.get_x(), axer2.get_y(), axer2.get_z()); }
     matrice3.translate(0, 0, -0.5 * M.get_axerheight());
     prog.setUniformValue("vue_modele", matrice_vue * matrice3);
     // if (!M.selected)
@@ -45,8 +44,11 @@ void VueOpenGL::dessine(Magnet const& M)
     // matrice2.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
     matrice2.setToIdentity();
     matrice2.translate((M.get_position()).get_x(), (M.get_position()).get_y(), (M.get_position()).get_z());
-    if (axer != 0) matrice2.rotate(-1 * angle * 180 / M_PI, axer.get_x(), axer.get_y(), axer.get_z());
-    else if (M.orientation() == Vecteur3D(0,0,-1)) matrice2.rotate(-1 * 180, (M.axis).get_x(), (M.axis).get_y(), (M.axis).get_z());
+    if (axer != 0) {
+        matrice2.rotate(-1 * angle * 180 / M_PI, axer.get_x(), axer.get_y(), axer.get_z());
+    } else if (M.orientation() == Vecteur3D(0, 0, -1)) {
+        matrice2.rotate(-1 * 180, (M.axis).get_x(), (M.axis).get_y(), (M.axis).get_z());
+    }
     matrice2.translate(0, 0, -1 * M.length / 2);
     prog.setUniformValue("vue_modele", matrice_vue * matrice2);
     // if (!M.selected)
@@ -64,8 +66,11 @@ void VueOpenGL::dessine(Magnet const& M)
     matrice.setToIdentity();
     // matrice.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
     matrice.translate((M.get_position()).get_x(), (M.get_position()).get_y(), (M.get_position()).get_z());
-    if (axer != 0) matrice.rotate(-1 * angle * 180 / M_PI, axer.get_x(), axer.get_y(), axer.get_z());
-    else if (M.orientation() == Vecteur3D(0,0,-1)) matrice2.rotate(-1 * 90, (M.axis).get_x(), (M.axis).get_y(), (M.axis).get_z());
+    if (axer != 0) {
+        matrice.rotate(-1 * angle * 180 / M_PI, axer.get_x(), axer.get_y(), axer.get_z());
+    } else if (M.orientation() == Vecteur3D(0, 0, -1)) {
+        matrice2.rotate(-1 * 90, (M.axis).get_x(), (M.axis).get_y(), (M.axis).get_z());
+    }
 
     // matrice.scale(M.get_radius(),M.get_radius(),M.get_height()/2);
     // matrice.rotate(-90,1,0,0);
@@ -74,10 +79,11 @@ void VueOpenGL::dessine(Magnet const& M)
     // cylinder.set_dimension(M.get_radius(),M.get_height()/2);
     // cylinder.initialize();
     // cylinder.draw(prog, SommetId);
-    if (!M.selected)
+    if (!M.selected) {
         dessineCylinder(matrice, 0, 0, 0.7);
-    else
+    } else {
         dessineCylinder(matrice, 0.75, 0.75, 0.75);
+    }
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 } // VueOpenGL::dessine
 
@@ -131,7 +137,7 @@ void VueOpenGL::dessine(Dodec const& d)
     Vecteur3D axer1(d.get_vecteur_1() ^ axer0);
     double angle = acos((d.get_vecteur_1() * axer0) / ((d.get_vecteur_1().norme()) * axer0.norme()));
 
-    if (axer1 != 0) matrice.rotate(-1 * angle * 180 / M_PI, axer1.get_x(), axer1.get_y(), axer1.get_z());
+    if (axer1 != 0) { matrice.rotate(-1 * angle * 180 / M_PI, axer1.get_x(), axer1.get_y(), axer1.get_z()); }
 
     dessineDodec(matrice);
 }
@@ -149,7 +155,7 @@ void VueOpenGL::dessine(Cylinder const& c)
 
     // matrice.rotate(-90,0,0,1);
     // matrice.rotate(-90,1,0,0);
-    if (axer != 0) matrice.rotate(1 * angle * 180 / M_PI, axer.get_x(), axer.get_y(), axer.get_z());
+    if (axer != 0) { matrice.rotate(1 * angle * 180 / M_PI, axer.get_x(), axer.get_y(), axer.get_z()); }
     // matrice.rotate(-90,1,0,0);
 
     // matrice.scale(c.get_radius()); //changer scale
@@ -162,7 +168,7 @@ void VueOpenGL::dessine(Cylinder const& c)
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 }
 
-void VueOpenGL::dessine(SystemeP9 const& S)
+void VueOpenGL::dessine(Systeme const& S)
 {
     if (!(S.tab_ptr_Magnets).empty()) {
         for (auto const& ptr_Magnet : (S.tab_ptr_Magnets)) {
