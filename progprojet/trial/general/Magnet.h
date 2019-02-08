@@ -10,14 +10,16 @@
 
 typedef Vecteur3D Position, Vitesse;
 
-//Paula's magnet: charge = 2, radius = 0.75e-3, mass = 0.3e-3, length = 1.9e-2
+// Paula's magnet: charge = 2, radius = 0.75e-3, mass = 0.3e-3, length = 1.9e-2
+// IMPORTANT: T:= normally torque; W:= normally omega/ angular acceleration
 class Magnet : public Dessinable
 {
 public:
     // constructeurs et destructeurs
     Magnet(Position const& position, Vecteur3D axis = Vecteur3D(0, 0, 1), bool movable = 1, double angle = 0.0001,
-      double charge = 2.0, double mass = 0.3e-3, double radius = 0.75e-3, double length = 1.9e-2,
-      bool selected = 0, double torque = 0, double newtorque = 0, Vecteur3D Bfield = Vecteur3D(0, 0, 0),
+      Vecteur3D polaraxis = Vecteur3D(1, 1, 1), double charge = 2.0, double mass = 0.3e-3,
+      double radius = 0.75e-3, double length = 1.9e-2, bool selected = 0, double torque = 0,
+      double newtorque = 0, Vecteur3D Bfield = Vecteur3D(0, 0, 0),
       double omega = 0, int rotations = 0, SupportADessin * support = &Texte1, double f = 0);
     virtual ~Magnet(){ }
 
@@ -30,7 +32,7 @@ public:
 
     // ENERGY
     double Kinetic() const
-    { return 0.5* inertia() * omega*omega; }
+    { return 0.5 * inertia() * omega * omega; }
 
     // ACCELERATION
     double accel(double T, double W) const// angular acceleration
@@ -40,20 +42,23 @@ public:
     { return (1 / inertia()) * T; }
 
     double dampingaccel(double W) const// angular acceleration
-    { return -1* f * W; }
+    { return -1 * f * W; }
 
-    double displ_accel(double T,double W) const// angular acceleration
-    { return (T/ inertia()) - f * W; }
+    double displ_accel(double T, double W) const// angular acceleration
+    { return (T / inertia()) - f * W; }
 
     // orientation attributes (unit vectors)
     Vecteur3D planevec1() const;
     Vecteur3D planevec2() const;
     Vecteur3D zaxis() const
-    {return planevec1()^planevec2();}
+    { return polaraxis ^ planevec2(); }
+
+    // what is that?
 
     Vecteur3D orientation() const
-    { return planevec1() * cos(angle) + planevec2() * sin(angle); }
-    //make sure axis forms RH coordinate system
+    { return polaraxis * cos(angle) + planevec2() * sin(angle); }
+
+    // make sure axis forms RH coordinate system
 
 
     Vecteur3D moment() const
@@ -82,7 +87,7 @@ public:
     double get_length() const { return length; }
 
     // CALC METHODS
-    double torquecalc(Vecteur3D r, double chargeM2) const;
+    double torquecalc(Vecteur3D r, double chargeM2, double chargeM1) const;
 
     virtual void addTorque(std::unique_ptr<Magnet> const& Magnet2);
 
@@ -99,7 +104,10 @@ public:
         addpotBN(Magnet2);
         addpotBS(Magnet2);
     }
-    double potB() const {return potBN + potBS;}
+
+    // is potb correct or should it be halved ?
+
+    double potB() const { return potBN + potBS; }
 
     virtual void addTorque(Vecteur3D extfield);
 
@@ -115,9 +123,9 @@ public:
     virtual void move(double delta_t);
     virtual void moveangle(double delta_t)
     {
-      if (movable){
-        angle += delta_t * omega + 0.5 * delta_t * delta_t * accel(torque, omega);
-      }
+        if (movable) {
+            angle += delta_t * omega + 0.5 * delta_t * delta_t * accel(torque, omega);
+        }
     }
 
     virtual void moveomega(double delta_t);
@@ -139,6 +147,7 @@ public:
     Vecteur3D axis;
     bool movable;
     double angle;
+    Vecteur3D polaraxis;
     double charge;
     double mass;
     double radius;
