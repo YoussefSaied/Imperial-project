@@ -18,7 +18,7 @@ public:
 
     // constructeurs et destructeurs
     Systeme(SupportADessin * support = &Texte1, int selectmagnet = 0) : Dessinable(Position(), support),
-        B(0.000, 0, 0), selectedmagnet(selectmagnet), KineticEnergy(0), PotentialEnergy(0), time(0), f(0), n(1)
+        B(0.000, 0, 0), selectedmagnet(selectmagnet), KineticEnergy(0), PotentialEnergy(0), time(0), f(1), n(1)
     { }
 
     virtual ~Systeme(){ }
@@ -35,6 +35,8 @@ public:
     // methodes
 
     virtual double Energy() const { return KineticEnergy + PotentialEnergy; }
+
+    virtual double NearestCorrelation() const;
 
     virtual void dessine() const override { support->dessine(*this); }
 

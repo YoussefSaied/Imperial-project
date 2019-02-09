@@ -33,42 +33,39 @@ Vecteur3D Dodec:: PointPlusProche(Vecteur3D const& x_i) const
 
 vector<vector<Vecteur3D> > Dodec:: vertipositions() const
 {
+    // They are clockwise
     vector<vector<Vecteur3D> > vp; // vertixes positions
     double a = (1 + sqrt(5)) / 2;
     vp.push_back({ Vecteur3D(1 / a, 0, a), Vecteur3D(-1 / a, 0, a), Vecteur3D(-1, -1, 1), Vecteur3D(0, -a,
                    1 / a),
-                   Vecteur3D(1, -1, 1) });
+                   Vecteur3D(1, -1, 1) }); // 1
     vp.push_back({ Vecteur3D(-1, -1, 1), Vecteur3D(-a, -1 / a, 0), Vecteur3D(-1, -1, -1), Vecteur3D(0, -a,
                    -1 / a),
-                   Vecteur3D(0, -a, 1 / a) });
+                   Vecteur3D(0, -a, 1 / a) }); // 2
     vp.push_back({ Vecteur3D(0, -a, 1 / a), Vecteur3D(0, -a, -1 / a), Vecteur3D(1, -1, -1), Vecteur3D(a, -1 / a,
                    0),
-                   Vecteur3D(1, -1, 1) });
+                   Vecteur3D(1, -1, 1) }); // 3
     vp.push_back({ Vecteur3D(1 / a, 0, a), Vecteur3D(1, -1, 1), Vecteur3D(a, -1 / a, 0), Vecteur3D(a, 1 / a,
                    0), Vecteur3D(1, 1,
-                   1) });
-    vp.push_back({ Vecteur3D(1 / a, 0, -a), Vecteur3D(1, 1, -1), Vecteur3D(a, 1 / a, 0), Vecteur3D(a, -1 / a,
-                   0),
-                   Vecteur3D(1, -1, -1) });
-    vp.push_back({ Vecteur3D(1 / a, 0, -a), Vecteur3D(1, -1, -1), Vecteur3D(0, -a, -1 / a), Vecteur3D(-1, -1,
-                   -1),
-                   Vecteur3D(-1 / a, 0, -a) });
-    vp.push_back({ Vecteur3D(1 / a, 0, -a), Vecteur3D(1, 1, -1), Vecteur3D(0, a, -1 / a), Vecteur3D(-1, 1,
-                   -1),
-                   Vecteur3D(-1 / a, 0, -a) });
-    vp.push_back({ Vecteur3D(-1, -1, -1), Vecteur3D(-a, -1 / a, 0), Vecteur3D(-a, 1 / a, 0), Vecteur3D(-1, 1,
-                   -1),
-                   Vecteur3D(-1 / a, 0, -a) });
-    vp.push_back({ Vecteur3D(-1, 1, 1), Vecteur3D(-a, 1 / a, 0), Vecteur3D(-a, -1 / a, 0), Vecteur3D(-1, -1,
-                   1),
-                   Vecteur3D(-1 / a, 0, a) });
+                   1) }); // 4
+    vp.push_back({ Vecteur3D(1 / a, 0, -a), Vecteur3D(1, 1, -1), Vecteur3D(a, 1 / a, 0),
+                   Vecteur3D(a, -1 / a, 0), Vecteur3D(1, -1, -1) }); // 5
+    vp.push_back({ Vecteur3D(1 / a, 0, -a), Vecteur3D(1, -1, -1), Vecteur3D(0, -a, -1 / a),
+                   Vecteur3D(-1, -1, -1), Vecteur3D(-1 / a, 0, -a) }); // 6
+
+    vp.push_back({ Vecteur3D(1 / a, 0, -a), Vecteur3D(-1 / a, 0, -a), Vecteur3D(-1, 1, -1),
+                   Vecteur3D(0, a, -1 / a), Vecteur3D(1, 1, -1) }); // 7
+
+    vp.push_back({ Vecteur3D(-1, -1, -1), Vecteur3D(-a, -1 / a, 0), Vecteur3D(-a, 1 / a, 0),
+                   Vecteur3D(-1, 1, -1), Vecteur3D(-1 / a, 0, -a) }); // 8
+    vp.push_back({ Vecteur3D(-1, 1, 1), Vecteur3D(-a, 1 / a, 0), Vecteur3D(-a, -1 / a, 0), Vecteur3D(-1, -1, 1),
+                   Vecteur3D(-1 / a, 0, a) }); // 9
     vp.push_back({ Vecteur3D(-1, 1, 1), Vecteur3D(-1 / a, 0, a), Vecteur3D(1 / a, 0, a), Vecteur3D(1, 1, 1),
-                   Vecteur3D(0, a, 1 / a) });
-    vp.push_back({ Vecteur3D(-1, 1, 1), Vecteur3D(0, a, 1 / a), Vecteur3D(0, a, -1 / a), Vecteur3D(-1, 1,
-                   -1),
-                   Vecteur3D(-a, 1 / a, 0) });
+                   Vecteur3D(0, a, 1 / a) }); // 10
+    vp.push_back({ Vecteur3D(-1, 1, 1), Vecteur3D(0, a, 1 / a), Vecteur3D(0, a, -1 / a), Vecteur3D(-1, 1, -1),
+                   Vecteur3D(-a, 1 / a, 0) }); // 11
     vp.push_back({ Vecteur3D(1, 1, -1), Vecteur3D(0, a, -1 / a), Vecteur3D(0, a, 1 / a), Vecteur3D(1, 1, 1),
-                   Vecteur3D(a, 1 / a, 0) });
+                   Vecteur3D(a, 1 / a, 0) }); // 12
 
     /*for(int i =-1; i<2; i+=2){
         for(int j =-1; j<2; j+=2){
@@ -93,8 +90,8 @@ vector<vector<Vecteur3D> > Dodec:: vertipositions() const
     Vecteur3D v3(-1, -1, 1);
     Vecteur3D o1(v1 - v2);
     Vecteur3D o2(v2 - v3);
-    Vecteur3D axer0(o1 ^ o2);
-    Vecteur3D axer1(axer0 ^ vecteur_1);
+    Vecteur3D axer0(o1 ^ o2);           // orthogonal vector to canonical dodec face
+    Vecteur3D axer1(axer0 ^ vecteur_1); // rotation axis
     double angle = acos((vecteur_1 * axer0) / ((vecteur_1.norme()) * axer0.norme()));
     for (auto& i : vp) {
         for (auto& j: i) {

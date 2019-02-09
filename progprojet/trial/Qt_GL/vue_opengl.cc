@@ -38,6 +38,7 @@ void VueOpenGL::dessine(Magnet const& M)
     cylinder.draw(prog, SommetId);
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
 
+    // magnet body:
 
     QMatrix4x4 matrice2;
 
@@ -62,6 +63,7 @@ void VueOpenGL::dessine(Magnet const& M)
 
 
     glPolygonMode(GL_FRONT_AND_BACK, GL_FILL);
+
     QMatrix4x4 matrice;
     matrice.setToIdentity();
     // matrice.rotate(-1*angle*180/M_PI,axer.get_x(),axer.get_y(),axer.get_z());
@@ -92,8 +94,8 @@ void VueOpenGL::dessine(Sphere const& sphere)
     QMatrix4x4 matrice;
     matrice.translate((sphere.get_position()).get_x(), (sphere.get_position()).get_y(),
       (sphere.get_position()).get_z());
-    matrice.scale(sphere.get_radius()); // changer scale
-    dessineSphere(matrice, 1, 0, 1);    // couleur
+    matrice.scale(sphere.get_radius());
+    dessineSphere(matrice, 1, 0, 1);
 }
 
 void VueOpenGL::dessine(Plan const& P)

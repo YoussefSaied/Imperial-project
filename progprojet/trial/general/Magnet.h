@@ -17,7 +17,7 @@ class Magnet : public Dessinable
 public:
     // constructeurs et destructeurs
     Magnet(Position const& position, Vecteur3D axis = Vecteur3D(0, 0, 1), bool movable = 1, double angle = 0.0001,
-      Vecteur3D polaraxis = Vecteur3D(1, 1, 1), double charge = 2.0, double mass = 0.3e-3,
+      Vecteur3D polaraxis = Vecteur3D(0, 0, 1), double charge = 2.0, double mass = 0.3e-3,
       double radius = 0.75e-3, double length = 1.9e-2, bool selected = 0, double torque = 0,
       double newtorque = 0, Vecteur3D Bfield = Vecteur3D(0, 0, 0),
       double omega = 0, int rotations = 0, SupportADessin * support = &Texte1, double f = 0);

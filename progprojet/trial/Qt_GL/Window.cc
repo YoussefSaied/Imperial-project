@@ -17,21 +17,42 @@ Window::Window()
     connect(glWidget, SIGNAL(evolved(double)), this, SLOT(updatelabelO()));
 
 
-    // chart
+    // chart1
     // maybe anti-aliasing; later
-
-    chart = createMyChart("Hamiltonian");
+    myaxis1 = new QValueAxis();
+    myaxis1->setTickCount(4);
+    chart1 = createMyChart("Hamiltonian");
     HamiltonianTime = createScatterSeries();
     // HamiltonianTime->setMarkerSize(10);
-    chart->addSeries(HamiltonianTime);
-    chartview = new QChartView(chart);
-    chart->createDefaultAxes();
-    chart->axisX()->setRange(0, 20);
-    chart->axisY()->setRange(-0.01, 0.01);
+    chart1->addSeries(HamiltonianTime);
+    chartview1 = new QChartView(chart1);
+    chart1->createDefaultAxes();
+    chart1->axisX()->setRange(0, 20);
+    // chart->axisY()->setRange(-0.01, 0.01);
+    chart1->setAxisY(myaxis1);
+    HamiltonianTime->attachAxis(myaxis1);
     // chart->createDefaultAxes();
     // chart->
     // maybe other series
 
+
+    // chart2
+    myaxis2 = new QValueAxis();
+    myaxis2->setTickCount(8);
+    myaxis2->setMax(1);
+    chart2 = createMyChart("Correlation");
+    CorrelationTime = createScatterSeries();
+    // HamiltonianTime->setMarkerSize(10);
+    chart2->addSeries(CorrelationTime);
+    chartview2 = new QChartView(chart2);
+    chart2->createDefaultAxes();
+    chart2->axisX()->setRange(0, 20);
+    // chart->axisY()->setRange(-0.01, 0.01);
+    chart2->setAxisY(myaxis2);
+    CorrelationTime->attachAxis(myaxis2);
+    // chart->createDefaultAxes();
+    // chart->
+    // maybe other series
 
     QLabel * labelx = new QLabel(this);
     labelx->setText("Bx (x10^-6)");
@@ -72,12 +93,13 @@ Window::Window()
     connect(angleselector, SIGNAL(valueChanged(double)), glWidget, SLOT(changeangle(double)));
     connect(glWidget, SIGNAL(anglechanged(int)), this, SLOT(setangleT(int)));
     QGridLayout * mainLayout = new QGridLayout;
-    mainLayout->addWidget(glWidget, 0, 0);
-    mainLayout->addWidget(labelO, 1, 0, -1, 1);
+    mainLayout->addWidget(glWidget, 0, 0, 2, 1);
+    mainLayout->addWidget(labelO, 2, 0, -1, 1);
 
-    mainLayout->addWidget(chartview, 0, 1, 1, 2);
+    mainLayout->addWidget(chartview1, 0, 1, 1, 2);
+    mainLayout->addWidget(chartview2, 1, 1, 1, 2);
     // mainLayout->setColumnStretch(8, 2);
-    mainLayout->setColumnMinimumWidth(1, 400);
+    mainLayout->setColumnMinimumWidth(1, 250);
 
     // mainLayout->addWidget(xSlider, 0, 1);
     mainLayout->addWidget(xselector, 4, 2);

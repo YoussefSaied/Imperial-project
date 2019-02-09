@@ -40,12 +40,21 @@ public slots:
         ss << std::endl;
         ss << "friction: " << (glWidget->system_tab[0])->f;
         ss << ", Kinetic Energy: " << (glWidget->system_tab[0])->KineticEnergy;
-        ss << std::endl << "PotentialEnergy: " << (glWidget->system_tab[0])->PotentialEnergy;
+        ss << std::endl << "PotentialEnergy: " << (glWidget->system_tab[0])->PotentialEnergy << std::endl;
+        ss << "Number of magnets in the system: " << (glWidget->system_tab[0])->tab_ptr_Magnets.size();
+        ss << ", Correlation: " << (glWidget->system_tab[0])->NearestCorrelation();
         s += ss.str();
         QString qstr = QString::fromStdString(s);
         labelO->setText(qstr);
         if ((glWidget->system_tab[0])->time >= 0.05 and std::fmod((glWidget->system_tab[0])->time, 0.1) ) {
             HamiltonianTime->append((glWidget->system_tab[0])->time, (glWidget->system_tab[0])->Energy());
+            CorrelationTime->append((glWidget->system_tab[0])->time, (glWidget->system_tab[0])->NearestCorrelation());
+            myaxis1->setMax(abs((glWidget->system_tab[0])->Energy() * 2));
+            myaxis1->setMin(-1 * abs((glWidget->system_tab[0])->Energy() * 2));
+            // myaxis2->setMax(abs((glWidget->system_tab[0])->NearestCorrelation() * 2));
+            // myaxis2->setMin(-1 * abs((glWidget->system_tab[0])->NearestCorrelation() * 2));
+
+            // myaxis->applyNiceNumbers();
         }
         // HamiltonianTime->remove(0);
     }
@@ -78,8 +87,13 @@ public:
     QPushButton * flipangle;
     QPushButton * omegato0;
     QSplineSeries * HamiltonianTime;
-    QChart * chart;
-    QChartView * chartview;
+    QSplineSeries * CorrelationTime;
+    QChart * chart1;
+    QChartView * chartview1;
+    QChart * chart2;
+    QChartView * chartview2;
+    QValueAxis * myaxis1;
+    QValueAxis * myaxis2;
 };
 
 // double spinbox for moment, angle (double connected)

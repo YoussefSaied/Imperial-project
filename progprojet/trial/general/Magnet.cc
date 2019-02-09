@@ -15,7 +15,9 @@ Magnet :: Magnet(Position const& position, Vecteur3D axis, bool movable, double 
     torque(torque), oldtorque(0), newtorque(newtorque), Bfield(Bfield),
     omega(omega), rotations(rotations), f(f), potBN(0), potBS(0), BTorque(0)
 {
-    if (polaraxis1 * axis == 0) { polaraxis = polaraxis1.normalise(); } else { polaraxis = planevec1(); }
+    if (polaraxis1.normalise() * axis.normalise() <= 0.01) { polaraxis = polaraxis1.normalise(); } else {
+        polaraxis = (polaraxis1.GS1(axis)).normalise();
+    }
 }
 
 ostream& Magnet:: display(std :: ostream& c) const

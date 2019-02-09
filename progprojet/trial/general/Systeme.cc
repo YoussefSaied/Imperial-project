@@ -190,3 +190,19 @@ void Systeme:: evolue1(double dt, double t, bool d)
         if (d) { dessine(); }
        }*/
 }
+
+double Systeme:: NearestCorrelation() const
+{ // can we do it with angles?
+    double correlation(0);
+    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
+        for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
+            if ( (tab_ptr_Magnets[i]->position - tab_ptr_Magnets[j]->position).norme() <
+              2 * tab_ptr_Magnets[i]->length and i != j)
+            {
+                correlation += (tab_ptr_Magnets[i]->moment().normalise()) * (tab_ptr_Magnets[j]->moment().normalise());
+            }
+        }
+    }
+    if (!tab_ptr_Magnets.empty()) { correlation /= tab_ptr_Magnets.size(); }
+    return correlation;
+}
