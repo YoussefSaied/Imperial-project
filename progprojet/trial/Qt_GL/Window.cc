@@ -64,6 +64,8 @@ Window::Window()
     labela->setText("Change Angle:");
     QLabel * labelom = new QLabel(this);
     labelom->setText("Change Omega:");
+    QLabel * labelmagnet = new QLabel(this);
+    labelmagnet->setText("Change Magnet:");
 
     xSlider        = createSlider();
     ySlider        = createSlider();
@@ -111,13 +113,17 @@ Window::Window()
     mainLayout->addWidget(zselector, 2, 2);
     mainLayout->addWidget(labelz, 2, 1);
 
-    mainLayout->addWidget(labels, 0, 5);
-    mainLayout->addWidget(magnetselector, 0, 6);
-    mainLayout->addWidget(labela, 4, 5);
-    mainLayout->addWidget(flipangle, 4, 7);
+    mainLayout->addWidget(labels, 1, 5, 1, 3);
+
+
+    mainLayout->addWidget(labelmagnet, 2, 5);
+    mainLayout->addWidget(magnetselector, 2, 6);
     mainLayout->addWidget(labelom, 3, 5);
-    mainLayout->addWidget(omegato0, 3, 7);
+    mainLayout->addWidget(omegato0, 3, 6);
+    mainLayout->addWidget(labela, 4, 5);
     mainLayout->addWidget(angleselector, 4, 6);
+    mainLayout->addWidget(flipangle, 4, 7);
+
 
     setLayout(mainLayout);
 

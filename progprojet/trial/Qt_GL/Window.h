@@ -32,17 +32,19 @@ public slots:
     void updatelabelO()
     {
         // do that at the system level
-        std::string s = "Graphical Window, B=  ";
+        std::string s = "B =  ";
         std::stringstream ss;
-        ss << (glWidget->system_tab[0])->B;
-        ss << ", time: " << (glWidget->system_tab[0])->time;
-        ss << ", Hamiltonian: " << (glWidget->system_tab[0])->Energy();
+        ss << (glWidget->system_tab[0])->B << std::endl;
+        ss << "Time: " << (glWidget->system_tab[0])->time << std::endl;
+        ss << "Number of magnets in the system: " << (glWidget->system_tab[0])->tab_ptr_Magnets.size() << std::endl;
+        ss << "Correlation: " << (glWidget->system_tab[0])->NearestCorrelation() << std::endl;
+        ss << "Hamiltonian: " << (glWidget->system_tab[0])->Energy();
         ss << std::endl;
-        ss << "friction: " << (glWidget->system_tab[0])->f;
-        ss << ", Kinetic Energy: " << (glWidget->system_tab[0])->KineticEnergy;
-        ss << std::endl << "PotentialEnergy: " << (glWidget->system_tab[0])->PotentialEnergy << std::endl;
-        ss << "Number of magnets in the system: " << (glWidget->system_tab[0])->tab_ptr_Magnets.size();
-        ss << ", Correlation: " << (glWidget->system_tab[0])->NearestCorrelation();
+        ss << "Kinetic Energy: " << (glWidget->system_tab[0])->KineticEnergy;
+        ss << ", Potential Energy: " << (glWidget->system_tab[0])->PotentialEnergy << std::endl;
+        ss << "Friction: " << (glWidget->system_tab[0])->f;
+
+
         s += ss.str();
         QString qstr = QString::fromStdString(s);
         labelO->setText(qstr);
