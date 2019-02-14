@@ -48,18 +48,21 @@ public slots:
         s += ss.str();
         QString qstr = QString::fromStdString(s);
         labelO->setText(qstr);
-        if ((glWidget->system_tab[0])->time >= 0.05 and std::fmod((glWidget->system_tab[0])->time, 0.1) ) {
+        if ((glWidget->system_tab[0])->time > 0.00) {
             HamiltonianTime->append((glWidget->system_tab[0])->time, (glWidget->system_tab[0])->Energy());
+            KineticTime->append((glWidget->system_tab[0])->time, (glWidget->system_tab[0])->KineticEnergy);
+            PotentialTime->append((glWidget->system_tab[0])->time, (glWidget->system_tab[0])->PotentialEnergy);
             CorrelationTime->append((glWidget->system_tab[0])->time, (glWidget->system_tab[0])->NearestCorrelation());
             myaxis1->setMax(abs((glWidget->system_tab[0])->Energy() * 2));
             myaxis1->setMin(-1 * abs((glWidget->system_tab[0])->Energy() * 2));
+
             // myaxis2->setMax(abs((glWidget->system_tab[0])->NearestCorrelation() * 2));
             // myaxis2->setMin(-1 * abs((glWidget->system_tab[0])->NearestCorrelation() * 2));
 
-            // myaxis->applyNiceNumbers();
+            // myaxis1->applyNiceNumbers();
         }
         // HamiltonianTime->remove(0);
-    }
+    } // updatelabelO
 
     void setmagnetT(int mn)
     {
@@ -89,6 +92,8 @@ public:
     QPushButton * flipangle;
     QPushButton * omegato0;
     QSplineSeries * HamiltonianTime;
+    QSplineSeries * KineticTime;
+    QSplineSeries * PotentialTime;
     QSplineSeries * CorrelationTime;
     QChart * chart1;
     QChartView * chartview1;

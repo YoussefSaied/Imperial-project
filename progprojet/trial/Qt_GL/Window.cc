@@ -20,17 +20,28 @@ Window::Window()
     // chart1
     // maybe anti-aliasing; later
     myaxis1 = new QValueAxis();
-    myaxis1->setTickCount(4);
+    QCategoryAxis * myaxis12 = new QCategoryAxis;
+    myaxis1->setTickCount(0);
     chart1 = createMyChart("Hamiltonian");
     HamiltonianTime = createScatterSeries();
+    KineticTime     = createScatterSeries();
+    PotentialTime   = createScatterSeries();
     // HamiltonianTime->setMarkerSize(10);
     chart1->addSeries(HamiltonianTime);
+    chart1->addSeries(KineticTime);
+    chart1->addSeries(PotentialTime);
     chartview1 = new QChartView(chart1);
     chart1->createDefaultAxes();
     chart1->axisX()->setRange(0, 20);
-    // chart->axisY()->setRange(-0.01, 0.01);
-    chart1->setAxisY(myaxis1);
-    HamiltonianTime->attachAxis(myaxis1);
+    // chart1->axisY()->setRange(-0.001, 0.001);
+    // chart1->setAxisY(myaxis1);
+    chart1->addAxis(myaxis1, Qt::AlignLeft);
+    // chart1->addAxis(myaxis12, Qt::AlignRight);
+    // HamiltonianTime->attachAxis(myaxis1);
+    // KineticTime->attachAxis(myaxis1);
+    // PotentialTime->attachAxis(myaxis1);
+    // myaxis12->append("0", 0);
+    // chart1->setAxisY(myaxis12);
     // chart->createDefaultAxes();
     // chart->
     // maybe other series
