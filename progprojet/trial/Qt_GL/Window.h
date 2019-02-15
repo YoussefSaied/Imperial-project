@@ -13,6 +13,8 @@
 #include <string>
 #include <sstream>
 #include <QtCharts>
+#include <QColor>
+#include <QValueAxis>
 
 using namespace QtCharts;
 class Window : public QWidget
@@ -53,8 +55,17 @@ public slots:
             KineticTime->append((glWidget->system_tab[0])->time, (glWidget->system_tab[0])->KineticEnergy);
             PotentialTime->append((glWidget->system_tab[0])->time, (glWidget->system_tab[0])->PotentialEnergy);
             CorrelationTime->append((glWidget->system_tab[0])->time, (glWidget->system_tab[0])->NearestCorrelation());
-            myaxis1->setMax(abs((glWidget->system_tab[0])->Energy() * 2));
-            myaxis1->setMin(-1 * abs((glWidget->system_tab[0])->Energy() * 2));
+
+            if ((glWidget->system_tab[0])->KineticEnergy<1){myaxis1->setMax(1);}
+            else{myaxis1->setMax((glWidget->system_tab[0])->KineticEnergy * 1.2);}
+            double a = (glWidget->system_tab[0])->PotentialEnergy * 1.2;
+            if (a<-1){
+            myaxis1->setMin(a);
+            myaxis1->setTickCount(int(std::abs(a)+1));}
+            else{
+              myaxis1->setMin(a-0.5);
+              myaxis1->setTickCount(4);
+            }
 
             // myaxis2->setMax(abs((glWidget->system_tab[0])->NearestCorrelation() * 2));
             // myaxis2->setMin(-1 * abs((glWidget->system_tab[0])->NearestCorrelation() * 2));

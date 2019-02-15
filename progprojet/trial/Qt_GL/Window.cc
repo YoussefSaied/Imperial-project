@@ -18,24 +18,28 @@ Window::Window()
 
 
     // chart1
-    // maybe anti-aliasing; later
     myaxis1 = new QValueAxis();
-    QCategoryAxis * myaxis12 = new QCategoryAxis;
-    myaxis1->setTickCount(0);
-    chart1 = createMyChart("Hamiltonian");
+    chart1 = createMyChart("Energy (x10^4)");
     HamiltonianTime = createScatterSeries();
     KineticTime     = createScatterSeries();
     PotentialTime   = createScatterSeries();
+    HamiltonianTime->setName("Total");
+    KineticTime->setName("Kinetic");
+    PotentialTime->setName("Potential");
     // HamiltonianTime->setMarkerSize(10);
     chart1->addSeries(HamiltonianTime);
     chart1->addSeries(KineticTime);
     chart1->addSeries(PotentialTime);
     chartview1 = new QChartView(chart1);
     chart1->createDefaultAxes();
-    chart1->axisX()->setRange(0, 20);
-    // chart1->axisY()->setRange(-0.001, 0.001);
+    chart1->axisX()->setRange(0, 4);
+    myaxis1->setLabelFormat("%.1f");
+    chartview1->chart()->setAxisY(myaxis1, HamiltonianTime);
+    chartview1->chart()->setAxisY(myaxis1, KineticTime);
+    chartview1->chart()->setAxisY(myaxis1, PotentialTime);
+
     // chart1->setAxisY(myaxis1);
-    chart1->addAxis(myaxis1, Qt::AlignLeft);
+  //  chart1->setAxis(myaxis1)//, Qt::AlignLeft);
     // chart1->addAxis(myaxis12, Qt::AlignRight);
     // HamiltonianTime->attachAxis(myaxis1);
     // KineticTime->attachAxis(myaxis1);
@@ -57,7 +61,7 @@ Window::Window()
     chart2->addSeries(CorrelationTime);
     chartview2 = new QChartView(chart2);
     chart2->createDefaultAxes();
-    chart2->axisX()->setRange(0, 20);
+    chart2->axisX()->setRange(0, 4);
     // chart->axisY()->setRange(-0.01, 0.01);
     chart2->setAxisY(myaxis2);
     CorrelationTime->attachAxis(myaxis2);

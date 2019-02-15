@@ -1,6 +1,5 @@
 CREATE libgeneral.a
 ADDMOD Systeme.o
-ADDMOD SystemeP9.o
 ADDMOD Aleatoire.o
 ADDMOD Plan.o
 ADDMOD Dalle.o

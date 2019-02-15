@@ -145,8 +145,8 @@ void Systeme:: evolue1(double dt)
     // MOVE OMEGA & ENERGY
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         tab_ptr_Magnets[i]->moveomega(dt);
-        KineticEnergy   += tab_ptr_Magnets[i]->Kinetic();
-        PotentialEnergy += tab_ptr_Magnets[i]->potB() / 2;
+        KineticEnergy   += energyunit*tab_ptr_Magnets[i]->Kinetic();
+        PotentialEnergy += energyunit*tab_ptr_Magnets[i]->potB() / 2;
         // division by 2 more logical I think and it shows better stability (scatch that, WAY better stability)
         // you had a triangular sum :( we need a diagonal one
 

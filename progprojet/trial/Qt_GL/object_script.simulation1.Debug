@@ -1,13 +1,12 @@
 INPUT(
-./debug\main_qt_glP12P9.o
-./debug\glwidgetP12P9.o
+./debug\main_qt_gl.o
+./debug\glwidget.o
 ./debug\Window.o
 ./debug\glsphere.o
 ./debug\glcylinder.o
 ./debug\vue_opengl.o
 ./debug\SupportADessinTexte.o
 ./debug\Systeme.o
-./debug\SystemeP9.o
 ./debug\Aleatoire.o
 ./debug\Magnet.o
 ./debug\Plan.o
@@ -17,6 +16,6 @@ INPUT(
 ./debug\Sphere.o
 ./debug\Vecteur3D.o
 ./debug\qrc_resource.o
-./debug\moc_glwidgetP12P9.o
+./debug\moc_glwidget.o
 ./debug\moc_Window.o
 );
