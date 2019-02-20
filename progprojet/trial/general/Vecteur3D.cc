@@ -40,9 +40,11 @@ double Vecteur3D:: get_z() const
 
 // methodes
 
-ostream&Vecteur3D:: affiche(ostream &sortie) const
+ostream&Vecteur3D:: affiche(ostream &sortie, bool withoutbrackets) const
 {
-    sortie << "(" << x << ", " << y << ", " << z << ") ";
+    if (withoutbrackets) {
+        sortie << "(" << x << ", " << y << ", " << z << ") ";
+    }   else { sortie << x << " " << y << " " << z; }
     return sortie;
 }
 
@@ -223,8 +225,6 @@ const Vecteur3D operator * (Vecteur3D vecteur, double scalaire)
 const Vecteur3D operator / (Vecteur3D vecteur, double scalaire)
 {
     return vecteur *= (1 / scalaire);
-
-    ;
 }
 
 const Vecteur3D operator - (Vecteur3D vecteur, Vecteur3D const& autre)

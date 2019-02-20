@@ -17,8 +17,9 @@ class Systeme : public Dessinable
 public:
 
     // constructeurs et destructeurs
-    Systeme(SupportADessin * support = &Texte1, int selectmagnet = 0) : Dessinable(Position(), support),
-        B(0.000, 0, 0), selectedmagnet(selectmagnet), KineticEnergy(0), PotentialEnergy(0), time(0), f(5), n(1),energyunit(1e4)
+    Systeme(SupportADessin * support = &Texte1, double f = 5.0, int selectmagnet = 0) : Dessinable(Position(), support),
+        B(0.000, 0, 0), selectedmagnet(selectmagnet), KineticEnergy(0), PotentialEnergy(0), time(0), f(f), n(1),
+        energyunit(1e4), NearestCorrelationv(0.0)
     { }
 
     virtual ~Systeme(){ }
@@ -32,11 +33,16 @@ public:
     double f;
     size_t n; // number of times display is used when running a text sim.
     int energyunit;
+    double NearestCorrelationv;
     // methodes
+
+    std::vector<double> vertexangles(Vecteur3D vertexposition, double thresholddistance);
 
     virtual double Energy() const { return KineticEnergy + PotentialEnergy; }
 
-    virtual double NearestCorrelation() const;
+    virtual double NearestCorrelation(double dt);
+
+    virtual double totalangle() const;
 
     virtual void dessine() const override { support->dessine(*this); }
 
@@ -44,6 +50,7 @@ public:
     virtual void evolue1(double dt, unsigned int nb_repet);
     virtual void evolue1(double dt, double t, bool d); // evolution du système selon le 1er temps t
     virtual std:: ostream& display(std:: ostream& c) const;
+    virtual std:: ostream& displaypos(ostream& c) const;
 
     virtual void addMagnet(Magnet const& new_Magnet);
 

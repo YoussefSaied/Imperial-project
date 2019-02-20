@@ -52,7 +52,7 @@ public:
 
     Vecteur3D normalise() const; // retourne un vecteur normalisé
 
-    std:: ostream&affiche(std:: ostream& sortie) const; // affiche le vecteur:  (x,y,z)
+    std:: ostream&affiche(std:: ostream& sortie, bool withoutbrackets = 1) const; // affiche le vecteur:  (x,y,z)
 
     Vecteur3D GS1() const; // Procédé de Gram-Schmitt
 

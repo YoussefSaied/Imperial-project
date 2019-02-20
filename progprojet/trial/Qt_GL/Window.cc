@@ -18,8 +18,8 @@ Window::Window()
 
 
     // chart1
-    myaxis1 = new QValueAxis();
-    chart1 = createMyChart("Energy (x10^4)");
+    myaxis1         = new QValueAxis();
+    chart1          = createMyChart("Energy (x10^4)");
     HamiltonianTime = createScatterSeries();
     KineticTime     = createScatterSeries();
     PotentialTime   = createScatterSeries();
@@ -32,14 +32,15 @@ Window::Window()
     chart1->addSeries(PotentialTime);
     chartview1 = new QChartView(chart1);
     chart1->createDefaultAxes();
-    chart1->axisX()->setRange(0, 4);
+    chart1->axisX()->setRange(0, 30);
+    myaxis1->setTickCount(8);
     myaxis1->setLabelFormat("%.1f");
     chartview1->chart()->setAxisY(myaxis1, HamiltonianTime);
     chartview1->chart()->setAxisY(myaxis1, KineticTime);
     chartview1->chart()->setAxisY(myaxis1, PotentialTime);
 
     // chart1->setAxisY(myaxis1);
-  //  chart1->setAxis(myaxis1)//, Qt::AlignLeft);
+    //  chart1->setAxis(myaxis1)//, Qt::AlignLeft);
     // chart1->addAxis(myaxis12, Qt::AlignRight);
     // HamiltonianTime->attachAxis(myaxis1);
     // KineticTime->attachAxis(myaxis1);
@@ -61,7 +62,7 @@ Window::Window()
     chart2->addSeries(CorrelationTime);
     chartview2 = new QChartView(chart2);
     chart2->createDefaultAxes();
-    chart2->axisX()->setRange(0, 4);
+    chart2->axisX()->setRange(0, 30);
     // chart->axisY()->setRange(-0.01, 0.01);
     chart2->setAxisY(myaxis2);
     CorrelationTime->attachAxis(myaxis2);
