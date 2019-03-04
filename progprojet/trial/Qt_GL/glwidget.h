@@ -14,8 +14,8 @@ class GLWidget : public QGLWidget
  */
 {
 public:
-    GLWidget(QWidget * parent = nullptr)
-        : QGLWidget(parent), sysm(&vue)
+    GLWidget(QWidget * parent = nullptr, double f = 3.0, double dt = 0.001)
+        : QGLWidget(parent), sysm(&vue, f), dt(dt)
     {
         system_tab.push_back(sysm.copie());
     }
@@ -41,6 +41,7 @@ public:
     // system
     std::vector<std::unique_ptr<Systeme> > system_tab;
     Systeme sysm;
+    double dt;
 public slots:
     void setXB(double x)
     {
@@ -166,7 +167,7 @@ private:
 
     // Timer
     int timerId;
-    double dt = 0.001;
+
 
     // pour faire évoluer les objets avec le bon "dt"
     QTime chronometre;

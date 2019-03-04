@@ -22,6 +22,7 @@ Magnet :: Magnet(Position const& position, Vecteur3D axis, bool movable, double 
 
 ostream& Magnet:: display(std :: ostream& c) const
 {
+    int numberofrotations(angle / M_PI);
     c << "Fixed Attributes" << endl
       << "Position of centre: " << position << endl
       << "axis: " << axis << endl
@@ -29,7 +30,8 @@ ostream& Magnet:: display(std :: ostream& c) const
       << "gamma: " << gamma() << endl
       << endl
       << "Motion" << endl
-      << "angle: " << std::fmod(angle, M_PI) << endl
+      << "angle: " << pow(-1, numberofrotations) * std::fmod(angle, M_PI) << endl
+      << "number of rotations: " << numberofrotations << endl
       << "orientation: " << orientation() << endl
       << endl
       << "omega: " << omega << endl

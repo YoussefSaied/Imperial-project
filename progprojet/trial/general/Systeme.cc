@@ -48,15 +48,27 @@ ostream& Systeme:: display(ostream& c) const
         (*ptr_Magnet).dessine();
        }*/
 
-    int us = tab_ptr_Magnets.size();
-    c << time << " " << tab_ptr_Magnets[us - 1]->angle << " " << Energy();
+    /*int us = tab_ptr_Magnets.size();*/
+    c << time;
+    for (auto& g: tab_ptr_Magnets) {
+        c << " " << g->angle << " ";
+    }
+    c << Energy();
     c << endl;
+    return c;
+}
+
+ostream& Systeme:: displaypos(ostream& c) const
+{
+    for (auto& g: tab_ptr_Magnets) {
+        c << g->position << endl;
+    }
     return c;
 }
 
 unique_ptr<Systeme> Systeme :: cloneme() const
 {
-    unique_ptr<Systeme> P9(new Systeme(support));
+    unique_ptr<Systeme> P9(new Systeme(support, f, selectedmagnet));
     for (auto& g: tab_ptr_Magnets) {
         P9->addMagnet(*g);
     }
@@ -145,8 +157,19 @@ void Systeme:: evolue1(double dt)
     // MOVE OMEGA & ENERGY
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         tab_ptr_Magnets[i]->moveomega(dt);
-        KineticEnergy   += tab_ptr_Magnets[i]->Kinetic();
-        PotentialEnergy += tab_ptr_Magnets[i]->potB() / 2;}
+        KineticEnergy   += energyunit * tab_ptr_Magnets[i]->Kinetic();
+        PotentialEnergy += energyunit * tab_ptr_Magnets[i]->potB() / 2;
+        // division by 2 more logical I think and it shows better stability (scatch that, WAY better stability)
+        // you had a triangular sum :( we need a diagonal one
+
+        /*size_t k = i + 1;
+
+           while (k < tab_ptr_Magnets.size()) {
+            PotentialEnergy += tab_ptr_Magnets[k]->potB();
+
+            k++;
+           }*/
+    }
 } // Systeme::evolue1
 
 
@@ -179,18 +202,55 @@ void Systeme:: evolue1(double dt, double t, bool d)
        }*/
 }
 
-double Systeme:: NearestCorrelation() const
+double Systeme:: NearestCorrelation(double dt)
 { // can we do it with angles?
     double correlation(0);
-    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
-        for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
-            if ( (tab_ptr_Magnets[i]->position - tab_ptr_Magnets[j]->position).norme() <
-              2 * tab_ptr_Magnets[i]->length and i != j)
-            {
-                correlation += (tab_ptr_Magnets[i]->moment().normalise()) * (tab_ptr_Magnets[j]->moment().normalise());
+    if (std::fmod(time, 100.0 * dt) <= 10.0 * dt) { //
+        for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
+            for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
+                if ( (tab_ptr_Magnets[i]->position - tab_ptr_Magnets[j]->position).norme() <
+                  2 * tab_ptr_Magnets[i]->length and i != j)
+                {
+                    correlation += (tab_ptr_Magnets[i]->moment().normalise())
+                      * (tab_ptr_Magnets[j]->moment().normalise());
+                }
             }
         }
+        if (!tab_ptr_Magnets.empty()) { correlation /= tab_ptr_Magnets.size(); }
+        NearestCorrelationv = correlation;
     }
-    if (!tab_ptr_Magnets.empty()) { correlation /= tab_ptr_Magnets.size(); }
-    return correlation;
+
+    return NearestCorrelationv;
+}
+
+double Systeme::totalangle() const
+{
+    double totalangle1 = 0;
+    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
+        double angle = tab_ptr_Magnets[i]->angle;
+        int numberofrotations(angle / M_PI);
+        angle        = pow(-1, numberofrotations) * std::fmod(angle, M_PI);
+        totalangle1 += angle;
+    }
+    // provisional:
+
+    /*if (tab_ptr_Magnets.size() > 29) {
+        totalangle1 += -2 * tab_ptr_Magnets[1]->angle;
+        totalangle1 += -2 * tab_ptr_Magnets[2]->angle;
+        totalangle1 += -2 * tab_ptr_Magnets[23]->angle;
+        totalangle1 += -2 * tab_ptr_Magnets[28]->angle;
+        totalangle1 += -2 * tab_ptr_Magnets[3]->angle;
+       }*/
+    return totalangle1;
+}
+
+std::vector<double> Systeme::vertexangles(Vecteur3D vertexposition, double thresholddistance)
+{
+    std::vector<double> angles;
+    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
+        if ((tab_ptr_Magnets[i]->position - vertexposition).norme() < thresholddistance) {
+            angles.push_back(tab_ptr_Magnets[i]->angle);
+        }
+    }
+    return angles;
 }
