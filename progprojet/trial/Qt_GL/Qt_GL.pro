@@ -30,6 +30,7 @@ SOURCES += \
     ../general/Dalle.cc \
     ../general/Brique.cc \
     ../general/Dodec.cc \
+    ../general/Cube.cc \
     ../general/Sphere.cc \
     ../general/Vecteur3D.cc
 
@@ -52,6 +53,7 @@ HEADERS += \
     ../general/Dalle.h \
     ../general/Brique.h \
     ../general/Dodec.h \
+    ../general/Cube.h \
     ../general/Sphere.h \
     ../general/Vecteur3D.h
 

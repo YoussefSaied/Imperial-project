@@ -13,6 +13,7 @@ INPUT(
 ./release\Dalle.o
 ./release\Brique.o
 ./release\Dodec.o
+./release\Cube.o
 ./release\Sphere.o
 ./release\Vecteur3D.o
 ./release\qrc_resource.o

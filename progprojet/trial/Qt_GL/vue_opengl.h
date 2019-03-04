@@ -20,6 +20,7 @@ public:
     virtual void dessine(Sphere const& s) override;
     virtual void dessine(Brique const& b) override;
     virtual void dessine(Dodec const& d) override;
+    virtual void dessine(Cube const& q) override;
     virtual void dessine(Cylinder const& c) override;
     virtual void dessine(Magnet const& M) override;
 
@@ -40,10 +41,13 @@ public:
     void rotate(double angle, double dir_x, double dir_y, double dir_z);
 
     // méthode utilitaire offerte pour simplifier
-    void dessineCube(QMatrix4x4 const& point_de_vue  = QMatrix4x4() );
     void dessineDodec(QMatrix4x4 const& point_de_vue = QMatrix4x4() );
+    void dessineCube(QMatrix4x4 const& point_de_vue = QMatrix4x4() );
     void dessinePenta(
         QMatrix4x4 const& point_de_vue = QMatrix4x4(), Vecteur3D x1 = Vecteur3D(0, 0, 0), Vecteur3D x2 = Vecteur3D(0, 0, 0), Vecteur3D x3 = Vecteur3D(0, 0, 0), Vecteur3D x4 = Vecteur3D(0, 0, 0), Vecteur3D x5 = Vecteur3D(0, 0, 0));
+    void dessineSquare(
+            QMatrix4x4 const& point_de_vue = QMatrix4x4(), Vecteur3D x1 = Vecteur3D(0, 0, 0), Vecteur3D x2 = Vecteur3D(0, 0, 0), Vecteur3D x3 = Vecteur3D(0, 0, 0), Vecteur3D x4 = Vecteur3D(0, 0, 0));
+
     void dessinePentai(
         QMatrix4x4 const& point_de_vue = QMatrix4x4(), Vecteur3D x1 = Vecteur3D(0, 0, 0), Vecteur3D x2 = Vecteur3D(0, 0, 0), Vecteur3D x3 = Vecteur3D(0, 0, 0), Vecteur3D x4 = Vecteur3D(0, 0, 0),
         Vecteur3D x5 = Vecteur3D(0, 0, 0))

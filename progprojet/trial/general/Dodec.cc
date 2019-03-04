@@ -37,8 +37,7 @@ vector<vector<Vecteur3D> > Dodec:: vertipositions() const
     vector<vector<Vecteur3D> > vp; // vertixes positions
     double a = (1 + sqrt(5)) / 2;
     vp.push_back({ Vecteur3D(1 / a, 0, a), Vecteur3D(-1 / a, 0, a), Vecteur3D(-1, -1, 1), Vecteur3D(0, -a,
-                   1 / a),
-                   Vecteur3D(1, -1, 1) }); // 1
+                   1 / a), Vecteur3D(1, -1, 1) }); // 1
     vp.push_back({ Vecteur3D(-1, -1, 1), Vecteur3D(-a, -1 / a, 0), Vecteur3D(-1, -1, -1), Vecteur3D(0, -a,
                    -1 / a),
                    Vecteur3D(0, -a, 1 / a) }); // 2

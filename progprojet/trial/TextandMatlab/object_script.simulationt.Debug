@@ -2,7 +2,6 @@ INPUT(
 ./debug\main_textmatlab.o
 ./debug\SupportADessinTexte.o
 ./debug\Systeme.o
-./debug\SystemeP9.o
 ./debug\Aleatoire.o
 ./debug\Magnet.o
 ./debug\Plan.o

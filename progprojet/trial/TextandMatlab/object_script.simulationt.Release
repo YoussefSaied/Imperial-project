@@ -2,7 +2,6 @@ INPUT(
 ./release\main_textmatlab.o
 ./release\SupportADessinTexte.o
 ./release\Systeme.o
-./release\SystemeP9.o
 ./release\Aleatoire.o
 ./release\Magnet.o
 ./release\Plan.o

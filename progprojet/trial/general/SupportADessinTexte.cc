@@ -7,6 +7,7 @@
 #include "Systeme.h"
 #include "Brique.h"
 #include "Dodec.h"
+#include "Cube.h"
 #include "Sphere.h"
 #include "Cylinder.h"
 #include "Magnet.h"
@@ -50,6 +51,11 @@ void SupportADessinTexte :: dessine(Brique const& b)
 void SupportADessinTexte :: dessine(Dodec const& d)
 {
     d.display(flot);
+}
+
+void SupportADessinTexte :: dessine(Cube const& q)
+{
+    q.display(flot);
 }
 
 void SupportADessinTexte :: dessine(Cylinder const& c)

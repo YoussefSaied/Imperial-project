@@ -144,6 +144,30 @@ void VueOpenGL::dessine(Dodec const& d)
     dessineDodec(matrice);
 }
 
+void VueOpenGL::dessine(Cube const& q)
+{
+    double a = (1 + sqrt(5)) / 2;
+    Vecteur3D v1(1 / a, 0, a);
+    Vecteur3D v2(-1 / a, 0, a);
+    Vecteur3D v3(-1, -1, 1);
+    Vecteur3D o1(v1 - v2);
+    Vecteur3D o2(v2 - v3);
+
+    QMatrix4x4 matrice;
+    matrice.setToIdentity();
+
+    matrice.translate((q.get_position()).get_x(), (q.get_position()).get_y(), (q.get_position()).get_z());
+    matrice.scale(q.get_edge());
+    // rotation
+    Vecteur3D axer0(o1 ^ o2);
+    Vecteur3D axer1(q.get_vecteur_1() ^ axer0);
+    double angle = acos((q.get_vecteur_1() * axer0) / ((q.get_vecteur_1().norme()) * axer0.norme()));
+
+    if (axer1 != 0) { matrice.rotate(-1 * angle * 180 / M_PI, axer1.get_x(), axer1.get_y(), axer1.get_z()); }
+
+    dessineCube(matrice);
+}
+
 void VueOpenGL::dessine(Cylinder const& c)
 {
     glPolygonMode(GL_FRONT_AND_BACK, GL_LINE);
@@ -280,6 +304,14 @@ void VueOpenGL::rotate(double angle, double dir_x, double dir_y, double dir_z)
     rotation_supplementaire.rotate(angle, dir_x, dir_y, dir_z);
     matrice_vue = rotation_supplementaire * matrice_vue;
 }
+void VueOpenGL::dessineSquare(QMatrix4x4 const& point_de_vue, Vecteur3D x1, Vecteur3D x2, Vecteur3D x3, Vecteur3D x4)
+{
+    // draw lines glBegin(GL_LINES);
+    dessineLine(point_de_vue, x1, x2);
+    dessineLine(point_de_vue, x2, x3);
+    dessineLine(point_de_vue, x3, x4);
+    dessineLine(point_de_vue, x4, x1);
+}
 
 //               = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = = =
 void VueOpenGL::dessineCube(QMatrix4x4 const& point_de_vue)
@@ -287,7 +319,23 @@ void VueOpenGL::dessineCube(QMatrix4x4 const& point_de_vue)
     prog.setUniformValue("vue_modele", matrice_vue * point_de_vue);
 
     glBegin(GL_QUADS);
-    // face coté X = +1
+    QMatrix4x4 m;
+    m.setToIdentity();
+
+    dessineSquare(point_de_vue,Vecteur3D(-1, -1, -1), Vecteur3D(-1, -1, 1), Vecteur3D(-1,1,1), Vecteur3D(-1,1,-1)); // 1
+    dessineSquare(point_de_vue,Vecteur3D(1, -1, -1), Vecteur3D(1, -1, 1), Vecteur3D(1,1,1), Vecteur3D(1,1,-1)); // 1
+    dessineSquare(point_de_vue,Vecteur3D(-1, -1, 1), Vecteur3D(-1, 1, 1), Vecteur3D(1,1,1), Vecteur3D(1,-1,1)); // 1
+    dessineSquare(point_de_vue,Vecteur3D(-1, -1, -1), Vecteur3D(1, -1,-1), Vecteur3D(1,1,-1), Vecteur3D(-1,1,-1)); // 1
+    dessineSquare(point_de_vue,Vecteur3D(-1, -1, -1), Vecteur3D(-1, -1, 1), Vecteur3D(1,-1,1), Vecteur3D(1,-1,-1)); // 1
+    dessineSquare(point_de_vue,Vecteur3D(-1, 1, -1), Vecteur3D(1, 1, -1), Vecteur3D(1,1,1), Vecteur3D(-1,1,1)); // 1
+
+
+/*
+dessineLine(point_de_vue, x1, x2);
+dessineLine(point_de_vue, x2, x3);
+dessineLine(point_de_vue, x3, x4);
+dessineLine(point_de_vue, x4, x5);
+dessineLine(point_de_vue, x5, x1);
     prog.setAttributeValue(CouleurId, 1.0, 0.0, 0.0); // rouge
     prog.setAttributeValue(SommetId, +1.0, -1.0, -1.0);
     prog.setAttributeValue(SommetId, +1.0, +1.0, -1.0);
@@ -329,7 +377,7 @@ void VueOpenGL::dessineCube(QMatrix4x4 const& point_de_vue)
     prog.setAttributeValue(SommetId, +1.0, +1.0, -1.0);
     prog.setAttributeValue(SommetId, +1.0, -1.0, -1.0);
 
-    glEnd();
+    glEnd();*/
 } // VueOpenGL::dessineCube
 
 void VueOpenGL::dessinePenta(QMatrix4x4 const& point_de_vue, Vecteur3D x1, Vecteur3D x2, Vecteur3D x3, Vecteur3D x4,

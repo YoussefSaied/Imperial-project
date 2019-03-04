@@ -130,7 +130,7 @@ int main(int argc, char * argv[])
     double dt      = configFile.get<double>("dt");
     double timesim = configFile.get<double>("timesim");
     double f       = configFile.get<double>("f");
-    int n = configFile.get<int>("nb_repet");
+    int n          = configFile.get<int>("nb_repet");
 
     // output text file:
     string output = configFile.get<string>("output");

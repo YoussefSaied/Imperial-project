@@ -6,11 +6,15 @@
 #include "Dalle.h"
 #include <vector>
 #include "Sphere.h"
+//#include "Tetra.h"
 #include "Brique.h"
 #include "Dodec.h"
+#include "Cube.h"
 #include "Cylinder.h"
 #include "Window.h"
 #include <iostream>
+#include <algorithm>
+
 using namespace std;
 
 int main(int argc, char * argv[])
@@ -45,7 +49,7 @@ int main(int argc, char * argv[])
     if (desiredconfig == "Dodec") {
         // Dodec dode(Vecteur3D(0, 0, 3), 4, Vecteur3D(0, -0.763932, 1.23607), false);
         Dodec dode(Vecteur3D(0, 0, 0), 3e-2, Vecteur3D(0, 0, 1.0), false);
-        for (size_t i = 0; i < (dode.vertipositions()).size(); ++i) {
+        for (size_t i = 0; i < 2; ++i) {
             size_t si = ((dode.vertipositions())[i]).size();
             for (size_t j = 0; j < si; ++j) {
                 Vecteur3D pos( ((dode.vertipositions())[i][j] + (dode.vertipositions())[i][(j + 1) % si]) / 2);
@@ -58,8 +62,12 @@ int main(int argc, char * argv[])
                 Vecteur3D polaraxis = (dode.vertipositions())[i][j] - (dode.vertipositions())[i][(j + 1) % si];
                 Vecteur3D v2        =
                   ((dode.vertipositions())[i][(j + 1) % si] - (dode.vertipositions())[i][(j + 2) % si]);
-                Vecteur3D v3 = polaraxis ^ v2; // vector perpindicular to face
-                // double alph  = M_PI - atan(2); // angle between two faces
+                Vecteur3D v3 = polaraxis ^ v2;
+                //polaraxis: parallel to edge
+                //v2: next edge on same face
+                //v3: perpendicular to face
+                //v4:
+                //double alph  = M_PI - atan(2); // angle between two faces
                 // orientation conditions:
 
                 /*  Vecteur3D axer(polaraxis ^ Vecteur3D(0, 0, 1));
@@ -187,5 +195,64 @@ int main(int argc, char * argv[])
             cout << " Vector after: " << (vectortoberotated.rotate(angleofrotation, rotationaxe)) << endl;
         }
     }
+/*
+    // Cube:
+    if (desiredconfig == "Cube") {
+        // Cube dode(Vecteur3D(0, 0, 3), 4, Vecteur3D(0, -0.763932, 1.23607), false);
+        Cube qube(Vecteur3D(0, 0, 0), 3e-2, Vecteur3D(0, 0, 1.0));
+        for (size_t i = 0; i < (qube.vertipositions()).size(); ++i) {
+            size_t si = ((qube.vertipositions())[i]).size();
+            for (size_t j = 0; j < si; ++j) {
+                Vecteur3D pos(0,0,0);
+                pos = ((qube.vertipositions())[i][j] + (qube.vertipositions())[i][(j + 1) % si]) / 2;
+                // axis CALCULATIONS:
+                Vecteur3D polaraxis = (qube.vertipositions())[i][j] - (qube.vertipositions())[i][(j + 1) % si]; //edge
+                Vecteur3D v2        =
+                  ((qube.vertipositions())[i][(j + 1) % si] - (qube.vertipositions())[i][(j + 2) % si]); //next edge
+                //double alph1 = 3*M_PI/4;
+                Vecteur3D axe = Vecteur3D(0.5,0.5,0).normalise();  //v2.rotate(alph1, polaraxis);
+
+                 Magnet M(pos, axe, 1, 0, polaraxis);
+                  (w.glWidget)->addMagnet(M);
+
+                 // position pos, axis axe, movable yes, angle_0 0, polaraxis polaraxis
+
+            }
+        }
+        (w.glWidget)->addObstacle(qube);
+        w.show();
+    }
+
+    //Tetra:
+    if (desiredconfig == "Tetra") {
+        // Cube dode(Vecteur3D(0, 0, 3), 4, Vecteur3D(0, -0.763932, 1.23607), false);
+        Cube qube(Vecteur3D(0, 0, 0), 3e-2, Vecteur3D(0, 0, 1.0));
+        vector<Vecteur3D> poss;
+        for (size_t i = 0; i < (qube.vertipositions()).size(); ++i) {
+            size_t si = ((qube.vertipositions())[i]).size();
+            for (size_t j = 0; j < si; ++j) {
+                Vecteur3D pos( ((qube.vertipositions())[i][j] + (qube.vertipositions())[i][(j + 1) % si]) / 2);
+                // axis CALCULATIONS:
+                Vecteur3D v1 = (qube.vertipositions())[i][j] - (qube.vertipositions())[i][(j + 1) % si]; //edge
+                Vecteur3D v2 =((qube.vertipositions())[i][(j + 1) % si] - (qube.vertipositions())[i][(j + 2) % si]); //next edge
+                Vecteur3D v3 = v1^v2 //perpendicular
+                double alph1 = M_PI/6;
+                Vecteur3D axe  = v3.rotate(alph1, v1);
+
+                if (std::find(poss.begin(), poss.end(), pos) != poss.end()) {}
+                else {Magnet M(pos, axe, 1, 0, polaraxis);
+                  poss.push_back(pos);
+                  (w.glWidget)->addMagnet(M);
+                }
+                 // position pos, axis axe, movable yes, angle_0 0, polaraxis polaraxis
+
+            }
+        }
+        (w.glWidget)->addObstacle(qube);
+        w.show();
+    }
+
+    */
     return a.exec();
+
 } // main

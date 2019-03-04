@@ -8,7 +8,7 @@
 #include <memory>
 #include <cmath>
 
-typedef Vecteur3D Position, Vitesse;
+//typedef Vecteur3D Position, Vitesse;
 
 // Paula's magnet: charge = 2, radius = 0.75e-3, mass = 0.3e-3, length = 1.9e-2
 // IMPORTANT: T:= normally torque; W:= normally omega/ angular acceleration

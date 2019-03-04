@@ -9,6 +9,7 @@
 #include "Vecteur3D.h"
 #include "Sphere.h"
 #include "Dodec.h"
+#include "Cube.h"
 #include "Magnet.h"
 
 class Systeme : public Dessinable
@@ -18,7 +19,7 @@ public:
 
     // constructeurs et destructeurs
     Systeme(SupportADessin * support = &Texte1, int selectmagnet = 0) : Dessinable(Position(), support),
-        B(0.000, 0, 0), selectedmagnet(selectmagnet), KineticEnergy(0), PotentialEnergy(0), time(0), f(5), n(1),energyunit(1e4)
+        B(0.000, 0, 0), selectedmagnet(selectmagnet), KineticEnergy(0), PotentialEnergy(0), time(0), f(1), n(1)
     { }
 
     virtual ~Systeme(){ }
@@ -31,8 +32,6 @@ public:
     double time;
     double f;
     size_t n; // number of times display is used when running a text sim.
-    int energyunit;
-    // methodes
 
     virtual double Energy() const { return KineticEnergy + PotentialEnergy; }
 
