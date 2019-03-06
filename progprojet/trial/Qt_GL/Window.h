@@ -41,7 +41,7 @@ public slots:
         ss << ", dt: " << glWidget->dt << std::endl;
         ss << "Total angle: " << (glWidget->system_tab[0])->totalangle() << std::endl;
         ss << "Number of magnets in the system: " << (glWidget->system_tab[0])->tab_ptr_Magnets.size() << std::endl;
-        ss << "Correlation: " << (glWidget->system_tab[0])->NearestCorrelation(glWidget->dt) << std::endl;
+        ss << "Correlation: " << (glWidget->system_tab[0])->NearestCorrelation() << std::endl;
         ss << "Hamiltonian: " << (glWidget->system_tab[0])->Energy();
         ss << std::endl;
         ss << "Kinetic Energy: " << (glWidget->system_tab[0])->KineticEnergy;
@@ -60,7 +60,7 @@ public slots:
             KineticTime->append((glWidget->system_tab[0])->time, (glWidget->system_tab[0])->KineticEnergy);
             PotentialTime->append((glWidget->system_tab[0])->time, (glWidget->system_tab[0])->PotentialEnergy);
             CorrelationTime->append((glWidget->system_tab[0])->time,
-              (glWidget->system_tab[0])->NearestCorrelation(glWidget->dt));
+              (glWidget->system_tab[0])->NearestCorrelation());
 
             if ((glWidget->system_tab[0])->KineticEnergy < 1) { myaxis1->setMax(1); } else {
                 myaxis1->setMax((glWidget->system_tab[0])->KineticEnergy * 1.2);

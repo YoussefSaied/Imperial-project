@@ -1,5 +1,6 @@
 #pragma once
 #include <vector>
+#include <cmath>
 #include "Obstacle.h"
 #include <iostream>
 #include "Dessinable.h"
@@ -18,8 +19,8 @@ class Systeme : public Dessinable
 public:
 
     // constructeurs et destructeurs
-    Systeme(SupportADessin * support = &Texte1, double f = 5.0, int selectmagnet = 0) : Dessinable(Position(), support),
-        B(0.000, 0, 0), selectedmagnet(selectmagnet), KineticEnergy(0), PotentialEnergy(0), time(0), f(f), n(1),
+    Systeme(SupportADessin * support = &Texte1, double f = 1.0, int selectmagnet = 0) : Dessinable(Position(), support),
+        B(0.000, 0, 0), selectedmagnet(selectmagnet), KineticEnergy(0), PotentialEnergy(0), time(0), f(f), n(1), eq(false),
         energyunit(1e4), NearestCorrelationv(0.0)
     { }
 
@@ -33,6 +34,7 @@ public:
     double time;
     double f;
     size_t n; // number of times display is used when running a text sim.
+    bool eq;
     int energyunit;
     double NearestCorrelationv;
     // methodes
@@ -41,19 +43,22 @@ public:
 
     virtual double Energy() const { return KineticEnergy + PotentialEnergy; }
 
-    virtual double NearestCorrelation(double dt);
+    virtual double NearestCorrelation() const;
 
     virtual double totalangle() const;
 
     virtual void dessine() const override { support->dessine(*this); }
 
     virtual void evolue1(double dt = 0.01);
+    virtual void evolue2(double dt = 0.01);
     virtual void evolue1(double dt, unsigned int nb_repet);
     virtual void evolue1(double dt, double t, bool d); // evolution du système selon le 1er temps t
     virtual std:: ostream& display(std:: ostream& c) const;
-    virtual std:: ostream& displaypos(ostream& c) const;
+    virtual std:: ostream& displaypos(std:: ostream& c) const;
 
     virtual void addMagnet(Magnet const& new_Magnet);
+
+    virtual void setfriction(double friction);
 
     void addObstacle(Obstacle const& nouveau_obstacle);
 

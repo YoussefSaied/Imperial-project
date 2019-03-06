@@ -37,7 +37,6 @@ int main(int argc, char * argv[])
      * Dalle dalle_obstacled(Position(0, 0, 0), Vecteur3D(0, 0.0, 1.0), Vecteur3D(0.0, 1.0, 0.0), 4, 4);
      * Brique b(dalle_obstacled, 4.0);*/
     // Dodec dode(Vecteur3D(0, 0, 3), 4, Vecteur3D(0, -0.763932, 1.23607), false);
-    Dodec dode(Vecteur3D(0, 0, 0), 3e-2, Vecteur3D(0, 0, 1.23607), false);
     Cylinder c1(Position(0, 10, 0), Vecteur3D(0, 7, 0), 1, 1);
     Cylinder c2(Position(10, 0, 0), Vecteur3D(7, 0, 0), 1, 1);
     Cylinder c3(Position(0, 0, 10), Vecteur3D(0, 0, 1), 1, 1);
@@ -46,41 +45,25 @@ int main(int argc, char * argv[])
     // All the magnets :D
     // int num = 0;
 
-
+    // Dodec dode(Vecteur3D(0, 0, 3), 4, Vecteur3D(0, -0.763932, 1.23607), false);
+    Dodec dode(Vecteur3D(0, 0, 0), 3e-2, Vecteur3D(0, 0, 1.0), false);
     for (size_t i = 0; i < (dode.vertipositions()).size(); ++i) {
         size_t si = ((dode.vertipositions())[i]).size();
         for (size_t j = 0; j < si; ++j) {
-            Vecteur3D p(0, 0, 0);
-            p = ((dode.vertipositions())[i][j] + (dode.vertipositions())[i][(j + 1) % si]) / 2;
-            // p += dode.position;
-            // ++num;
-            // cout << i << "," << j << num << ":  ";
-            // cout << p << endl;
-            // For the axe
-            Vecteur3D v1(0, 1, 0);
-            Vecteur3D v2(0, 1, 0);
-            Vecteur3D v3(0, 1, 0);
-            Vecteur3D v4(0, 1, 0);
-            Vecteur3D axe(0, 1, 0);
-            v1 = ((dode.vertipositions())[i][j] - (dode.vertipositions())[i][(j + 1) % si]);
-            // for v2 :
-            v2 = ((dode.vertipositions())[i][(j + 1) % si] - (dode.vertipositions())[i][(j + 2) % si]);
-            // for v3 :
-            v3 = v1 ^ v2;
-            double alph = atan(2); // angle of rotation arctan(2)
-            v4  = v3.rotate(alph, v1);
-            axe = v4 ^ v1;
+            Vecteur3D pos( ((dode.vertipositions())[i][j] + (dode.vertipositions())[i][(j + 1) % si]) / 2);
+            Vecteur3D polaraxis = (dode.vertipositions())[i][j] - (dode.vertipositions())[i][(j + 1) % si];
+            Vecteur3D v2        =
+              ((dode.vertipositions())[i][(j + 1) % si] - (dode.vertipositions())[i][(j + 2) % si]);
+            Vecteur3D v3 = polaraxis ^ v2;
+            double alph1  = -1 * atan(2) / 2;
+            Vecteur3D v4  = v3.rotate(alph1, polaraxis);
+            Vecteur3D axe = (v4 ^ polaraxis).normalise();
 
-            // calculate polaraxis:
-            Vecteur3D polaraxis(1, 0, 0);
-            polaraxis = (dode.vertipositions())[i][j] - (dode.vertipositions())[i][(j + 1) % si];
-
-            // add magnet here.
-            Magnet M(p, axe, 1, 0, polaraxis); // position p, axis a, movable yes, angle_0 0, polaraxis polaraxis
-
+            Magnet M(pos, axe, 1, 0, polaraxis); // position pos, axis axe, movable yes, angle_0 0, polaraxis polaraxis
             s.addMagnet(M);
         }
     }
+
 
     /*w.addMagnet(M2);
        w.addMagnet(M3);
@@ -137,10 +120,10 @@ int main(int argc, char * argv[])
     unique_ptr<ofstream> tfile(new ofstream(output.c_str()));
     tfile->precision(20);
     SupportADessinTexte tsupport(*tfile);
-    s.f = f;
+    s.setfriction(f);
     s.n = n;
     s.set_support(&tsupport);
-    s.evolue1(dt, timesim);
+    s.evolue1(dt, timesim,1);
 
     /*std::cout << "Please input dt:" << '\n';
        cin >> dt;
