@@ -26,8 +26,8 @@ set(groot, 'defaultTextInterpreter', 'latex');
 set(groot, 'defaultAxesFontSize', 18);
 
 %% Parametres %%
-repertoire = './';
-executable = 'simulationt';
+repertoire = '';
+executable = 'debug/simulationt';
 
 input = 'configuration.in';
 
@@ -38,18 +38,19 @@ nsimul = 5;
 % Indiquer ici les valeurs des parametres a scanner :
 %dt = linspace(-4,-5,nsimul);
 %dt= 0.01;
-dt = 10^-2 ./2.^linspace(1,nsimul,nsimul);
-%dt = logspace(-4,-6,nsimul)
-f = linspace(0,100,nsimul);
-
+%dt = 10^-2 ./2.^linspace(1,nsimul,nsimul);
+dt = logspace(-4,-6,nsimul);
+%f = [2,2.25,2.5,2.6,2.7,2.8,2.9,3,3.25,3.5];%,20,50];
+f = linspace(1,5,100);
 
 % Selectionner ici le parametre a scanner
- paramstr = 'dt';
- param = dt;
+%paramstr = 'dt';
+%param = dt;
 
-%  paramstr = 'f';
-%  param = f;
-
+paramstr = 'f';
+param = f;
+%time - correlation - sum angle - energy - kinetic
+nsimul = length(param);
 
 %% Simulations %%
 
@@ -60,7 +61,7 @@ for i = 1:nsimul
     tic
     filename = [paramstr,'/',paramstr,'=', num2str(param(i))];
     output{i} = [filename];
-    eval(sprintf('!%s%s %s %s=%.15g output=%s',  repertoire,executable, input, paramstr, param(i), output{i}));
+    eval(sprintf('!%s %s %s=%.15g output=%s',executable, input, paramstr, param(i), output{i}));
     % Variante pour scanner Nx et Ny en meme temps:
     % eval(sprintf('!%s%s %s %s=%.15g %s=%.15g output=%s', repertoire, executable, input, [paramstr,'x'], param(i), [paramstr,'y'], param(i), output{i}));
     disp('Done.')
@@ -105,19 +106,64 @@ if(strcmp(paramstr,'dt'))
 end
 
 if(strcmp(paramstr,'f'))
-     xmoyf = zeros(1,nsimul);
-     P1 = zeros(1501,nsimul); %1501 pour 150s et dt=0.1
-     P2 = zeros(1501,nsimul);
-     P3 = zeros(1501,nsimul);
-
-    for i = 1:nsimul
+    eqE = zeros(nsimul,1);
+    eqtime = zeros(nsimul,1);
+    eqCor = zeros(nsimul,1);
+    
+    for i = 1:length(f)
+    %load
     filename = [output{i}];
-    data = load([filename,'_obs.out']);
+    data = load([filename]);
+    
+    %unpack
     t = data(:,1);
-    P1(:,i) = data(:,2);
-    P2(:,i) = data(:,3);
-    P3(:,i) = data(:,4);
+    correlation = data(:,2);
+    angle = data(:,3);
+    energy = data(:,4);
+    kineticenergy = data(:,5);
+    
+    %figures per friction
+
+%     figure
+%     subplot(1,2,1)
+%     plot(t,log(kineticenergy));
+%     title(filename)
+%     grid on
+%     xlabel('time');
+%     ylabel('KE')
+%     subplot(1,2,2)
+%     plot(t,correlation);
+%     grid on
+%     xlabel('time');
+%     ylabel('corr')
+    
+    %find eq
+    for j = 1:length(kineticenergy)
+    if kineticenergy(j) > 1e-10
+        eqE(i) = energy(j);
+        eqtime(i) = t(j);
+        eqCor(i) = correlation(j);
     end
+    end
+    end
+
+figure
+plot(f,eqE);
+grid on
+xlabel('friction coef');
+ylabel('KE')
+
+figure
+plot(f,eqtime)
+grid on
+xlabel('friction coef');
+ylabel('eqtime')
+
+figure
+plot(f,eqCor)
+grid on
+xlabel('friction coef');
+ylabel('correlation')
 end
 
 
@@ -154,36 +200,16 @@ end
 
 if(strcmp(paramstr,'f'))
     figure
-    plot(t,P1);
+    plot(f,eqtime);
     grid on
-    xlabel('Time t [s]');
-    ylabel('$P_{x<x_a}(t)$ [ ]')
-    legend('$V_0 = 0.8E$','$V_0 = E$','$V_0 = 1.1 E$')
+    xlabel('friction coef');
+    ylabel('time till eq. (KE/PE = 1e-10)')
 
     figure
-    plot(t,P2);
+    plot(f, finalenergy);
     grid on
-    xlabel('Time t [s]');
-    ylabel('$P_{x_a \le x \le x_b}(t)$ [ ]')
-    legend('$V_0 = 0.8E$','$V_0 = E$','$V_0 = 1.1 E$')
+    xlabel('friction coef')
+    ylabel('final energy')
 
-    figure
-    plot(t,P3);
-    grid on
-    xlabel('Time t [s]');
-    ylabel('$P_{x>x_b}(t)$ [ ]')
-    legend('$V_0 = 0.8E$','$V_0 = E$','$V_0 = 1.1 E$')
-
-    figure
-    plot(V0/0.3081,P3(end,:),'+')
-    hold on
-    line([1 1], [0.1 0.8]);
-    line([0.7 1.2], [0.5 0.5]);
-    line([0.832382 0.832382], [0.1 0.8]);
-    pV0 = polyfit(V0/0.3081,P3(end,:),1);
-    pvV0 = polyval(pV0,V0/0.3081);
-    plot(V0/0.3081,pvV0,'--')
-    xlabel('$V0/E$ [ ]')
-    ylabel('$P_{x>x_b}(t)$ [ ]')
 
 end

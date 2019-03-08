@@ -1,9 +1,9 @@
 % Physique :
 dt = 0.001
-timesim = 10
+timesim = 1
 f=0
 nb_repet= 200
-
+random = 0
 % Numérique :
 
 output = output

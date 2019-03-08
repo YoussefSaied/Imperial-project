@@ -2,6 +2,10 @@
 #include "Systeme.h"
 #include <iostream>
 #include <cmath>
+#include <ctime>
+#include <chrono>
+#include <cstdlib>
+#include <stdio.h>
 
 using namespace std;
 
@@ -45,10 +49,23 @@ void Systeme:: setfriction(double friction)
   f = friction;
 }
 
+void Systeme:: randominitial()
+{ int i = 0;
+  for (auto const& ptr_Magnet : tab_ptr_Magnets) {
+    ++i;
+    std::chrono::time_point<std::chrono::system_clock> noww = std::chrono::system_clock::now();
+    int secnow = std::chrono::duration_cast<std::chrono::seconds>(
+                  noww.time_since_epoch()).count();
+    srand (secnow + i);
+    int randomval = M_PI*(rand() % 2);
+    ptr_Magnet->angle = randomval;
+  }
+}
+
 
 ostream& Systeme:: display(ostream& c) const
 {
-  bool fric = 1;
+  bool fric = 0;
   if (fric){
   c << time<<" ";
   c << NearestCorrelation()<<" ";

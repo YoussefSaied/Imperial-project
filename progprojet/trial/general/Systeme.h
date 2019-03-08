@@ -13,6 +13,8 @@
 #include "Cube.h"
 #include "Magnet.h"
 
+
+
 class Systeme : public Dessinable
 {
     friend class VueOpenGL; // simple solution
@@ -53,12 +55,17 @@ public:
     virtual void evolue2(double dt = 0.01);
     virtual void evolue1(double dt, unsigned int nb_repet);
     virtual void evolue1(double dt, double t, bool d); // evolution du système selon le 1er temps t
+    virtual void evolue2(double dt, double t, bool d); // evolution du système selon le 1er temps t
+    
     virtual std:: ostream& display(std:: ostream& c) const;
     virtual std:: ostream& displaypos(std:: ostream& c) const;
 
     virtual void addMagnet(Magnet const& new_Magnet);
 
     virtual void setfriction(double friction);
+
+    virtual void randominitial();
+
 
     void addObstacle(Obstacle const& nouveau_obstacle);
 

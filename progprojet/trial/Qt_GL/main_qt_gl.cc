@@ -22,7 +22,7 @@ int main(int argc, char * argv[])
     QApplication a(argc, argv);
     Window w;
 
-    string desiredconfig = "Dodec";
+    string desiredconfig = "HC";
 
     // coordinate system:
     Cylinder c1(Position(0, 10, 0), Vecteur3D(0, 7, 0), 1, 1);
