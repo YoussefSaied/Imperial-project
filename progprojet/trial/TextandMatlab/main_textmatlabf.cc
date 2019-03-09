@@ -20,19 +20,12 @@ int main(int argc, char * argv[])
     Dodec dode(Vecteur3D(0, 0, 0), 3e-2, Vecteur3D(0, 0, 1.23607), false);
 
 
-    // vector<vector<double> > verticesfaceindex; // position face index face index
-
-
     for (size_t i = 0; i < (dode.vertipositions()).size(); ++i) {
         size_t si = ((dode.vertipositions())[i]).size();
         for (size_t j = 0; j < si; ++j) {
             Vecteur3D p(0, 0, 0);
             p = ((dode.vertipositions())[i][j] + (dode.vertipositions())[i][(j + 1) % si]) / 2;
-            // p += dode.position;
-            // ++num;
-            // cout << i << "," << j << num << ":  ";
-            // cout << p << endl;
-            // For the axe
+
             Vecteur3D v1(0, 1, 0);
             Vecteur3D v2(0, 1, 0);
             Vecteur3D v3(0, 1, 0);
@@ -84,6 +77,8 @@ int main(int argc, char * argv[])
     s.n = n;
 
     s.evolue1(dt, timesim);
+    // namefile with time
+    // run sim. with evolve1 and evolve2
 
     // s.set_support(&tsupport);
     // output 30 angles

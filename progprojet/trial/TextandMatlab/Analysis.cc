@@ -57,7 +57,7 @@ int main(int argc, char * argv[])
             for (size_t l = 0; l < VM.size(); ++l) {
                 if (vertixpositions[i][j] == VM[l].position) { exists = l; }
             }
-            if ((exists != -1)) {
+            if ((exists == -1)) {
                 VM.push_back({ vertixpositions[i][j], -1, -1, -1 });
             }
         }
@@ -93,19 +93,20 @@ int main(int argc, char * argv[])
             Magnet M(p, axe, 1, 0, polaraxis); // position p, axis a, movable yes, angle_0 0, polaraxis polaraxis
 
             int index;
-            if (s.addMagnet(M); ) { index = (s.tab_ptr_Magnets.size() - 1); }
+            // if (s.addMagnet(M)  { index = (s.tab_ptr_Magnets.size() - 1); }
+            index = s.addMagnet(M);
 
             // VM:
-            for (auto VMelem: VM) {
-                if ((VMelem.vfi).position == (dode.vertipositions())[i][j]) {
-                    if (VMelem.magnet1 == -1) { magnet1 = index; }
-                    elseif(VMelem.magnet2 == -1) magnet2 = index;
-                    elseif(VMelem.magnet3 == -1) magnet3 = index;
+            for (auto vm: VM) {
+                if ((vm).position == (dode.vertipositions())[i][j]) {
+                    if (vm.magnet1 == -1) { magnet1 = index; }
+                    elseif(vm.magnet2 == -1) magnet2 = index;
+                    elseif(vm.magnet3 == -1) magnet3 = index;
                 }
-                if ((VMelem.vfi).position == (dode.vertipositions())[i][(j + 1) % si]) {
-                    if (VMelem.magnet1 == -1) { magnet1 = index; }
-                    elseif(VMelem.magnet2 == -1) magnet2 = index;
-                    elseif(VMelem.magnet3 == -1) magnet3 = index;
+                if ((vm).position == (dode.vertipositions())[i][(j + 1) % si]) {
+                    if (vm.magnet1 == -1) { magnet1 = index; }
+                    elseif(vm.magnet2 == -1) magnet2 = index;
+                    elseif(vm.magnet3 == -1) magnet3 = index;
                 }
             }
         }
@@ -113,16 +114,16 @@ int main(int argc, char * argv[])
 
 
     // DV:
-    for (auto VMelem1: VM) {
-        for (auto VMelem2: VM) {
-            if (VMelem1.magnet1 == VMelem2.magnet1) {
-                DV.push_back({ VMelem2.magnet1, VMelem1, VMelem2 });
+    for (size_t i = 0; i < VM.size(); ++i) {
+        for (size_t j = i + 1; j < VM.size(); ++j) {
+            if (VM[i].magnet1 == VM[j].magnet1) {
+                DV.push_back({ VM[j].magnet1, VM[i], VM[j] });
             }
-            if (VMelem1.magnet2 == VMelem2.magnet2) {
-                DV.push_back({ VMelem2.magnet2, VMelem1, VMelem2 });
+            if (VM[i].magnet2 == VM[j].magnet2) {
+                DV.push_back({ VM[j].magnet2, VM[i], VM[j] });
             }
-            if (VMelem1.magnet3 == VMelem2.magnet3) {
-                DV.push_back({ VMelem2.magnet3, VMelem1, VMelem2 });
+            if (VM[i].magnet3 == VM[j].magnet3) {
+                DV.push_back({ VM[j].magnet3, VM[i], VM[j]  });
             }
         }
     }
@@ -135,9 +136,11 @@ int main(int argc, char * argv[])
             for (auto DVelem: DV) {
                 if (DVelem.v1.position == vertixpositions[i][j] and DVelem.v2.position ==
                   vertixpositions [i][(j + 1) % si]) { VectorDVelem.push_back(DVelem); }
+                if (DVelem.v2.position == vertixpositions[i][j] and DVelem.v1.position ==
+                  vertixpositions [i][(j + 1) % si]) { VectorDVelem.push_back(DVelem); }
             }
         }
-        FM.push_back({ VectorDVelem, -1 });
+        FM.push_back({ VectorDVelem, -10 });
     }
 
 
@@ -175,24 +178,24 @@ int main(int argc, char * argv[])
     bool doublevertixup(doublevertix dv, int magnetindex)
     {
         Vecteur3D barycenterofdv = s.tab_ptr_Magnets[dv.centralmagnet]->position;
-        Vecteur3D upwardorientation(barycenterofface - Dodec.position);
-        double seperationafterorientation1 =
+        Vecteur3D upwardOrientation(barycenterofdv - Dodec.position);
+        double seperationAfterorientation1 =
           (s.tab_ptr_Magnets[magnetindex]->position
-          + s.tab_ptr_Magnets[magnetindex]->orientation() * s.tab_ptr_Magnets[magnetindex]->length
+          + s.tab_ptr_Magnets[magnetindex]->orientation() * s.tab_ptr_Magnets[magnetindex]->length / 2
           - barycenterofdv ).norme();
-        double seperationafterorientation2 =
-          -1 * (s.tab_ptr_Magnets[magnetindex]->position
-          + s.tab_ptr_Magnets[dv.centralmagnet]->orientation() * s.tab_ptr_Magnets[magnetindex]->length
+        double seperationAfterorientation2 = // reorienting the central magnet orientation
+          (-1 * s.tab_ptr_Magnets[magnetindex]->position
+          + s.tab_ptr_Magnets[dv.centralmagnet]->orientation() * s.tab_ptr_Magnets[magnetindex]->length / 2
           + barycenterofdv ).norme();
-        double seperationbetweencenters =
+        double seperationBetweencenters =
           (s.tab_ptr_Magnets[magnetindex]->position
           - barycenterofdv ).norme();
         int fixer = 1;
-        if (seperationafterorientation1 < seperationbetweencenters) { fixer *= -1 }
-        if (seperationafterorientation2 > seperationbetweencenters) { fixer *= -1 }
+        if (seperationAfterorientation1 < seperationBetweencenters) { fixer *= -1 } // fixing branch magnet
+        if (seperationAfterorientation2 > seperationBetweencenters) { fixer *= -1 } // fixing centralmagnet
         if (fixer
           * ((s.tab_ptr_Magnets[magnetindex]->orientation() ^ s.tab_ptr_Magnets[dv.centralmagnet]->orientation())
-          * upwardorientation) > 0) { return 1; }
+          * upwardOrientation) > 0) { return 1; }
         return 0;
     }
 
@@ -205,18 +208,18 @@ int main(int argc, char * argv[])
 
     int doublevertixstrengthRelative(doublevertix dv, int magnetindex)
     {
-        int detailed = 0;
+        int strength = 0;
         int doublevertixindexofmagnet = finddoublevertix(magnetindex);
         if (doublevertixstrength(DV[doublevertixindexofmagnet]) ==
           0 or doublevertixstrength(DV[doublevertixindexofmagnet]) == 3)
         {
-            detailed += doublevertixstrength(DV[doublevertixindexofmagnet]);
-        }           else {
+            strength = doublevertixstrength(DV[doublevertixindexofmagnet]);
+        } else {
             if (Oddoneout(dv.v1) == DV[doublevertixindexofmagnet].centralmagnet) {
-                detailed += 2
-            } else { detailed += 1 }
+                strength = 2
+            } else { strength = 1 }
         }
-        return detailed;
+        return strength;
     }
 
     int doublevertixstrengthDetailed(doublevertix dv)
@@ -260,13 +263,13 @@ int main(int argc, char * argv[])
               * s.tab_ptr_Magnets[fm.doubleVertixVector[(i + 1) % facesize].centralmagnet]->orientation());
             scalarproducts.push_back(scalarp);
             barycenterofface += s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->position;
-            barycenterofface /= 5;
         }
+        barycenterofface /= facesize;
         int streaksize     = 0;
         int maxstreaksize  = 1;
         int maxstreakindex = 0;
         for (size_t i = 0; i < 2 * scalarproducts.size(); ++i) {
-            if (scalarproducts[i] > 0) { streaksize += 1; }
+            if (scalarproducts[i % scalarproducts.size()] > 0) { streaksize += 1; }
             if (streaksize >= maxstreaksize) {
                 maxstreaksize  = streaksize;
                 maxstreakindex = i;
@@ -275,10 +278,13 @@ int main(int argc, char * argv[])
         }
         // for orientation:
         Vecteur3D upwardorientation(barycenterofface - Dodec.position);
-        double orientation = (s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->orientation()
-          ^ s.tab_ptr_Magnets[fm.doubleVertixVector[(i + 1) % facesize].centralmagnet]->orientation())
+        double orientation =
+          (s.tab_ptr_Magnets[fm.doubleVertixVector[maxstreakindex % facesize].centralmagnet]->orientation()
+          ^ s.tab_ptr_Magnets[fm.doubleVertixVector[(maxstreakindex + 1) % facesize].centralmagnet]->orientation())
           * upwardorientation;
-        if (orientation > 0) { return maxstreaksize; } else { return -1 * maxstreaksize; }
+        if (orientation > 0) { return maxstreaksize % (facesize + 1); } else {
+            return -1 * maxstreaksize % (facesize + 1);
+        }
     }
 
     // energies:

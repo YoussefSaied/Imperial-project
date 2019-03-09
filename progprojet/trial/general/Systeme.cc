@@ -20,22 +20,22 @@ ostream& operator << (ostream& sortie, Systeme const& systeme)
     return sortie;
 }
 
-bool Systeme:: addMagnet(Magnet const & nouveau_Magnet)
+int Systeme:: addMagnet(Magnet const & nouveau_Magnet)
 {
     // faire des tests de compatibilité
-    bool exists = 0;
-    for (auto const& ptr_Magnet : tab_ptr_Magnets) {
-        if ((ptr_Magnet->position - nouveau_Magnet.position).norme() < 0.0001) {
-            exists = 1;
+    int index = -1;
+    for (size_t i = 0; i < tab_ptr_Magnets.size(); i++) {
+        if ((tab_ptr_Magnets[i]->position - nouveau_Magnet.position).norme() < 0.0001) {
+            index = i;
         }
     }
-    if (!exists) {
+    if (index == -1) {
         tab_ptr_Magnets.push_back(nouveau_Magnet.copie());
         (*(tab_ptr_Magnets.back())).set_support(support);
         (*(tab_ptr_Magnets.back())).f = f;
         // cout << 1 << endl;
     }
-    return !exists;
+    return index;
 }
 
 void Systeme:: setangles(std::string filename)

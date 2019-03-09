@@ -54,7 +54,7 @@ public:
 
     virtual void setangles(std::string filename);
 
-    virtual bool addMagnet(Magnet const& new_Magnet);
+    virtual int addMagnet(Magnet const& new_Magnet);
 
     void addObstacle(Obstacle const& nouveau_obstacle);
 
