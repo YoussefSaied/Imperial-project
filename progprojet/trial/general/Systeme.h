@@ -50,9 +50,11 @@ public:
     virtual void evolue1(double dt, unsigned int nb_repet);
     virtual void evolue1(double dt, double t, bool d); // evolution du système selon le 1er temps t
     virtual std:: ostream& display(std:: ostream& c) const;
-    virtual std:: ostream& displaypos(ostream& c) const;
+    virtual std:: ostream& displaypos(std::ostream& c) const;
 
-    virtual void addMagnet(Magnet const& new_Magnet);
+    virtual void setangles(std::string filename);
+
+    virtual bool addMagnet(Magnet const& new_Magnet);
 
     void addObstacle(Obstacle const& nouveau_obstacle);
 

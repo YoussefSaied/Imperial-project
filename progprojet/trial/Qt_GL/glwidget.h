@@ -14,7 +14,7 @@ class GLWidget : public QGLWidget
  */
 {
 public:
-    GLWidget(QWidget * parent = nullptr, double f = 3.0, double dt = 0.001)
+    GLWidget(QWidget * parent = nullptr, double f = 0.1, double dt = 0.001)
         : QGLWidget(parent), sysm(&vue, f), dt(dt)
     {
         system_tab.push_back(sysm.copie());

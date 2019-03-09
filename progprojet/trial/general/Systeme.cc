@@ -1,5 +1,8 @@
 #include "Systeme.h"
 #include <iostream>
+#include <fstream>
+#include <sstream>
+#include <iostream>
 using namespace std;
 
 
@@ -17,7 +20,7 @@ ostream& operator << (ostream& sortie, Systeme const& systeme)
     return sortie;
 }
 
-void Systeme:: addMagnet(Magnet const & nouveau_Magnet)
+bool Systeme:: addMagnet(Magnet const & nouveau_Magnet)
 {
     // faire des tests de compatibilité
     bool exists = 0;
@@ -31,6 +34,17 @@ void Systeme:: addMagnet(Magnet const & nouveau_Magnet)
         (*(tab_ptr_Magnets.back())).set_support(support);
         (*(tab_ptr_Magnets.back())).f = f;
         // cout << 1 << endl;
+    }
+    return !exists;
+}
+
+void Systeme:: setangles(std::string filename)
+{
+    unique_ptr<ifstream> tfile(new ifstream(filename));
+    int value;
+    for (auto& ptr_Magnet : tab_ptr_Magnets) {
+        *tfile >> value;
+        ptr_Magnet->angle = value;
     }
 }
 
@@ -183,7 +197,7 @@ void Systeme:: evolue1(double dt, unsigned int nb_repet)
 
 void Systeme:: evolue1(double dt, double t, bool d)
 {
-    double targettime = t / n;
+    double targettime = t / n; // the output interval
     while (targettime <= t) {
         while (abs(time + dt - targettime) < abs(time - targettime) ) {
             evolue1(dt);
