@@ -22,7 +22,7 @@ int main(int argc, char * argv[])
     QApplication a(argc, argv);
     Window w;
 
-    string desiredconfig = "HC";
+    string desiredconfig = "Dodec";
 
     // coordinate system:
     Cylinder c1(Position(0, 10, 0), Vecteur3D(0, 7, 0), 1, 1);
@@ -49,7 +49,7 @@ int main(int argc, char * argv[])
     if (desiredconfig == "Dodec") {
         // Dodec dode(Vecteur3D(0, 0, 3), 4, Vecteur3D(0, -0.763932, 1.23607), false);
         Dodec dode(Vecteur3D(0, 0, 0), 3e-2, Vecteur3D(0, 0, 1.0), false);
-        for (size_t i = 0; i < 2; ++i) {
+        for (size_t i = 0; i < (dode.vertipositions()).size(); ++i) {
             size_t si = ((dode.vertipositions())[i]).size();
             for (size_t j = 0; j < si; ++j) {
                 Vecteur3D pos( ((dode.vertipositions())[i][j] + (dode.vertipositions())[i][(j + 1) % si]) / 2);
@@ -92,6 +92,7 @@ int main(int argc, char * argv[])
                 (w.glWidget)->addMagnet(M);
             }
         }
+        (w.glWidget)->system_tab[0]->randominitial();
         (w.glWidget)->addObstacle(dode);
         w.show();
     }
@@ -153,6 +154,7 @@ int main(int argc, char * argv[])
             }
         }
         w.show();
+
     }
     // w.addObstacle(b);
     // w.addObstacle(dalle_obstacled);

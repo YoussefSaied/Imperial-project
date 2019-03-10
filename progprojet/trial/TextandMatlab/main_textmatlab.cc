@@ -123,8 +123,8 @@ int main(int argc, char * argv[])
     s.setfriction(f);
     s.n = n;
     s.set_support(&tsupport);
-    s.randominitial();
-    s.evolue1(dt, timesim,1);
+//    s.randominitial();
+    s.evolue2(dt, timesim, 1);
 
     /*std::cout << "Please input dt:" << '\n';
        cin >> dt;

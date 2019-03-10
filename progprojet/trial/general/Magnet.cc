@@ -152,6 +152,19 @@ void Magnet :: addpotBS(unique_ptr<Magnet> const& Magnet2)
     potBS += 1e-7 * chargeS() * Magnet2->chargeS() / rS.norme();
 }
 
+double Magnet :: spotB(std::unique_ptr<Magnet> const& Magnet2)
+{   double potential = 0;
+    Vecteur3D rNN = Magnet2->positionN() - positionN();
+    Vecteur3D rSN = Magnet2->positionS() - positionN();
+    Vecteur3D rNS = Magnet2->positionN() - positionS();
+    Vecteur3D rSS = Magnet2->positionS() - positionS();
+    potential += 1e-7 * chargeN() * Magnet2->chargeN() / rNN.norme();
+    potential += 1e-7 * chargeN() * Magnet2->chargeS() / rNS.norme();
+    potential += 1e-7 * chargeS() * Magnet2->chargeN() / rSN.norme();
+    potential += 1e-7 * chargeS() * Magnet2->chargeS() / rSS.norme();
+    return potential;}
+
+    
 // VERLET CALCULATIONS
 void Magnet :: VerletBU(double delta_t)
 {

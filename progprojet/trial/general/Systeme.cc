@@ -57,7 +57,7 @@ void Systeme:: randominitial()
     int secnow = std::chrono::duration_cast<std::chrono::seconds>(
                   noww.time_since_epoch()).count();
     srand (secnow + i);
-    int randomval = M_PI*(rand() % 2);
+    double randomval = M_PI*(rand() % 2);
     ptr_Magnet->angle = randomval;
   }
 }
@@ -65,7 +65,7 @@ void Systeme:: randominitial()
 
 ostream& Systeme:: display(ostream& c) const
 {
-  bool fric = 0;
+  bool fric = 1;
   if (fric){
   c << time<<" ";
   c << NearestCorrelation()<<" ";
@@ -220,7 +220,8 @@ void Systeme:: evolue2(double dt)
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         tab_ptr_Magnets[i]->addnewTorque(B);
         for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
-            if (i != j) {
+          if ( (tab_ptr_Magnets[i]->position - tab_ptr_Magnets[j]->position).norme() <
+            2 * tab_ptr_Magnets[i]->length and i != j) {
                 tab_ptr_Magnets[i]->addnewTorque(tab_ptr_Magnets[j]);
                 tab_ptr_Magnets[i]->addpotB(tab_ptr_Magnets[j]);
             }
