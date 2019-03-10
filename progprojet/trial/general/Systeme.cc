@@ -1,18 +1,12 @@
 #define _USE_MATH_DEFINES
 #include "Systeme.h"
 #include <iostream>
-<<<<<<< HEAD
 #include <cmath>
 #include <ctime>
 #include <chrono>
 #include <cstdlib>
 #include <stdio.h>
 
-=======
-#include <fstream>
-#include <sstream>
-#include <iostream>
->>>>>>> 09fcf2009e5b03350e296195431b706596c4b5c8
 using namespace std;
 
 
@@ -270,11 +264,7 @@ void Systeme:: evolue1(double dt, unsigned int nb_repet)
 
 void Systeme:: evolue1(double dt, double t, bool d)
 {
-<<<<<<< HEAD
-    double targettime = t / n;                                                  //n=1
-=======
     double targettime = t / n; // the output interval
->>>>>>> 09fcf2009e5b03350e296195431b706596c4b5c8
     while (targettime <= t) {
         while (abs(time + dt - targettime) < abs(time - targettime) ) {
             evolue1(dt);

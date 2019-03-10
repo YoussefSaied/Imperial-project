@@ -12,7 +12,9 @@
 #include "Dodec.h"
 #include "Cube.h"
 #include "Magnet.h"
-
+#include <fstream>
+#include <sstream>
+#include <iostream>
 
 
 class Systeme : public Dessinable
@@ -56,13 +58,9 @@ public:
     virtual void evolue1(double dt, unsigned int nb_repet);
     virtual void evolue1(double dt, double t, bool d); // evolution du système selon le 1er temps t
     virtual void evolue2(double dt, double t, bool d); // evolution du système selon le 1er temps t
-    
+
     virtual std:: ostream& display(std:: ostream& c) const;
-<<<<<<< HEAD
     virtual std:: ostream& displaypos(std:: ostream& c) const;
-=======
-    virtual std:: ostream& displaypos(std::ostream& c) const;
->>>>>>> 09fcf2009e5b03350e296195431b706596c4b5c8
 
     virtual void setangles(std::string filename);
 
