@@ -1,4 +1,4 @@
-#include <QGLWidget> // Classe pour faire une fenêtre OpenGL
+#include <QGLWidget>
 #include <QTime>
 #include <QSlider>
 #include <QSpinBox>

@@ -58,9 +58,15 @@ public:
     virtual void evolue2(double dt, double t, bool d); // evolution du système selon le 1er temps t
     
     virtual std:: ostream& display(std:: ostream& c) const;
+<<<<<<< HEAD
     virtual std:: ostream& displaypos(std:: ostream& c) const;
+=======
+    virtual std:: ostream& displaypos(std::ostream& c) const;
+>>>>>>> 09fcf2009e5b03350e296195431b706596c4b5c8
 
-    virtual void addMagnet(Magnet const& new_Magnet);
+    virtual void setangles(std::string filename);
+
+    virtual int addMagnet(Magnet const& new_Magnet);
 
     virtual void setfriction(double friction);
 

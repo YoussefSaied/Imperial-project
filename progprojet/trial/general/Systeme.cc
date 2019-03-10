@@ -1,12 +1,18 @@
 #define _USE_MATH_DEFINES
 #include "Systeme.h"
 #include <iostream>
+<<<<<<< HEAD
 #include <cmath>
 #include <ctime>
 #include <chrono>
 #include <cstdlib>
 #include <stdio.h>
 
+=======
+#include <fstream>
+#include <sstream>
+#include <iostream>
+>>>>>>> 09fcf2009e5b03350e296195431b706596c4b5c8
 using namespace std;
 
 
@@ -24,20 +30,31 @@ ostream& operator << (ostream& sortie, Systeme const& systeme)
     return sortie;
 }
 
-void Systeme:: addMagnet(Magnet const & nouveau_Magnet)
+int Systeme:: addMagnet(Magnet const & nouveau_Magnet)
 {
     // faire des tests de compatibilité
-    bool exists = 0;
-    for (auto const& ptr_Magnet : tab_ptr_Magnets) {
-        if ((ptr_Magnet->position - nouveau_Magnet.position).norme() < 0.0001) {
-            exists = 1;
+    int index = -1;
+    for (size_t i = 0; i < tab_ptr_Magnets.size(); i++) {
+        if ((tab_ptr_Magnets[i]->position - nouveau_Magnet.position).norme() < 0.0001) {
+            index = i;
         }
     }
-    if (!exists) {
+    if (index == -1) {
         tab_ptr_Magnets.push_back(nouveau_Magnet.copie());
         (*(tab_ptr_Magnets.back())).set_support(support);
         (*(tab_ptr_Magnets.back())).f = f;
         // cout << 1 << endl;
+    }
+    return index;
+}
+
+void Systeme:: setangles(std::string filename)
+{
+    unique_ptr<ifstream> tfile(new ifstream(filename));
+    int value;
+    for (auto& ptr_Magnet : tab_ptr_Magnets) {
+        *tfile >> value;
+        ptr_Magnet->angle = value;
     }
 }
 
@@ -253,7 +270,11 @@ void Systeme:: evolue1(double dt, unsigned int nb_repet)
 
 void Systeme:: evolue1(double dt, double t, bool d)
 {
+<<<<<<< HEAD
     double targettime = t / n;                                                  //n=1
+=======
+    double targettime = t / n; // the output interval
+>>>>>>> 09fcf2009e5b03350e296195431b706596c4b5c8
     while (targettime <= t) {
         while (abs(time + dt - targettime) < abs(time - targettime) ) {
             evolue1(dt);
