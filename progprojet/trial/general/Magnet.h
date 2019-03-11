@@ -107,7 +107,6 @@ public:
 
     double spotB (std::unique_ptr<Magnet> const& Magnet2);
 
-    // is potb correct or should it be halved ?
 
     double potB() const { return potBN + potBS; }
 

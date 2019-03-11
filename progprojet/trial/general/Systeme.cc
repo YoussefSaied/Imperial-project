@@ -151,13 +151,12 @@ unique_ptr<Systeme> Systeme ::copie() const
 
  */
 
-
-void Systeme:: evolue1(double dt)
+///////////EVOLVE//////////////////////
+void Systeme:: evolue(double dt)
 {
     time += dt;
     KineticEnergy   = 0;
     PotentialEnergy = 0;
-
     // CALC TORQUE
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         if (time > 0.1) {
@@ -173,12 +172,10 @@ void Systeme:: evolue1(double dt)
             }
         }
     }
-
     // MOVE ANGLE
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         tab_ptr_Magnets[i]->moveangle(dt);
     }
-
     // CALC NEWTORQUE
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         tab_ptr_Magnets[i]->addnewTorque(B);
@@ -189,7 +186,6 @@ void Systeme:: evolue1(double dt)
             }
         }
     }
-
     // MOVE OMEGA & ENERGY
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         tab_ptr_Magnets[i]->moveomega(dt);
@@ -199,12 +195,35 @@ void Systeme:: evolue1(double dt)
     if (std::abs(KineticEnergy/Energy()) < 1e-15){eq=true;}
 }
 
-// Systeme::evolue2 : Nearest neighbours using position if statement
-void Systeme:: evolue2(double dt)
+void Systeme:: evolue(double dt, unsigned int nb_repet)
+{
+    for (unsigned int i(0); i < nb_repet; ++i) {
+        evolue(dt);
+    }
+}
+
+void Systeme:: evolue(double dt, double t, bool d)
+{
+    double targettime = t / n; // the output interval
+    while (targettime <= t) {
+        while (abs(time + dt - targettime) < abs(time - targettime) )
+        {evolue(dt);}
+        targettime += t / n;
+        if (d) {dessine();}
+    }
+}
+
+/////////////EVOLVE1///////////////////
+void Systeme:: evolue1(double dt)
 {
     time += dt;
     KineticEnergy   = 0;
     PotentialEnergy = 0;
+
+    //nearest neighbours
+    double genconst = 2;
+    //second nearest neighbours
+    //double genconst = 4.5;
 
     // CALC TORQUE
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
@@ -216,17 +235,15 @@ void Systeme:: evolue2(double dt)
             for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
                 // magnet interactions
                 if ( (tab_ptr_Magnets[i]->position - tab_ptr_Magnets[j]->position).norme() <
-                  2 * tab_ptr_Magnets[i]->length and i != j){
+                  genconst * tab_ptr_Magnets[i]->length and i != j){
                     tab_ptr_Magnets[i]->addTorque(tab_ptr_Magnets[j]);}
                 }
             }
         }
-
     // MOVE ANGLE
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         tab_ptr_Magnets[i]->moveangle(dt);
     }
-
     // CALC NEWTORQUE
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         tab_ptr_Magnets[i]->addnewTorque(B);
@@ -238,7 +255,6 @@ void Systeme:: evolue2(double dt)
             }
         }
     }
-
     // MOVE OMEGA & ENERGY
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         tab_ptr_Magnets[i]->moveomega(dt);
@@ -247,13 +263,6 @@ void Systeme:: evolue2(double dt)
     }
     if (std::abs(KineticEnergy/Energy()) < 1e-15){eq=true;}
 }
-
-
-
-
-
-
-
 
 void Systeme:: evolue1(double dt, unsigned int nb_repet)
 {
@@ -266,39 +275,14 @@ void Systeme:: evolue1(double dt, double t, bool d)
 {
     double targettime = t / n; // the output interval
     while (targettime <= t) {
-        while (abs(time + dt - targettime) < abs(time - targettime) ) {
-            evolue1(dt);
-            }
-            targettime += t / n;
-            if (d) { dessine(); }
-
-
+        while (abs(time + dt - targettime) < abs(time - targettime) )
+        {evolue1(dt);}
+        targettime += t / n;
+        if (d) {dessine();}
     }
 }
 
 
-void Systeme:: evolue2(double dt, double t, bool d)
-{
-    double targettime = t / n;                                                  //n=1
-    while (targettime <= t) {
-        while (abs(time + dt - targettime) < abs(time - targettime) ) {
-            evolue2(dt);
-            }
-            targettime += t / n;
-            if (d) { dessine(); }
-
-
-    }
-}
-    /*int nb_repet;
-       if (t > dt)
-       { nb_repet = t / dt; } else
-       { nb_repet = 1; }
-       unsigned int nbr2(nb_repet / n);
-       for (unsigned int i(0); i < n; ++i) {
-        evolue1(dt, nbr2);
-        if (d) { dessine(); }
-       }*/
 
 
 

@@ -73,10 +73,10 @@ int main(int argc, char * argv[])
     unique_ptr<ofstream> tfile(new ofstream(output.c_str()));
     tfile->precision(20);
     SupportADessinTexte tsupport(*tfile);
-    s.f = f;
+    s.setfriction(f);
     s.n = n;
 
-    s.evolue1(dt, timesim);
+    s.evolue(dt, timesim);
     // namefile with time
     // run sim. with evolve1 and evolve2
 

@@ -16,7 +16,6 @@ int main(int argc, char * argv[])
 {
     // intitial configuration:
     Systeme s;
-
     Dodec dode(Vecteur3D(0, 0, 0), 3e-2, Vecteur3D(0, 0, 1.23607), false);
 
 
@@ -63,34 +62,20 @@ int main(int argc, char * argv[])
         }
     }
 
-
+    Dodec dode(Vecteur3D(0, 0, 0), 3e-2, Vecteur3D(0, 0, 1.0), false);
     for (size_t i = 0; i < (dode.vertipositions()).size(); ++i) {
         size_t si = ((dode.vertipositions())[i]).size();
         for (size_t j = 0; j < si; ++j) {
-            Vecteur3D p(0, 0, 0);
-            p = ((dode.vertipositions())[i][j] + (dode.vertipositions())[i][(j + 1) % si]) / 2;
+            Vecteur3D pos( ((dode.vertipositions())[i][j] + (dode.vertipositions())[i][(j + 1) % si]) / 2);
+            Vecteur3D polaraxis = (dode.vertipositions())[i][j] - (dode.vertipositions())[i][(j + 1) % si];
+            Vecteur3D v2        =
+              ((dode.vertipositions())[i][(j + 1) % si] - (dode.vertipositions())[i][(j + 2) % si]);
+            Vecteur3D v3 = polaraxis ^ v2;
+            double alph1  = -1 * atan(2) / 2;
+            Vecteur3D v4  = v3.rotate(alph1, polaraxis);
+            Vecteur3D axe = (v4 ^ polaraxis).normalise();
 
-            Vecteur3D v1(0, 1, 0);
-            Vecteur3D v2(0, 1, 0);
-            Vecteur3D v3(0, 1, 0);
-            Vecteur3D v4(0, 1, 0);
-            Vecteur3D axe(0, 1, 0);
-            v1 = ((dode.vertipositions())[i][j] - (dode.vertipositions())[i][(j + 1) % si]);
-            // for v2 :
-            v2 = ((dode.vertipositions())[i][(j + 1) % si] - (dode.vertipositions())[i][(j + 2) % si]);
-            // for v3 :
-            v3 = v1 ^ v2;
-            double alph = atan(2); // angle of rotation arctan(2)
-            v4  = v3.rotate(alph, v1);
-            axe = v4 ^ v1;
-
-            // calculate polaraxis:
-            Vecteur3D polaraxis(1, 0, 0);
-            polaraxis = (dode.vertipositions())[i][j] - (dode.vertipositions())[i][(j + 1) % si];
-
-            // add magnet here.
-
-            Magnet M(p, axe, 1, 0, polaraxis); // position p, axis a, movable yes, angle_0 0, polaraxis polaraxis
+            Magnet M(pos, axe, 1, 0, polaraxis); // position pos, axis axe, movable yes, angle_0 0, polaraxis
 
             int index;
             // if (s.addMagnet(M)  { index = (s.tab_ptr_Magnets.size() - 1); }
@@ -99,7 +84,7 @@ int main(int argc, char * argv[])
             // VM:
             for (auto vm: VM) {
                 if ((vm).position == (dode.vertipositions())[i][j]) {
-                    if (vm.magnet1 == -1) { magnet1 = index; }
+                    if (vm.magnet1 == -1) {  magnet1 = index; }
                     elseif(vm.magnet2 == -1) magnet2 = index;
                     elseif(vm.magnet3 == -1) magnet3 = index;
                 }
@@ -146,8 +131,6 @@ int main(int argc, char * argv[])
 
     // IMPORTANT: We might need to seperate them
     // set angles:
-
-
     s.setangles("finalangles.in");
 
 
@@ -167,12 +150,12 @@ int main(int argc, char * argv[])
 
     int doublevertixstrength(doublevertix dv)
     {
-        if (Oddoneout(dv.v1) == dv.centralmagnet and Oddoneout(dv.v2) == dv.centralmagnet) { return 3; }
-        elseif(Oddoneout(dv.v1) != dv.centralmagnet and Oddoneout(dv.v2) == dv.centralmagnet) return 2;
+        if (Oddoneout(dv.v1) == dv.centralmagnet and Oddoneout(dv.v2) == dv.centralmagnet) { return 3; } //ff
+        elseif(Oddoneout(dv.v1) != dv.centralmagnet and Oddoneout(dv.v2) == dv.centralmagnet) return 2; //fw
 
-        elseif(Oddoneout(dv.v1) == dv.centralmagnet and Oddoneout(dv.v2) != dv.centralmagnet) return 1;
+        elseif(Oddoneout(dv.v1) == dv.centralmagnet and Oddoneout(dv.v2) != dv.centralmagnet) return 1; //wf
 
-        elseif(Oddoneout(dv.v1) != dv.centralmagnet and Oddoneout(dv.v2) != dv.centralmagnet) return 0;
+        elseif(Oddoneout(dv.v1) != dv.centralmagnet and Oddoneout(dv.v2) != dv.centralmagnet) return 0; //ww
     }
 
     bool doublevertixup(doublevertix dv, int magnetindex)
@@ -312,35 +295,60 @@ int main(int argc, char * argv[])
         }
         return Energy;
     }
+    /*
+    I think this is the most logical way to do it:
+    Rather than working out the angles from the indices in Matlab, we
+    do it here so that we have 4 files:
 
-    // Correlation
+    Magnet: [angle, moment, Vtype (ff,fw,ww)] (x30)
+    Vertex: [anglex3, Energy] (x20)
+    DVertex: [anglex5, Energy, Dtype] (x30)
+    Face: [anglex5, Vtypex5, Ftype, Energy] (x12)
 
+    Vtype = ff,fw,ww
+    Dtype = intx5 eg ww-ww-ff-ww-ww
+    Ftype = 5,4,3,2
+    */
 
     // output files:
     string outputPath;
     if (argc > 1) { // Fichier d'output specifie par l'utilisateur ("./Exercice8 config_perso.in")
         outputPath = argv[1];
     }
+    
+    //create:
+    //////Magnet: // Angle // Moment // Type
+    string Magnet = outputPath + "Magnet";
+    unique_ptr<ofstream> tfile0(new ofstream(Magnet.c_str()));
 
-    string Vertex = outputPath + "Vertex"; // Energy //Oddoneout type //faces?
+    }
+    ///////VERTEX: // Angles (x3) // Energy
+    //comments:  Oddoneout gives index of forced magnet
+    string Vertex = outputPath + "Vertex";
     unique_ptr<ofstream> tfile1(new ofstream(Vertex.c_str()));
     for (auto vm: VM) {
         *tfile1 << vertixEnergy(vm) << " " << Oddoneout(vm) << endl;
     }
 
-    string Dvertex = outputPath + "Dvertex"; // central magnet index // Energy // type
+    ////DOUBLE VERTEX: // Angles (x5) // Energy // type
+    //comments: type = int with 5 digits, each digit has value 3,2,1,0
+    //digits correspond to magnets in double vertex (3rd digit is central mag)
+    //values correspond to ff=3,fw=2,wf=1,ww=0
+    string Dvertex = outputPath + "Dvertex";
     unique_ptr<ofstream> tfile2(new ofstream(Dvertex.c_str()));
     for (auto dv: DV) {
         *tfile2 << dv.centralmagnet << " " << doublevertixEnergy(dv) << " " << doublevertixstrengthDetailed(vm) << endl;
     }
 
-    string Face = outputPath + "Faceparameters"; // Energy // type // 5 magnetsindex
+    ////FACE: // Angles (x5) // orientation // Energy // types
+    //comments: orientation gives max streak size = 5,4,3,2 (-1,1 for CW,ACW)
+    string Face = outputPath + "Faceparameters";
     unique_ptr<ofstream> tfile3(new ofstream(Dvertex.c_str()));
     for (auto fm: FM) {
-        *tfile3 << getFaceOrientaion(fm) << " " << faceEnergy(fm) << " ";
         for (auto dv: fm.doubleVertixVector) {
-            *tfile3 << dv.centralmagnet << " ";
+            *tfile3 << doulevertixstrengthDetailed(dv) << " ";
         }
+        *tfile3 << getFaceOrientaion(fm) << " " << faceEnergy(fm) << " ";
         *tfile3 << endl;
     }
 

@@ -28,15 +28,6 @@ int main(int argc, char * argv[])
     Magnet M4(Position(0, 0, 0), Vecteur3D(0, 1, 0), 0);
     Magnet M5(Position(0, 0, 0 + M1.length * 2.2), Vecteur3D(0, 1, 0), 1, 1.5);
 
-  //  Dodec dode(Vecteur3D(0, 0, 0), 3e-2, Vecteur3D(0, 0, 1.23607), false);
-    Cylinder c1(Position(0, 10, 0), Vecteur3D(0, 7, 0), 1, 1);
-    Cylinder c2(Position(10, 0, 0), Vecteur3D(7, 0, 0), 1, 1);
-    Cylinder c3(Position(0, 0, 10), Vecteur3D(0, 0, 1), 1, 1);
-
-
-    // All the magnets :D
-    // int num = 0;
-
     // Dodec dode(Vecteur3D(0, 0, 3), 4, Vecteur3D(0, -0.763932, 1.23607), false);
     Dodec dode(Vecteur3D(0, 0, 0), 3e-2, Vecteur3D(0, 0, 1.0), false);
     for (size_t i = 0; i < (dode.vertipositions()).size(); ++i) {
@@ -51,44 +42,10 @@ int main(int argc, char * argv[])
             Vecteur3D v4  = v3.rotate(alph1, polaraxis);
             Vecteur3D axe = (v4 ^ polaraxis).normalise();
 
-            Magnet M(pos, axe, 1, 0, polaraxis); // position pos, axis axe, movable yes, angle_0 0, polaraxis polaraxis
+            Magnet M(pos, axe, 1, 0, polaraxis); // position pos, axis axe, movable yes, angle_0 0, polaraxis
             s.addMagnet(M);
         }
     }
-
-
-    /*w.addMagnet(M2);
-       w.addMagnet(M3);
-       w.addMagnet(M4);
-       w.addMagnet(M5);
-       w.addMagnet(M6);
-       w.addMagnet(M7);
-       w.addMagnet(M8);*/
-    // w.addObstacle(b);
-    // s.addObstacle(c1);
-    // s.addObstacle(c2);
-    // s.addObstacle(c3);
-    // s.addObstacle(dode);
-    // s.addMagnet(M1);
-    // s.addMagnet(M2);
-    // s.addMagnet(M3);
-    // s.addMagnet(M4);
-    //  s.addMagnet(M5);
-    // w.addObstacle(dode);
-    // w.addObstacle(dalle_obstacled);
-    // w.addObstacle((b.dalle6())[3]);
-    // w.addObstacle((b.dalle6())[4]);
-    // cout << endl << "number of magnets" << ((s.system_tab[0])->tab_ptr_Magnets).size() << endl;
-
-    /*double b = (1 + sqrt(5)) / 2;
-       Vecteur3D v1(1 / b, 0, b);
-       Vecteur3D v2(-1 / b, 0, b);
-       Vecteur3D v3(-1, -1, 1);
-       Vecteur3D o1(v1 - v2);
-       Vecteur3D o2(v2 - v3);
-       Vecteur3D axer0(o1 ^ o2);
-       cout << axer0;*/
-
 
     // the text stuff ::
 
@@ -116,15 +73,7 @@ int main(int argc, char * argv[])
     s.n = n;
     s.set_support(&tsupport);
 //    s.randominitial();
-    s.evolue2(dt, timesim, 1);
+    s.evolue1(dt, timesim, 1);
 
-    /*std::cout << "Please input dt:" << '\n';
-       cin >> dt;
-       cout << endl;
-       std::cout << "Please input time of simulation:" << '\n';
-       cin >> timesim;*/
     return 0;
-} // main
-
-// unique_ptr<ofstream> textfile0(new ofstream("Dodecedgesandvertices"));
-// tfile->precision(20);
+}

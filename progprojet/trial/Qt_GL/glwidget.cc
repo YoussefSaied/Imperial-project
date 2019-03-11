@@ -160,11 +160,11 @@ void GLWidget::timerEvent(QTimerEvent * event)
     Q_UNUSED(event);
 
     if (dt > 0.001) {
-        if (!system_tab.empty()) { system_tab.back()->evolue1(dt); }
+        if (!system_tab.empty()) { system_tab.back()->evolue(dt); }
         (system_tab.back()->time) += dt;
     } else {
         int n(0.001 / dt);
-        if (!system_tab.empty()) { system_tab.back()->evolue1(dt, n); }
+        if (!system_tab.empty()) { system_tab.back()->evolue(dt, n); }
         (system_tab.back()->time) += n * dt;
     }
     emit evolved(dt);
