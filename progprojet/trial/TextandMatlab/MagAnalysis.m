@@ -22,7 +22,7 @@ set(groot, 'defaultAxesFontSize', 18);
 s = load('data/system');
 s_Aabs = sum(abs(s(:,:,1:30)))
 s_A = sum(s(:,:,1:30))
-s_E = s(:,;,31);
+s_E = s(:,:,31);
 s_C = s(:,:,32); %maybe need a couple of different correlations
 
 %magnets
