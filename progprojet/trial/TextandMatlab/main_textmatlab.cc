@@ -73,7 +73,7 @@ int main(int argc, char * argv[])
     s.n = n;
     s.set_support(&tsupport);
 //    s.randominitial();
-    s.evolue1(dt, timesim, 1);
+    s.evolue2(dt, timesim, 1);
 
     return 0;
 }

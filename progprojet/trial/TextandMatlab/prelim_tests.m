@@ -41,8 +41,8 @@ nsimul = 5;
 %dt = 10^-2 ./2.^linspace(1,nsimul,nsimul);
 dt = logspace(-4,-6,nsimul);
 %f = [2,2.25,2.5,2.6,2.7,2.8,2.9,3,3.25,3.5];%,20,50];
-f = linspace(1,10,400);
-
+%f = linspace(1,10,400);
+f = [1,2,3];
 % Selectionner ici le parametre a scanner
 %paramstr = 'dt';
 %param = dt;
@@ -118,30 +118,30 @@ if(strcmp(paramstr,'f'))
     %unpack
     t = data(:,1);
     correlation = data(:,2);
-    gradcor = gradient(correlation)
+    gradcor = gradient(correlation);
     angle = data(:,3);
     energy = data(:,4);
     kineticenergy = data(:,5);
     
     %figures per friction
 
-%     figure
-%     subplot(1,3,1)
-%     plot(t,log(kineticenergy));
-%     title(filename)
-%     grid on
-%     xlabel('time');
-%     ylabel('KE')
-%     subplot(1,3,2)
-%     plot(t,correlation);
-%     grid on
-%     xlabel('time');
-%     ylabel('corr');
-%     subplot(1,3,3)
-%     plot(t,log(abs(gradcor)));
-%     grid on
-%     xlabel('time');
-%     ylabel('corr');
+    figure
+    subplot(1,3,1)
+    plot(t,log(kineticenergy));
+    title(filename)
+    grid on
+    xlabel('time');
+    ylabel('KE')
+    subplot(1,3,2)
+    plot(t,correlation);
+    grid on
+    xlabel('time');
+    ylabel('corr');
+    subplot(1,3,3)
+    plot(t,log(abs(gradcor)));
+    grid on
+    xlabel('time');
+    ylabel('corr');
     
     %find eq
     for j = 1:length(kineticenergy)

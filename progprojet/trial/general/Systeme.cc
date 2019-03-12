@@ -282,7 +282,82 @@ void Systeme:: evolue1(double dt, double t, bool d)
     }
 }
 
+/////////////EVOLVE2///////////////////
+void Systeme:: evolue2(double dt)
+{
+    time += dt;
+    KineticEnergy   = 0;
+    PotentialEnergy = 0;
 
+    //nearest neighbours
+    //second nearest neighbours
+    //double genconst = 4.5;
+
+    // CALC TORQUE
+    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
+        if (time > 0.1) {
+            tab_ptr_Magnets[i]->resetnew();
+        } else {
+            tab_ptr_Magnets[i]->reset();
+            tab_ptr_Magnets[i]->addTorque(B);
+            int count = 0;
+            for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
+                // magnet interactions
+                if ( (tab_ptr_Magnets[i]->position - tab_ptr_Magnets[j]->position).norme() <
+                  2 * tab_ptr_Magnets[i]->length and i != j){
+                    for (size_t k(0); k < tab_ptr_Magnets.size(); ++k) {
+                      if ( (tab_ptr_Magnets[j]->position - tab_ptr_Magnets[k]->position).norme() <
+                        2 * tab_ptr_Magnets[j]->length and j != k and i != k){
+                          tab_ptr_Magnets[i]->addTorque(tab_ptr_Magnets[k]);
+                          count += 1;
+                      if (std::fmod(time,0.5)){cout << "["<<count <<" "<< i <<" "<< j<<" " << k<<"]";}}
+
+                }
+              }
+            }
+          }
+        }
+    // MOVE ANGLE
+    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
+        tab_ptr_Magnets[i]->moveangle(dt);
+    }
+    // CALC NEWTORQUE
+    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
+        tab_ptr_Magnets[i]->addnewTorque(B);
+        for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
+          if ( (tab_ptr_Magnets[i]->position - tab_ptr_Magnets[j]->position).norme() <
+            2 * tab_ptr_Magnets[i]->length and i != j) {
+                tab_ptr_Magnets[i]->addnewTorque(tab_ptr_Magnets[j]);
+                tab_ptr_Magnets[i]->addpotB(tab_ptr_Magnets[j]);
+            }
+        }
+    }
+    // MOVE OMEGA & ENERGY
+    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
+        tab_ptr_Magnets[i]->moveomega(dt);
+        KineticEnergy   += energyunit * tab_ptr_Magnets[i]->Kinetic();
+        PotentialEnergy += energyunit * tab_ptr_Magnets[i]->potB() / 2;
+    }
+    if (std::abs(KineticEnergy/Energy()) < 1e-15){eq=true;}
+}
+
+void Systeme:: evolue2(double dt, unsigned int nb_repet)
+{
+    for (unsigned int i(0); i < nb_repet; ++i) {
+        evolue2(dt);
+    }
+}
+
+void Systeme:: evolue2(double dt, double t, bool d)
+{
+    double targettime = t / n; // the output interval
+    while (targettime <= t) {
+        while (abs(time + dt - targettime) < abs(time - targettime) )
+        {evolue2(dt);}
+        targettime += t / n;
+        if (d) {dessine();}
+    }
+}
 
 
 
