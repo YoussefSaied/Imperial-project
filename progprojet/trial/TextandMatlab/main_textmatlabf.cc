@@ -9,6 +9,10 @@
 #include "Cylinder.h"
 #include <iostream>
 #include "ConfigFile.tpp"
+#include <ctime>
+#include <chrono>
+#include <cstdlib>
+#include <stdio.h>
 
 using namespace std;
 
@@ -17,66 +21,57 @@ int main(int argc, char * argv[])
     // intitial configuration:
     Systeme s;
 
-    Dodec dode(Vecteur3D(0, 0, 0), 3e-2, Vecteur3D(0, 0, 1.23607), false);
-
-
+    Dodec dode(Vecteur3D(0, 0, 0), 3e-2, Vecteur3D(0, 0, 1.0), false);
     for (size_t i = 0; i < (dode.vertipositions()).size(); ++i) {
         size_t si = ((dode.vertipositions())[i]).size();
         for (size_t j = 0; j < si; ++j) {
-            Vecteur3D p(0, 0, 0);
-            p = ((dode.vertipositions())[i][j] + (dode.vertipositions())[i][(j + 1) % si]) / 2;
+            Vecteur3D pos( ((dode.vertipositions())[i][j] + (dode.vertipositions())[i][(j + 1) % si]) / 2);
+            Vecteur3D polaraxis = (dode.vertipositions())[i][j] - (dode.vertipositions())[i][(j + 1) % si];
+            Vecteur3D v2        =
+              ((dode.vertipositions())[i][(j + 1) % si] - (dode.vertipositions())[i][(j + 2) % si]);
+            Vecteur3D v3 = polaraxis ^ v2;
+            double alph1  = -1 * atan(2) / 2;
+            Vecteur3D v4  = v3.rotate(alph1, polaraxis);
+            Vecteur3D axe = (v4 ^ polaraxis).normalise();
 
-            Vecteur3D v1(0, 1, 0);
-            Vecteur3D v2(0, 1, 0);
-            Vecteur3D v3(0, 1, 0);
-            Vecteur3D v4(0, 1, 0);
-            Vecteur3D axe(0, 1, 0);
-            v1 = ((dode.vertipositions())[i][j] - (dode.vertipositions())[i][(j + 1) % si]);
-            // for v2 :
-            v2 = ((dode.vertipositions())[i][(j + 1) % si] - (dode.vertipositions())[i][(j + 2) % si]);
-            // for v3 :
-            v3 = v1 ^ v2;
-            double alph = atan(2); // angle of rotation arctan(2)
-            v4  = v3.rotate(alph, v1);
-            axe = v4 ^ v1;
-
-            // calculate polaraxis:
-            Vecteur3D polaraxis(1, 0, 0);
-            polaraxis = (dode.vertipositions())[i][j] - (dode.vertipositions())[i][(j + 1) % si];
-
-            // add magnet here.
-            Magnet M(p, axe, 1, 0, polaraxis); // position p, axis a, movable yes, angle_0 0, polaraxis polaraxis
+            Magnet M(pos, axe, 1, 0, polaraxis); // position pos, axis axe, movable yes, angle_0 0, polaraxis
             s.addMagnet(M);
         }
     }
+    s.setfriction(f);
 
 
-    // the text stuff ::
+   std::chrono::time_point<std::chrono::system_clock> currenttime = std::chrono::system_clock::now();
+   int nsimul = 1;
+   
+   //EVOLVE
+   string output = "evolve" + std::put_time(std::localtime(&currenttime), "%T");
+   unique_ptr<ofstream> tfile(new ofstream(output.c_str()));
+   tfile->precision(20);
+   SupportADessinTexte tsupport(*tfile);
+   s.randominitial();
+   s.evolue(dt, timesim,1,1);
 
-    // input configuration file:
-    string inputPath("configuration.in");
-    if (argc > 1) { // Fichier d'input specifie par l'utilisateur ("./Exercice8 config_perso.in")
-        inputPath = argv[1];
-    }
-    ConfigFile configFile(inputPath);
-    for (int i(2); i < argc; ++i) { // Input complementaires ("./Exercice8 config_perso.in input_scan=[valeur]")
-        configFile.process(argv[i]);
-    }
 
-    double dt      = configFile.get<double>("dt");
-    double timesim = configFile.get<double>("timesim");
-    double f       = configFile.get<double>("f");
-    int n = configFile.get<int>("nb_repet");
+   //EVOLVE1
+   string output = "evolve1" + std::put_time(std::localtime(&currenttime), "%T");
+   unique_ptr<ofstream> tfile1(new ofstream(output.c_str()));
+   tfile1->precision(20);
+   SupportADessinTexte tsupport(*tfile1);
+   s.randominitial();
+   s.evolue1(dt, timesim,1,1);
+
+   //EVOLVE2
+   string output = "evolve2" + std::put_time(std::localtime(&currenttime), "%T");
+   unique_ptr<ofstream> tfile2(new ofstream(output.c_str()));
+   tfile2->precision(20);
+   SupportADessinTexte tsupport(*tfile2);
+   s.randominitial();
+   s.evolue2(dt, timesim,1,1);
 
     // output text file:
-    string output = configFile.get<string>("output");
-    unique_ptr<ofstream> tfile(new ofstream(output.c_str()));
-    tfile->precision(20);
-    SupportADessinTexte tsupport(*tfile);
-    s.setfriction(f);
-    s.n = n;
 
-    s.evolue(dt, timesim);
+
     // namefile with time
     // run sim. with evolve1 and evolve2
 

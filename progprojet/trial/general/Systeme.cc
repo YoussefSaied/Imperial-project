@@ -76,7 +76,7 @@ void Systeme:: randominitial()
 
 ostream& Systeme:: display(ostream& c) const
 {
-  bool fric = 1;
+  bool fric = 0;
   if (fric){
   c << time<<" ";
   c << NearestCorrelation()<<" ";
@@ -89,7 +89,6 @@ ostream& Systeme:: display(ostream& c) const
     for (auto& g: tab_ptr_Magnets) {
         c << " " << g->angle << " ";
     }
-    c << Energy();
     c << endl;}
     return c;
 }
@@ -202,15 +201,16 @@ void Systeme:: evolue(double dt, unsigned int nb_repet)
     }
 }
 
-void Systeme:: evolue(double dt, double t, bool d)
+void Systeme:: evolue(double dt, double t, bool d, bool final)
 {
     double targettime = t / n; // the output interval
     while (targettime <= t) {
         while (abs(time + dt - targettime) < abs(time - targettime) )
         {evolue(dt);}
         targettime += t / n;
-        if (d) {dessine();}
-    }
+        if (!final and d){dessine();}
+      }
+      if (d and final) {dessine();}
 }
 
 /////////////EVOLVE1///////////////////
@@ -271,15 +271,16 @@ void Systeme:: evolue1(double dt, unsigned int nb_repet)
     }
 }
 
-void Systeme:: evolue1(double dt, double t, bool d)
+void Systeme:: evolue1(double dt, double t, bool d, bool final)
 {
     double targettime = t / n; // the output interval
     while (targettime <= t) {
         while (abs(time + dt - targettime) < abs(time - targettime) )
         {evolue1(dt);}
         targettime += t / n;
-        if (d) {dessine();}
-    }
+        if (!final and d){dessine();}
+      }
+      if (d and final) {dessine();}
 }
 
 /////////////EVOLVE2///////////////////
@@ -348,15 +349,16 @@ void Systeme:: evolue2(double dt, unsigned int nb_repet)
     }
 }
 
-void Systeme:: evolue2(double dt, double t, bool d)
+void Systeme:: evolue2(double dt, double t, bool d, bool final)
 {
     double targettime = t / n; // the output interval
     while (targettime <= t) {
         while (abs(time + dt - targettime) < abs(time - targettime) )
         {evolue2(dt);}
         targettime += t / n;
-        if (d) {dessine();}
-    }
+        if (!final and d){dessine();}
+      }
+      if (d and final) {dessine();}
 }
 
 
