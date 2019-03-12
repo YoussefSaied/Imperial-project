@@ -1,3 +1,3 @@
 #make distclean
-qmake simulationt.pro
+qmake simulationt.pro CONFIG+=configT
 make

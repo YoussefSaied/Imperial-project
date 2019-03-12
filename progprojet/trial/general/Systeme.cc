@@ -54,28 +54,29 @@ void Systeme:: setangles(std::string filename)
 
 void Systeme:: setfriction(double friction)
 {
-  for (auto const& ptr_Magnet : tab_ptr_Magnets) {
-    ptr_Magnet->f = friction;
-  }
-  f = friction;
+    for (auto const& ptr_Magnet : tab_ptr_Magnets) {
+        ptr_Magnet->f = friction;
+    }
+    f = friction;
 }
 
 void Systeme:: randominitial()
-{ int i = 0;
-  for (auto const& ptr_Magnet : tab_ptr_Magnets) {
-    ++i;
-    std::chrono::time_point<std::chrono::system_clock> noww = std::chrono::system_clock::now();
-    int secnow = std::chrono::duration_cast<std::chrono::seconds>(
-                  noww.time_since_epoch()).count();
-    srand (secnow + i);
-    double randomval = M_PI*(rand() % 2);
-    ptr_Magnet->angle = randomval;
-  }
+{
+    int i = 0;
+    for (auto const& ptr_Magnet : tab_ptr_Magnets) {
+        ++i;
+        std::chrono::time_point<std::chrono::system_clock> noww = std::chrono::system_clock::now();
+        int secnow = std::chrono::duration_cast<std::chrono::seconds>(
+            noww.time_since_epoch()).count();
+        srand(secnow + i);
+        double randomval = M_PI * (rand() % 2);
+        ptr_Magnet->angle = randomval;
+    }
 }
-
 
 ostream& Systeme:: display(ostream& c) const
 {
+<<<<<<< HEAD
   bool fric = 0;
   if (fric){
   c << time<<" ";
@@ -90,6 +91,24 @@ ostream& Systeme:: display(ostream& c) const
         c << " " << g->angle << " ";
     }
     c << endl;}
+=======
+    bool fric = 0;
+    if (fric) {
+        c << time << " ";
+        c << NearestCorrelation() << " ";
+        c << totalangle() << " ";
+        c << Energy() << " ";
+        c << KineticEnergy << " ";
+        c << endl;
+    } else {
+        c << time;
+        for (auto& g: tab_ptr_Magnets) {
+            c << " " << g->angle << " ";
+        }
+        // c << Energy();
+        c << endl;
+    }
+>>>>>>> 47e22b41fe817c386b4370e80f2afecb435e7b48
     return c;
 }
 
@@ -191,8 +210,8 @@ void Systeme:: evolue(double dt)
         KineticEnergy   += energyunit * tab_ptr_Magnets[i]->Kinetic();
         PotentialEnergy += energyunit * tab_ptr_Magnets[i]->potB() / 2;
     }
-    if (std::abs(KineticEnergy/Energy()) < 1e-15){eq=true;}
-}
+    if (std::abs(KineticEnergy / Energy()) < 1e-15) { eq = true; }
+} // Systeme::evolue
 
 void Systeme:: evolue(double dt, unsigned int nb_repet)
 {
@@ -205,12 +224,18 @@ void Systeme:: evolue(double dt, double t, bool d, bool final)
 {
     double targettime = t / n; // the output interval
     while (targettime <= t) {
-        while (abs(time + dt - targettime) < abs(time - targettime) )
-        {evolue(dt);}
+        while (abs(time + dt - targettime) < abs(time - targettime) ) {
+            evolue(dt);
+        }
         targettime += t / n;
+<<<<<<< HEAD
         if (!final and d){dessine();}
       }
       if (d and final) {dessine();}
+=======
+        if (d) { dessine(); }
+    }
+>>>>>>> 47e22b41fe817c386b4370e80f2afecb435e7b48
 }
 
 /////////////EVOLVE1///////////////////
@@ -220,10 +245,10 @@ void Systeme:: evolue1(double dt)
     KineticEnergy   = 0;
     PotentialEnergy = 0;
 
-    //nearest neighbours
+    // nearest neighbours
     double genconst = 2;
-    //second nearest neighbours
-    //double genconst = 4.5;
+    // second nearest neighbours
+    // double genconst = 4.5;
 
     // CALC TORQUE
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
@@ -235,11 +260,13 @@ void Systeme:: evolue1(double dt)
             for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
                 // magnet interactions
                 if ( (tab_ptr_Magnets[i]->position - tab_ptr_Magnets[j]->position).norme() <
-                  genconst * tab_ptr_Magnets[i]->length and i != j){
-                    tab_ptr_Magnets[i]->addTorque(tab_ptr_Magnets[j]);}
+                  genconst * tab_ptr_Magnets[i]->length and i != j)
+                {
+                    tab_ptr_Magnets[i]->addTorque(tab_ptr_Magnets[j]);
                 }
             }
         }
+    }
     // MOVE ANGLE
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         tab_ptr_Magnets[i]->moveangle(dt);
@@ -248,8 +275,9 @@ void Systeme:: evolue1(double dt)
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         tab_ptr_Magnets[i]->addnewTorque(B);
         for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
-          if ( (tab_ptr_Magnets[i]->position - tab_ptr_Magnets[j]->position).norme() <
-            2 * tab_ptr_Magnets[i]->length and i != j) {
+            if ( (tab_ptr_Magnets[i]->position - tab_ptr_Magnets[j]->position).norme() <
+              2 * tab_ptr_Magnets[i]->length and i != j)
+            {
                 tab_ptr_Magnets[i]->addnewTorque(tab_ptr_Magnets[j]);
                 tab_ptr_Magnets[i]->addpotB(tab_ptr_Magnets[j]);
             }
@@ -261,8 +289,8 @@ void Systeme:: evolue1(double dt)
         KineticEnergy   += energyunit * tab_ptr_Magnets[i]->Kinetic();
         PotentialEnergy += energyunit * tab_ptr_Magnets[i]->potB() / 2;
     }
-    if (std::abs(KineticEnergy/Energy()) < 1e-15){eq=true;}
-}
+    if (std::abs(KineticEnergy / Energy()) < 1e-15) { eq = true; }
+} // Systeme::evolue1
 
 void Systeme:: evolue1(double dt, unsigned int nb_repet)
 {
@@ -275,12 +303,18 @@ void Systeme:: evolue1(double dt, double t, bool d, bool final)
 {
     double targettime = t / n; // the output interval
     while (targettime <= t) {
-        while (abs(time + dt - targettime) < abs(time - targettime) )
-        {evolue1(dt);}
+        while (abs(time + dt - targettime) < abs(time - targettime) ) {
+            evolue1(dt);
+        }
         targettime += t / n;
+<<<<<<< HEAD
         if (!final and d){dessine();}
       }
       if (d and final) {dessine();}
+=======
+        if (d) { dessine(); }
+    }
+>>>>>>> 47e22b41fe817c386b4370e80f2afecb435e7b48
 }
 
 /////////////EVOLVE2///////////////////
@@ -365,26 +399,20 @@ void Systeme:: evolue2(double dt, double t, bool d, bool final)
 
 double Systeme:: NearestCorrelation() const
 { // can we do it with angles?
-  double correlation(0);
-        for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
-            for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
-                if ( (tab_ptr_Magnets[i]->position - tab_ptr_Magnets[j]->position).norme() <
-                  2 * tab_ptr_Magnets[i]->length and i != j)
-                {
-                    correlation += (tab_ptr_Magnets[i]->moment().normalise())
-                      * (tab_ptr_Magnets[j]->moment().normalise());
-                }
+    double correlation(0);
+    for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
+        for (size_t j(0); j < tab_ptr_Magnets.size(); ++j) {
+            if ( (tab_ptr_Magnets[i]->position - tab_ptr_Magnets[j]->position).norme() <
+              2 * tab_ptr_Magnets[i]->length and i != j)
+            {
+                correlation += (tab_ptr_Magnets[i]->moment().normalise())
+                  * (tab_ptr_Magnets[j]->moment().normalise());
             }
         }
-        if (!tab_ptr_Magnets.empty()) { correlation /= tab_ptr_Magnets.size(); }
-      return correlation;
-
+    }
+    if (!tab_ptr_Magnets.empty()) { correlation /= tab_ptr_Magnets.size(); }
+    return correlation;
 }
-
-
-
-
-
 
 double Systeme::totalangle() const
 {
