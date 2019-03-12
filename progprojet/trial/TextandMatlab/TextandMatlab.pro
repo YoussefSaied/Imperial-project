@@ -1,7 +1,15 @@
 QMAKE_CXXFLAGS += -std=c++11
 
-
+configT{
 TARGET = simulationt
+SOURCES += \
+    main_textmatlab.cc
+}
+configA{
+SOURCES += \
+		Analysis.cc
+TARGET = Analysis
+}
 LIBS += -L../general -lgeneral
 win32:LIBS += -lopengl32
 win64:LIBS += -lopengl32
@@ -11,7 +19,6 @@ PRE_TARGETDEPS += ../general/libgeneral.a
 INCLUDEPATH += ../general
 CONFIG += qt debug
 SOURCES += \
-    main_textmatlab.cc \
     ../general/SupportADessinTexte.cc \
     ../general/Systeme.cc \
     ../general/Aleatoire.cc \
