@@ -5,11 +5,13 @@ TARGET = simulationt
 SOURCES += \
     main_textmatlab.cc
 }
+
 configA{
 SOURCES += \
 		Analysis.cc
 TARGET = Analysis
 }
+
 LIBS += -L../general -lgeneral
 win32:LIBS += -lopengl32
 win64:LIBS += -lopengl32
@@ -45,4 +47,5 @@ HEADERS += \
     ../general/Brique.h \
     ../general/Dodec.h \
     ../general/Sphere.h \
+    Analysisclass.h\
     ../general/Vecteur3D.h
