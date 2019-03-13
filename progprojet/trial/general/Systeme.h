@@ -56,18 +56,17 @@ public:
     //evolve: all magnet magnet interactions
     virtual void evolue(double dt = 0.01);
     virtual void evolue(double dt, unsigned int nb_repet);
-    virtual void evolue(double dt, double t, bool d); // evolution du système selon le 1er temps t
+    virtual void evolue(double dt, double t, bool d, bool final); // evolution du système selon le 1er temps t
 
     //evolve1: nearest neighbours only
     virtual void evolue1(double dt = 0.01);
     virtual void evolue1(double dt, unsigned int nb_repet);
-    virtual void evolue1(double dt, double t, bool d); // evolution du système selon le 1er temps t
+    virtual void evolue1(double dt, double t, bool d, bool final); // evolution du système selon le 1er temps t
 
     //evolve2: 2nd nearest and nearest neighbours only
-    virtual void evolue2(double dt, double t, bool d);
-    virtual void evolue2(double dt, unsigned int nb_repet);
     virtual void evolue2(double dt = 0.01);
-
+    virtual void evolue2(double dt, unsigned int nb_repet);
+    virtual void evolue2(double dt, double t, bool d, bool final);
 
 
     virtual std:: ostream& display(std:: ostream& c) const;

@@ -8,19 +8,22 @@ repertoire = '';
 executable = 'debug/simulationt';
 input = 'configuration.in';
 
-nsimul = 500;
+nsimul = 2;
 
 
 % Indiquer ici les valeurs des parametres a scanner :
+%dt = linspace(-4,-5,nsimul);
+%dt= 0.01;
+%dt = 10^-2 ./2.^linspace(1,nsimul,nsimul);
 dt = logspace(-4,-6,nsimul);
-f = linspace(0.1,10,nsimul);
+%f = [2,2.25,2.5,2.6,2.7,2.8,2.9,3,3.25,3.5];%,20,50];
+f = linspace(2.5,3,nsimul);
 
 % Selectionner ici le parametre a scanner
 %paramstr = 'dt';
 %param = dt;
 
 paramstr = 'f';
-folder = '/evolve1/';
 param = f;
 %time - correlation - sum angle - energy - kinetic
 
@@ -32,7 +35,7 @@ output = cell(1, nsimul);
 
 for i = 1:nsimul
     tic
-    filename = [paramstr,folder,paramstr,'=', num2str(param(i))];
+    filename = [paramstr,'/',paramstr,'=', num2str(param(i))];
     output{i} = [filename];
     eval(sprintf('!%s %s %s=%.15g output=%s',executable, input, paramstr, param(i), output{i}));
     % Variante pour scanner Nx et Ny en meme temps:

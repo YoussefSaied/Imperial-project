@@ -46,10 +46,11 @@ int Systeme:: addMagnet(Magnet const & nouveau_Magnet)
 void Systeme:: setangles(std::string filename)
 {
     unique_ptr<ifstream> tfile(new ifstream(filename));
-    int value;
+    double value;
     for (auto& ptr_Magnet : tab_ptr_Magnets) {
         *tfile >> value;
         ptr_Magnet->angle = value;
+        cout << "hello" << value;
     }
 }
 
@@ -77,7 +78,7 @@ void Systeme:: randominitial()
 
 ostream& Systeme:: display(ostream& c) const
 {
-    bool fric = 0;
+    bool fric = 1;
     if (fric) {
         c << time << " ";
         c << NearestCorrelation() << " ";
@@ -204,7 +205,7 @@ void Systeme:: evolue(double dt, unsigned int nb_repet)
     }
 }
 
-void Systeme:: evolue(double dt, double t, bool d)
+void Systeme:: evolue(double dt, double t, bool d, bool final)
 {
     double targettime = t / n; // the output interval
     while (targettime <= t) {
@@ -212,8 +213,9 @@ void Systeme:: evolue(double dt, double t, bool d)
             evolue(dt);
         }
         targettime += t / n;
-        if (d) { dessine(); }
-    }
+        if (!final and d){dessine();}
+      }
+      if (d and final) {dessine();}
 }
 
 /////////////EVOLVE1///////////////////
@@ -277,7 +279,7 @@ void Systeme:: evolue1(double dt, unsigned int nb_repet)
     }
 }
 
-void Systeme:: evolue1(double dt, double t, bool d)
+void Systeme:: evolue1(double dt, double t, bool d, bool final)
 {
     double targettime = t / n; // the output interval
     while (targettime <= t) {
@@ -285,8 +287,9 @@ void Systeme:: evolue1(double dt, double t, bool d)
             evolue1(dt);
         }
         targettime += t / n;
-        if (d) { dessine(); }
-    }
+        if (!final and d){dessine();}
+      }
+      if (d and final) {dessine();}
 }
 
 /////////////EVOLVE2///////////////////
@@ -314,16 +317,13 @@ void Systeme:: evolue2(double dt)
                   2 * tab_ptr_Magnets[i]->length and i != j)
                 {
                     for (size_t k(0); k < tab_ptr_Magnets.size(); ++k) {
-                        if ( (tab_ptr_Magnets[j]->position - tab_ptr_Magnets[k]->position).norme() <
-                          2 * tab_ptr_Magnets[j]->length and j != k and i != k)
-                        {
-                            tab_ptr_Magnets[i]->addTorque(tab_ptr_Magnets[k]);
-                            count += 1;
-                            if (std::fmod(time, 0.5)) {
-                                cout << "[" << count << " " << i << " " << j << " " << k << "]";
-                            }
-                        }
+                      if ( (tab_ptr_Magnets[j]->position - tab_ptr_Magnets[k]->position).norme() <
+                        2 * tab_ptr_Magnets[j]->length and j != k and i != k){
+                          tab_ptr_Magnets[i]->addTorque(tab_ptr_Magnets[k]);
+                          count += 1;
+                      //if (std::fmod(time,0.5)){cout << "["<<count <<" "<< i <<" "<< j<<" " << k<<"]";}
                     }
+
                 }
             }
         }
@@ -360,7 +360,7 @@ void Systeme:: evolue2(double dt, unsigned int nb_repet)
     }
 }
 
-void Systeme:: evolue2(double dt, double t, bool d)
+void Systeme:: evolue2(double dt, double t, bool d, bool final)
 {
     double targettime = t / n; // the output interval
     while (targettime <= t) {
@@ -368,8 +368,9 @@ void Systeme:: evolue2(double dt, double t, bool d)
             evolue2(dt);
         }
         targettime += t / n;
-        if (d) { dessine(); }
-    }
+        if (!final and d){dessine();}
+      }
+      if (d and final) {dessine();}
 }
 
 double Systeme:: NearestCorrelation() const

@@ -1,0 +1,13 @@
+INPUT(
+./debug\Analysis.o
+./debug\SupportADessinTexte.o
+./debug\Systeme.o
+./debug\Aleatoire.o
+./debug\Magnet.o
+./debug\Plan.o
+./debug\Dalle.o
+./debug\Brique.o
+./debug\Dodec.o
+./debug\Sphere.o
+./debug\Vecteur3D.o
+);

@@ -17,16 +17,6 @@ int main(int argc, char * argv[])
 {
     // intitial configuration:
     Systeme s;
-    Vecteur3D v1(1, 0, 0);
-    Vecteur3D v2(1, 0, 0);
-    Vecteur3D v3(1, 0, 0);
-    v2 = v1.rotate(M_PI / 3 * 2, Vecteur3D(0, 0, 1));
-    v3 = v1.rotate(M_PI / 3 * 4, Vecteur3D(0, 0, 1));
-    Magnet M1(Position(0, 0, 0), v2);
-    Magnet M2(Position(0 + M1.length * 1.2, 0, 0), v3);
-    Magnet M3(Position(0 + M1.length * 0.6, 0 + M1.length * 1.039, 0), v1);
-    Magnet M4(Position(0, 0, 0), Vecteur3D(0, 1, 0), 0);
-    Magnet M5(Position(0, 0, 0 + M1.length * 2.2), Vecteur3D(0, 1, 0), 1, 1.5);
 
     // Dodec dode(Vecteur3D(0, 0, 3), 4, Vecteur3D(0, -0.763932, 1.23607), false);
     Dodec dode(Vecteur3D(0, 0, 0), 3e-2, Vecteur3D(0, 0, 1.0), false);
@@ -46,8 +36,6 @@ int main(int argc, char * argv[])
             s.addMagnet(M);
         }
     }
-
-    // the text stuff ::
 
     // input configuration file:
     string inputPath("configuration.in");
@@ -70,10 +58,11 @@ int main(int argc, char * argv[])
     tfile->precision(20);
     SupportADessinTexte tsupport(*tfile);
     s.setfriction(f);
+    s.randominitial();
     s.n = n;
     s.set_support(&tsupport);
 //    s.randominitial();
-    s.evolue2(dt, timesim, 1);
+    s.evolue1(dt, timesim, 1,0);
 
     return 0;
 }
