@@ -53,12 +53,6 @@ int main(int argc, char * argv[])
             size_t si = ((dode.vertipositions())[i]).size();
             for (size_t j = 0; j < si; ++j) {
                 Vecteur3D pos( ((dode.vertipositions())[i][j] + (dode.vertipositions())[i][(j + 1) % si]) / 2);
-                // p += dode.position;
-                // ++num;
-                // cout << i << "," << j << num << ":  ";
-                // cout << p << endl;
-
-                // axis CALCULATIONS:
                 Vecteur3D polaraxis = (dode.vertipositions())[i][j] - (dode.vertipositions())[i][(j + 1) % si];
                 Vecteur3D v2        =
                   ((dode.vertipositions())[i][(j + 1) % si] - (dode.vertipositions())[i][(j + 2) % si]);

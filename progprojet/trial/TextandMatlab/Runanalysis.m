@@ -1,6 +1,7 @@
 evolve = load('evolve');
 evolve1 = load('evolve1');
 evolve2 = load('evolve2');
+
 nsimul = 1;
 %groups::
 magnets = zeros(nsimul,30,2); %angle,type
