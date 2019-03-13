@@ -59,7 +59,8 @@ int main(int argc, char * argv[])
     string DVertex = outputPath + "DVertex";
     unique_ptr<ofstream> tfile2(new ofstream(DVertex.c_str()));
     for (auto& dv: SD.DV) {
-        *tfile2 << dv.centralmagnet << " " << SD.doublevertixEnergy(dv) << " " << SD.doublevertixstrengthDetailed(dv)
+        *tfile2 << dv.centralmagnet << " " << SD.doublevertixEnergy(dv) << " "
+                << SD.doublevertixstrengthDetailed(dv)
                 << endl;
     }
 
