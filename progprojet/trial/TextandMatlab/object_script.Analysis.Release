@@ -1,0 +1,13 @@
+INPUT(
+./release\Analysis.o
+./release\SupportADessinTexte.o
+./release\Systeme.o
+./release\Aleatoire.o
+./release\Magnet.o
+./release\Plan.o
+./release\Dalle.o
+./release\Brique.o
+./release\Dodec.o
+./release\Sphere.o
+./release\Vecteur3D.o
+);

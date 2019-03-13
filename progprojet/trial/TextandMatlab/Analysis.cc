@@ -195,6 +195,7 @@ double vertixEnergy(vertixmagnets vm)
     Energy += s.tab_ptr_Magnets[vm.magnet1]->spotB(s.tab_ptr_Magnets[vm.magnet2]);
     Energy += s.tab_ptr_Magnets[vm.magnet1]->spotB(s.tab_ptr_Magnets[vm.magnet3]);
     Energy += s.tab_ptr_Magnets[vm.magnet2]->spotB(s.tab_ptr_Magnets[vm.magnet3]);
+    cout << Energy;
     return Energy;
 }
 
@@ -214,10 +215,19 @@ double faceEnergy(facemagnets fm)
     return Energy;
 }
 
+
+
+
+
+
+
+
+
 int main(int argc, char * argv[])
 {
     // VM initialisation:
     vector<vector<Vecteur3D> > vertixpositions = dode.vertipositions();
+    cout << "hello";
 
     for (size_t i = 0; i < vertixpositions.size(); ++i) {
         size_t si = (vertixpositions[i]).size();
@@ -298,6 +308,7 @@ int main(int argc, char * argv[])
     }
 
     // set angles:
+    cout << "hello";
     s.setangles("finalangles.in");
 
 

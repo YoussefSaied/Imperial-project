@@ -45,10 +45,11 @@ int Systeme:: addMagnet(Magnet const & nouveau_Magnet)
 void Systeme:: setangles(std::string filename)
 {
     unique_ptr<ifstream> tfile(new ifstream(filename));
-    int value;
+    double value;
     for (auto& ptr_Magnet : tab_ptr_Magnets) {
         *tfile >> value;
         ptr_Magnet->angle = value;
+        cout << "hello" << value;
     }
 }
 
@@ -76,23 +77,7 @@ void Systeme:: randominitial()
 
 ostream& Systeme:: display(ostream& c) const
 {
-<<<<<<< HEAD
-  bool fric = 0;
-  if (fric){
-  c << time<<" ";
-  c << NearestCorrelation()<<" ";
-  c << totalangle()<<" ";
-  c << Energy()<<" ";
-  c << KineticEnergy<<" ";
-  c << endl;}
-  else{
-    c << time;
-    for (auto& g: tab_ptr_Magnets) {
-        c << " " << g->angle << " ";
-    }
-    c << endl;}
-=======
-    bool fric = 0;
+    bool fric = 1;
     if (fric) {
         c << time << " ";
         c << NearestCorrelation() << " ";
@@ -108,7 +93,6 @@ ostream& Systeme:: display(ostream& c) const
         // c << Energy();
         c << endl;
     }
->>>>>>> 47e22b41fe817c386b4370e80f2afecb435e7b48
     return c;
 }
 
@@ -228,14 +212,9 @@ void Systeme:: evolue(double dt, double t, bool d, bool final)
             evolue(dt);
         }
         targettime += t / n;
-<<<<<<< HEAD
         if (!final and d){dessine();}
       }
       if (d and final) {dessine();}
-=======
-        if (d) { dessine(); }
-    }
->>>>>>> 47e22b41fe817c386b4370e80f2afecb435e7b48
 }
 
 /////////////EVOLVE1///////////////////
@@ -307,14 +286,9 @@ void Systeme:: evolue1(double dt, double t, bool d, bool final)
             evolue1(dt);
         }
         targettime += t / n;
-<<<<<<< HEAD
         if (!final and d){dessine();}
       }
       if (d and final) {dessine();}
-=======
-        if (d) { dessine(); }
-    }
->>>>>>> 47e22b41fe817c386b4370e80f2afecb435e7b48
 }
 
 /////////////EVOLVE2///////////////////
@@ -345,7 +319,8 @@ void Systeme:: evolue2(double dt)
                         2 * tab_ptr_Magnets[j]->length and j != k and i != k){
                           tab_ptr_Magnets[i]->addTorque(tab_ptr_Magnets[k]);
                           count += 1;
-                      if (std::fmod(time,0.5)){cout << "["<<count <<" "<< i <<" "<< j<<" " << k<<"]";}}
+                      //if (std::fmod(time,0.5)){cout << "["<<count <<" "<< i <<" "<< j<<" " << k<<"]";}
+                    }
 
                 }
               }

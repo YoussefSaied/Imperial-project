@@ -8,11 +8,13 @@
 #include "Dodec.h"
 #include "Cylinder.h"
 #include <iostream>
+#include <iomanip>
 #include "ConfigFile.tpp"
 #include <ctime>
 #include <chrono>
 #include <cstdlib>
 #include <stdio.h>
+#include <time.h>
 
 using namespace std;
 
@@ -38,34 +40,42 @@ int main(int argc, char * argv[])
             s.addMagnet(M);
         }
     }
-    s.setfriction(f);
+    s.setfriction(3);
+    double dt = 0.001;
+    double timesim = 5;
+    std::string return_current_time_and_date() {
+      auto now = std::chrono::system_clock::now();
+      auto today = date::floor<days>(now);
 
+      std::stringstream ss;
+      ss << today << ' ' << date::make_time(now - today) << " UTC";
+   //std::chrono::time_point<std::chrono::system_clock> currenttime = std::chrono::system_clock::now();
 
-   std::chrono::time_point<std::chrono::system_clock> currenttime = std::chrono::system_clock::now();
-   int nsimul = 1;
-   
    //EVOLVE
-   string output = "evolve" + std::put_time(std::localtime(&currenttime), "%T");
+   string output = "evolve" ;//+ std::put_time(std::localtime(&currenttime), "%T");
    unique_ptr<ofstream> tfile(new ofstream(output.c_str()));
    tfile->precision(20);
    SupportADessinTexte tsupport(*tfile);
+   s.set_support(&tsupport);
    s.randominitial();
    s.evolue(dt, timesim,1,1);
 
 
    //EVOLVE1
-   string output = "evolve1" + std::put_time(std::localtime(&currenttime), "%T");
-   unique_ptr<ofstream> tfile1(new ofstream(output.c_str()));
+   string output1 = "evolve1" ;//+ std::put_time(std::localtime(&currenttime), "%T");
+   unique_ptr<ofstream> tfile1(new ofstream(output1.c_str()));
    tfile1->precision(20);
-   SupportADessinTexte tsupport(*tfile1);
+   SupportADessinTexte tsupport1 = *tfile1;
+   s.set_support(&tsupport1);
    s.randominitial();
    s.evolue1(dt, timesim,1,1);
 
    //EVOLVE2
-   string output = "evolve2" + std::put_time(std::localtime(&currenttime), "%T");
-   unique_ptr<ofstream> tfile2(new ofstream(output.c_str()));
+   string output2 = "evolve2";// + std::put_time(std::localtime(&currenttime), "%T");
+   unique_ptr<ofstream> tfile2(new ofstream(output2.c_str()));
    tfile2->precision(20);
-   SupportADessinTexte tsupport(*tfile2);
+   SupportADessinTexte tsupport2 = *tfile2;
+   s.set_support(&tsupport2);
    s.randominitial();
    s.evolue2(dt, timesim,1,1);
 
