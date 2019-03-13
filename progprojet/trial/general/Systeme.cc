@@ -50,7 +50,6 @@ void Systeme:: setangles(std::string filename)
     for (auto& ptr_Magnet : tab_ptr_Magnets) {
         *tfile >> value;
         ptr_Magnet->angle = value;
-        cout << "hello" << value;
     }
 }
 
@@ -78,7 +77,7 @@ void Systeme:: randominitial()
 
 ostream& Systeme:: display(ostream& c) const
 {
-    bool fric = 1;
+    bool fric = 0;
     if (fric) {
         c << time << " ";
         c << NearestCorrelation() << " ";
@@ -299,10 +298,6 @@ void Systeme:: evolue2(double dt)
     KineticEnergy   = 0;
     PotentialEnergy = 0;
 
-    // nearest neighbours
-    // second nearest neighbours
-    // double genconst = 4.5;
-
     // CALC TORQUE
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         if (time > 0.1) {
@@ -328,6 +323,7 @@ void Systeme:: evolue2(double dt)
             }
         }
     }
+  }
     // MOVE ANGLE
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         tab_ptr_Magnets[i]->moveangle(dt);
