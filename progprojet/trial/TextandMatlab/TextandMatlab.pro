@@ -3,7 +3,7 @@ QMAKE_CXXFLAGS += -std=c++11
 configT{
 TARGET = simulationt
 SOURCES += \
-    main_textmatlab.cc
+    main_textmatlabf.cc
 }
 
 configA{

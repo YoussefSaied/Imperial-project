@@ -20,7 +20,7 @@ f = linspace(0.1,10,nsimul);
 %param = dt;
 
 paramstr = 'f';
-folder = '/evolve1/';
+folder = '/evolve2_random/';
 param = f;
 %time - correlation - sum angle - energy - kinetic
 
@@ -34,7 +34,7 @@ for i = 1:nsimul
     tic
     filename = [paramstr,folder,paramstr,'=', num2str(param(i))];
     output{i} = [filename];
-    eval(sprintf('!%s %s %s=%.15g output=%s',executable, input, paramstr, param(i), output{i}));
+    %eval(sprintf('!%s %s %s=%.15g output=%s',executable, input, paramstr, param(i), output{i}));
     % Variante pour scanner Nx et Ny en meme temps:
     % eval(sprintf('!%s%s %s %s=%.15g %s=%.15g output=%s', repertoire, executable, input, [paramstr,'x'], param(i), [paramstr,'y'], param(i), output{i}));
     disp('Done.')
@@ -98,27 +98,27 @@ if(strcmp(paramstr,'f'))
     
     %figures per friction
 
-    figure
-    subplot(1,3,1)
-    plot(t,log(kineticenergy));
-    title(filename)
-    grid on
-    xlabel('time');
-    ylabel('KE')
-    subplot(1,3,2)
-    plot(t,correlation);
-    grid on
-    xlabel('time');
-    ylabel('corr');
-    subplot(1,3,3)
-    plot(t,log(abs(gradcor)));
-    grid on
-    xlabel('time');
-    ylabel('corr');
+%     figure
+%     subplot(1,3,1)
+%     plot(t,log(kineticenergy));
+%     title(filename)
+%     grid on
+%     xlabel('time');
+%     ylabel('KE')
+%     subplot(1,3,2)
+%     plot(t,correlation);
+%     grid on
+%     xlabel('time');
+%     ylabel('corr');
+%     subplot(1,3,3)
+%     plot(t,log(abs(gradcor)));
+%     grid on
+%     xlabel('time');
+%     ylabel('corr');
     
     %find eq
     for j = 1:length(kineticenergy)
-    if kineticenergy(j) > 1e-15
+    if kineticenergy(j) > 1e-5
         eqE(i) = energy(j);
         eqtime(i) = t(j);
         eqCor(i) = correlation(j);
