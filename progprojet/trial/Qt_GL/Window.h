@@ -7,12 +7,12 @@
 #include <QPushButton>
 #include <QHBoxLayout>
 #include <QGridLayout>
+#include <QtCharts>
 #include "vue_opengl.h"
 #include "Systeme.h"
 #include "glwidget.h"
 #include <string>
 #include <sstream>
-#include <QtCharts>
 #include <QColor>
 #include <QValueAxis>
 

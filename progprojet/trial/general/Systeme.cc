@@ -342,7 +342,7 @@ void Systeme:: evolue2(double dt)
             }
         }
     }
-  }
+
     // MOVE ANGLE
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         tab_ptr_Magnets[i]->moveangle(dt);
