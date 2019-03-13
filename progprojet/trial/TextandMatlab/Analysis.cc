@@ -43,13 +43,14 @@ int main(int argc, char * argv[])
     //////Magnet: // Angle // Moment // Type
     string Magnet = outputPath + "Magnet";
     unique_ptr<ofstream> tfile0(new ofstream(Magnet.c_str()));
-
+    for (auto& m: SD.s.tab_ptr_Magnets){
+    *tfile0 << m->angle<<endl;}
     ///////VERTEX: // Angles (x3) // Energy
     // comments:  Oddoneout gives index of forced magnet
     string Vertex = outputPath + "Vertex";
     unique_ptr<ofstream> tfile1(new ofstream(Vertex.c_str()));
     for (auto& vm: SD.VM) {
-        *tfile1 << SD.vertixEnergy(vm) << " " << SD.Oddoneout(vm) << endl;
+        *tfile1 <<  SD.vertixEnergy(vm) << " " << SD.Oddoneout(vm) << endl;
     }
 
     ////DOUBLE VERTEX: // Angles (x5) // Energy // type

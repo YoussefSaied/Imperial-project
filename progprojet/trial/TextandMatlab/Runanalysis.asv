@@ -12,12 +12,10 @@ faces = zeros(nsimul,12,7); %anglex5,typex5,orientation,energy,
 for i = 1:nsimul
   angles = evolve(i,2:31);
   dlmwrite('finalangles.in',angles,'delimiter',' ');
-  system('debug/Analysis');
+  system('Analysis');
   %should create 4 temp files: Magnet, Vertex, DVertex, Faceparameters
  % tempmagnet = load('Magnet')
-%   tempvertex = load('Vertex');
-%   tempdvertex = load('DVertex');
-%   tempface = load('Faceparameters');
+
 %   vertices(i,:,:) = tempvertex;
 %   doublevertices(i,:,:) = tempdvertex;
 %   faces(i,:,:) = tempface;

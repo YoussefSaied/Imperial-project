@@ -43,12 +43,7 @@ int main(int argc, char * argv[])
     s.setfriction(3);
     double dt = 0.001;
     double timesim = 5;
-    std::string return_current_time_and_date() {
-      auto now = std::chrono::system_clock::now();
-      auto today = date::floor<days>(now);
 
-      std::stringstream ss;
-      ss << today << ' ' << date::make_time(now - today) << " UTC";
    //std::chrono::time_point<std::chrono::system_clock> currenttime = std::chrono::system_clock::now();
 
    //EVOLVE
