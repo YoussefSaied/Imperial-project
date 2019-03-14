@@ -69,7 +69,7 @@ int main(int argc, char * argv[])
             }
         }
         (w.glWidget)->system_tab[0]->randominitial();
-        (w.glWidget)->system_tab[0]->setangles("evolve");
+        (w.glWidget)->system_tab[0]->setangles("finalangles.in");
         (w.glWidget)->addObstacle(dode);
         w.show();
     }
