@@ -164,27 +164,100 @@ public:
 
     // Vertix strength (f/w):
 
+    std::string OddoneoutText(vertixmagnets vm)
+    {
+        double N1N2 = (((s.tab_ptr_Magnets[vm.magnet1])->positionN())
+          - ((s.tab_ptr_Magnets[vm.magnet2])->positionN())).norme();
+        double N1S2 = (((s.tab_ptr_Magnets[vm.magnet1])->positionN())
+          - ((s.tab_ptr_Magnets[vm.magnet2])->positionS())).norme();
+        double S1N2 = (((s.tab_ptr_Magnets[vm.magnet1])->positionS())
+          - ((s.tab_ptr_Magnets[vm.magnet2])->positionN())).norme();
+        double S1S2 = (((s.tab_ptr_Magnets[vm.magnet1])->positionS())
+          - ((s.tab_ptr_Magnets[vm.magnet2])->positionS())).norme();
+        double N2N3 = (((s.tab_ptr_Magnets[vm.magnet2])->positionN())
+          - ((s.tab_ptr_Magnets[vm.magnet3])->positionN())).norme();
+        double N2S3 = (((s.tab_ptr_Magnets[vm.magnet2])->positionN())
+          - ((s.tab_ptr_Magnets[vm.magnet3])->positionS())).norme();
+        double S2N3 = (((s.tab_ptr_Magnets[vm.magnet2])->positionS())
+          - ((s.tab_ptr_Magnets[vm.magnet3])->positionN())).norme();
+        double S2S3 = (((s.tab_ptr_Magnets[vm.magnet2])->positionS())
+          - ((s.tab_ptr_Magnets[vm.magnet3])->positionS())).norme();
+
+
+        // cases: N1S2 (N3/S3):
+        if (N1S2 < N1N2 and N1S2 < S1S2 and N1S2 < S1N2) {
+            if (S2N3 > S2S3) { return std::to_string(vm.magnet1) + "N1S2S3"; }
+            else { return std::to_string(vm.magnet2) + "N1S2N3"; }
+        }
+        // cases: N1N2 (N3/S3)
+        else if (N1N2 < N1S2 and N1N2 < S1S2 and N1N2 < S1N2) {
+            if (N2N3 > N2S3) { return std::to_string(vm.magnet3) + "N1N2S3";  }
+            else { return std::to_string(-1) + "N1S2N3"; }
+        }
+
+        // cases: S1S2 (N3/S3):
+        else if (S1S2 < N1S2 and S1S2 < N1N2 and S1S2 < S1N2) {
+            if (S2N3 > S2S3) { return std::to_string(-2) + "S1S2S3"; }
+            else { return std::to_string(vm.magnet3) + "S1S2N3"; }
+        }
+        // cases: S1N2 (N3/S3)
+        else {
+            if (S1N2 < N1S2 and S1N2 < N1N2 and S1N2 < S1S2) { return std::to_string(vm.magnet2) + "S1N2S3"; }
+            else { return std::to_string(vm.magnet1) + "S1N2S3"; }
+        }
+
+        // angles:
+
+
+        // return -1;
+    } // sends back oddmagnet index
+
     int Oddoneout(vertixmagnets vm)
     {
-        double p12 = ((s.tab_ptr_Magnets[vm.magnet1])->orientation())
-          * ((s.tab_ptr_Magnets[vm.magnet2])->orientation());
-        double p13 = ((s.tab_ptr_Magnets[vm.magnet1])->orientation())
-          * ((s.tab_ptr_Magnets[vm.magnet3])->orientation());
-        double p23 = ((s.tab_ptr_Magnets[vm.magnet2])->orientation())
-          * ((s.tab_ptr_Magnets[vm.magnet3])->orientation());
-        if (p12 > 0 and p13 > 0) {
-            return vm.magnet1;
+        double N1N2 = (((s.tab_ptr_Magnets[vm.magnet1])->positionN())
+          - ((s.tab_ptr_Magnets[vm.magnet2])->positionN())).norme();
+        double N1S2 = (((s.tab_ptr_Magnets[vm.magnet1])->positionN())
+          - ((s.tab_ptr_Magnets[vm.magnet2])->positionS())).norme();
+        double S1N2 = (((s.tab_ptr_Magnets[vm.magnet1])->positionS())
+          - ((s.tab_ptr_Magnets[vm.magnet2])->positionN())).norme();
+        double S1S2 = (((s.tab_ptr_Magnets[vm.magnet1])->positionS())
+          - ((s.tab_ptr_Magnets[vm.magnet2])->positionS())).norme();
+        double N2N3 = (((s.tab_ptr_Magnets[vm.magnet2])->positionN())
+          - ((s.tab_ptr_Magnets[vm.magnet3])->positionN())).norme();
+        double N2S3 = (((s.tab_ptr_Magnets[vm.magnet2])->positionN())
+          - ((s.tab_ptr_Magnets[vm.magnet3])->positionS())).norme();
+        double S2N3 = (((s.tab_ptr_Magnets[vm.magnet2])->positionS())
+          - ((s.tab_ptr_Magnets[vm.magnet3])->positionN())).norme();
+        double S2S3 = (((s.tab_ptr_Magnets[vm.magnet2])->positionS())
+          - ((s.tab_ptr_Magnets[vm.magnet3])->positionS())).norme();
+
+
+        // cases: N1S2 (N3/S3):
+        if (N1S2 < N1N2 and N1S2 < S1S2 and N1S2 < S1N2) {
+            if (S2N3 > S2S3) { return vm.magnet1; }
+            else { return vm.magnet2; }
+        }
+        // cases: N1N2 (N3/S3)
+        else if (N1N2 < N1S2 and N1N2 < S1S2 and N1N2 < S1N2) {
+            if (N2N3 > N2S3) { return vm.magnet3;  }
+            else { return -1; }
         }
 
-        if (p12 > 0 and p23 > 0) {
-            return vm.magnet2;
+        // cases: S1S2 (N3/S3):
+        else if (S1S2 < N1S2 and S1S2 < N1N2 and S1S2 < S1N2) {
+            if (S2N3 > S2S3) { return -2; }
+            else { return vm.magnet3; }
+        }
+        // cases: S1N2 (N3/S3)
+        else {
+            if (S1N2 < N1S2 and S1N2 < N1N2 and S1N2 < S1S2) { return vm.magnet2; }
+            else { return vm.magnet1; }
         }
 
-        if (p23 > 0 and p13 > 0) {
-            return vm.magnet3;
-        }
+        // angles:
 
-        return -1;
+
+        // return -1;
     } // sends back oddmagnet index
 
     int doublevertixstrength(doublevertix dv)
@@ -260,36 +333,50 @@ public:
             else { strength = 1; }
         }
 
-        return strength;
+        return strength + 1;
+    }
+
+    std::vector<int> nonCentralindex(doublevertix dv, vertixmagnets vm)
+    {
+        std::vector<int> indices;
+        if (vm.magnet1 != dv.centralmagnet) { indices.push_back(vm.magnet1); }
+
+        if (vm.magnet2 != dv.centralmagnet) { indices.push_back(vm.magnet2); }
+
+        if (vm.magnet3 != dv.centralmagnet) { indices.push_back(vm.magnet3); }
+
+        return indices;
     }
 
     int doublevertixstrengthDetailed(doublevertix dv)
     {
-        int detailed(doublevertixstrength(dv) * 100);
-        if (doublevertixup(dv, (dv.v1).magnet1)) {
+        int detailed((doublevertixstrength(dv) + 1) * 100);
+        std::vector<int> indices1 = nonCentralindex(dv, dv.v1);
+        if (doublevertixup(dv, indices1[0])) {
             // v1m1
-            detailed += doublevertixstrengthRelative(dv, (dv.v1).magnet1);
+            detailed += doublevertixstrengthRelative(dv, indices1[0]);
             // v1m2
-            detailed += doublevertixstrengthRelative(dv, (dv.v1).magnet2) * 10;
+            detailed += doublevertixstrengthRelative(dv, indices1[1]) * 10;
         }
         else {
             // v1m1
-            detailed += doublevertixstrengthRelative(dv, (dv.v1).magnet1) * 10;
+            detailed += doublevertixstrengthRelative(dv, indices1[0]) * 10;
             // v1m2
-            detailed += doublevertixstrengthRelative(dv, (dv.v1).magnet2);
+            detailed += doublevertixstrengthRelative(dv, indices1[1]);
         }
 
-        if (doublevertixup(dv, (dv.v2).magnet1)) {
+        std::vector<int> indices2 = nonCentralindex(dv, dv.v2);
+        if (doublevertixup(dv, indices2[0])) {
             // v2m1
-            detailed += doublevertixstrengthRelative(dv, (dv.v2).magnet1) * 1000;
+            detailed += doublevertixstrengthRelative(dv, indices2[0]) * 1000;
             // v2m2
-            detailed += doublevertixstrengthRelative(dv, (dv.v2).magnet2) * 10000;
+            detailed += doublevertixstrengthRelative(dv, indices2[1]) * 10000;
         }
         else {
             // v2m1
-            detailed += doublevertixstrengthRelative(dv, (dv.v2).magnet1) * 10000;
+            detailed += doublevertixstrengthRelative(dv, indices2[0]) * 10000;
             // v2m2
-            detailed += doublevertixstrengthRelative(dv, (dv.v2).magnet2) * 1000;
+            detailed += doublevertixstrengthRelative(dv, indices2[1]) * 1000;
         }
 
         return detailed;
@@ -322,24 +409,68 @@ public:
     }
 
     // orientation of face
-    int getFaceOrientaion(facemagnets fm)
+    std::vector<double> getFaceOrientaion(facemagnets fm)
+    {
+        // we can do it with vector product; seems elegant?
+        std::vector<double> scalarproducts;
+        size_t facesize = fm.doubleVertixVector.size();
+        for (size_t i = 0; i < facesize; ++i) {
+            double scalarp(0);
+            double P1N2 = (s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->position
+              - s.tab_ptr_Magnets[fm.doubleVertixVector[(i + 1) % facesize].centralmagnet]->positionN()).norme();
+            double P1S2 = (s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->position
+              - s.tab_ptr_Magnets[fm.doubleVertixVector[(i + 1) % facesize].centralmagnet]->positionS()).norme();
+            double N1N2 = (s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->positionN()
+              - s.tab_ptr_Magnets[fm.doubleVertixVector[(i + 1) % facesize].centralmagnet]->positionN()).norme();
+            double S1N2 = (s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->positionS()
+              - s.tab_ptr_Magnets[fm.doubleVertixVector[(i + 1) % facesize].centralmagnet]->positionN()).norme();
+            double S1S2 = (s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->positionS()
+              - s.tab_ptr_Magnets[fm.doubleVertixVector[(i + 1) % facesize].centralmagnet]->positionS()).norme();
+            double N1S2 = (s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->positionN()
+              - s.tab_ptr_Magnets[fm.doubleVertixVector[(i + 1) % facesize].centralmagnet]->positionS()).norme();
+            if (P1N2 > P1S2 and S1S2 > N1S2) { scalarp = 1; }
+
+            else if (P1S2 > P1N2 and N1N2 > S1N2) { scalarp = 1; }
+
+            scalarproducts.push_back(scalarp);
+        }
+        return scalarproducts;
+    } // getFaceOrientaion
+
+    int getFaceOrientaionN(facemagnets fm)
     {
         // we can do it with vector product; seems elegant?
         std::vector<double> scalarproducts;
         Vecteur3D barycenterofface(0, 0, 0);
         size_t facesize = fm.doubleVertixVector.size();
         for (size_t i = 0; i < facesize; ++i) {
-            double scalarp(s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->orientation()
-              * s.tab_ptr_Magnets[fm.doubleVertixVector[(i + 1) % facesize].centralmagnet]->orientation());
+            double scalarp(0);
+            double P1N2 = (s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->position
+              - s.tab_ptr_Magnets[fm.doubleVertixVector[(i + 1) % facesize].centralmagnet]->positionN()).norme();
+            double P1S2 = (s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->position
+              - s.tab_ptr_Magnets[fm.doubleVertixVector[(i + 1) % facesize].centralmagnet]->positionS()).norme();
+            double N1N2 = (s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->positionN()
+              - s.tab_ptr_Magnets[fm.doubleVertixVector[(i + 1) % facesize].centralmagnet]->positionN()).norme();
+            double S1N2 = (s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->positionS()
+              - s.tab_ptr_Magnets[fm.doubleVertixVector[(i + 1) % facesize].centralmagnet]->positionN()).norme();
+            double S1S2 = (s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->positionS()
+              - s.tab_ptr_Magnets[fm.doubleVertixVector[(i + 1) % facesize].centralmagnet]->positionS()).norme();
+            double N1S2 = (s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->positionN()
+              - s.tab_ptr_Magnets[fm.doubleVertixVector[(i + 1) % facesize].centralmagnet]->positionS()).norme();
+            if (P1N2 > P1S2 and S1S2 > N1S2) { scalarp = 1; }
+
+            else if (P1S2 > P1N2 and N1N2 > S1N2) { scalarp = 1; }
+
             scalarproducts.push_back(scalarp);
             barycenterofface += s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->position;
         }
+
         barycenterofface = barycenterofface / facesize;
         int streaksize     = 0;
         int maxstreaksize  = 1;
         int maxstreakindex = 0;
         for (size_t i = 0; i < 2 * scalarproducts.size(); ++i) {
-            if (scalarproducts[i % scalarproducts.size()] > 0) {
+            if (scalarproducts[i % scalarproducts.size()] == 1) {
                 streaksize += 1;
             }
 
@@ -348,7 +479,7 @@ public:
                 maxstreakindex = i;
             }
 
-            if (scalarproducts[i] < 0) {
+            if (scalarproducts[i % scalarproducts.size()] == 0) {
                 streaksize = 0;
             }
         }
@@ -359,10 +490,11 @@ public:
           ^ s.tab_ptr_Magnets[fm.doubleVertixVector[(maxstreakindex + 1) % facesize].centralmagnet]->orientation())
           * upwardorientation;
         if (orientation > 0) {
-            return maxstreaksize % (facesize + 1);
+            return maxstreaksize;
         }
         else {
-            return -1 * maxstreaksize % (facesize + 1);
+            return -1 * maxstreaksize;
+            // % (facesize + 1)
         }
     } // getFaceOrientaion
 };

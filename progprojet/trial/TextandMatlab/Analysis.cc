@@ -30,7 +30,7 @@ int main(int argc, char * argv[])
        Ftype = 5,4,3,2
      */
 
-    SystemeDodec SD;
+    SystemeDodec SD("evolve");
 
 
     // output files:
@@ -43,14 +43,13 @@ int main(int argc, char * argv[])
     //////Magnet: // Angle // Moment // Type
     string Magnet = outputPath + "Magnet";
     unique_ptr<ofstream> tfile0(new ofstream(Magnet.c_str()));
-    for (auto& m: SD.s.tab_ptr_Magnets){
-    *tfile0 << m->angle<<endl;}
+
     ///////VERTEX: // Angles (x3) // Energy
     // comments:  Oddoneout gives index of forced magnet
     string Vertex = outputPath + "Vertex";
     unique_ptr<ofstream> tfile1(new ofstream(Vertex.c_str()));
     for (auto& vm: SD.VM) {
-        *tfile1 <<  SD.vertixEnergy(vm) << " " << SD.Oddoneout(vm) << endl;
+        *tfile1 << SD.vertixEnergy(vm) << " " << SD.Oddoneout(vm) << endl;
     }
 
     ////DOUBLE VERTEX: // Angles (x5) // Energy // type
@@ -60,7 +59,10 @@ int main(int argc, char * argv[])
     string DVertex = outputPath + "DVertex";
     unique_ptr<ofstream> tfile2(new ofstream(DVertex.c_str()));
     for (auto& dv: SD.DV) {
-        *tfile2 << dv.centralmagnet << " " << SD.doublevertixEnergy(dv) << " " << SD.doublevertixstrengthDetailed(dv)
+        *tfile2 << dv.centralmagnet << " " << SD.doublevertixEnergy(dv) << " "
+                << SD.doublevertixstrengthDetailed(dv)
+                << " " << dv.v1.magnet1 << " " << dv.v1.magnet2 << " " << dv.v1.magnet3
+                << " " << dv.v2.magnet1 << " " << dv.v2.magnet2 << " " << dv.v2.magnet3
                 << endl;
     }
 
@@ -71,9 +73,12 @@ int main(int argc, char * argv[])
     unique_ptr<ofstream> tfile3(new ofstream(Face.c_str()));
     for (auto& fm: SD.FM) {
         for (auto& dv: fm.doubleVertixVector) {
-            *tfile3 << SD.doublevertixstrengthDetailed(dv) << " ";
+            *tfile3 << dv.centralmagnet << " ";
         }
-        *tfile3 << SD.getFaceOrientaion(fm) << " " << SD.faceEnergy(fm) << " ";
+        std::vector<double> v = SD.getFaceOrientaion(fm);
+        *tfile3 << "FACE ORIENTATION:" << v[0] << " " << v[1] << " " << v[2] << " " << v[3] << " " << v[4] << " "
+                << "FO#: " << SD.getFaceOrientaionN(fm) << " "
+                << SD.faceEnergy(fm) << " ";
         *tfile3 << endl;
     }
 

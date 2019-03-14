@@ -1,5 +1,5 @@
 QMAKE_CXXFLAGS += -std=c++11
-
+CONFIG+=configA
 configT{
 TARGET = simulationt
 SOURCES += \
