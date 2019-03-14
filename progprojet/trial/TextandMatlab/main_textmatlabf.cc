@@ -44,10 +44,18 @@ int main(int argc, char * argv[])
     double dt = 0.001;
     double timesim = 5;
 
-   //std::chrono::time_point<std::chrono::system_clock> currenttime = std::chrono::system_clock::now();
+    struct tm *newtime;
+ time_t ltime;
+
+/* Get the time in seconds */
+ time(&ltime);
+/* Convert it to the structure tm */
+ newtime = localtime(&ltime);
+
+     /* Print the local time as a string */
 
    //EVOLVE
-   string output = "evolve" ;//+ std::put_time(std::localtime(&currenttime), "%T");
+   string output = ("data/evolve/angles %s",asctime(newtime));
    unique_ptr<ofstream> tfile(new ofstream(output.c_str()));
    tfile->precision(20);
    SupportADessinTexte tsupport(*tfile);
@@ -57,7 +65,7 @@ int main(int argc, char * argv[])
 
 
    //EVOLVE1
-   string output1 = "evolve1" ;//+ std::put_time(std::localtime(&currenttime), "%T");
+   string output1 = ("data/evolve1/angles %s",asctime(newtime));
    unique_ptr<ofstream> tfile1(new ofstream(output1.c_str()));
    tfile1->precision(20);
    SupportADessinTexte tsupport1 = *tfile1;
@@ -66,7 +74,7 @@ int main(int argc, char * argv[])
    s.evolue1(dt, timesim,1,1);
 
    //EVOLVE2
-   string output2 = "evolve2";// + std::put_time(std::localtime(&currenttime), "%T");
+   string output2 = ("data/evolve2/angles %s",asctime(newtime));
    unique_ptr<ofstream> tfile2(new ofstream(output2.c_str()));
    tfile2->precision(20);
    SupportADessinTexte tsupport2 = *tfile2;
@@ -74,7 +82,8 @@ int main(int argc, char * argv[])
    s.randominitial();
    s.evolue2(dt, timesim,1,1);
 
-    // output text file:
+
+
 
 
     // namefile with time

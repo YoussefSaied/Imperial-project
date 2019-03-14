@@ -25,15 +25,15 @@ set(groot, 'defaultAxesFontSize', 18);
 
 
 %system
-s = load('data/system');
-s_Aabs = sum(abs(s(:,:,1:30)))
-s_A = sum(s(:,:,1:30))
-s_E = s(:,:,31);
-s_C = s(:,:,32); %maybe need a couple of different correlations
+s = load('data/evolve/angles'); %nx(T,E,C,ax30)
+s_Aabs = sum(abs(s(:,4:33)));
+s_A = sum(s(:,4:33));
+s_E = s(:,3);
+s_C = s(:,2); %maybe need a couple of different correlations
 
 %magnets
-m = load('data/magnets'); %shape:(nsimul)x(30)x(angle,type)
-nsimul = length(m(:,,1,1));
+m = load('data/evolve/magnets'); %nx30x(a,T)
+nsimul = length(m(:,1,1));
 m_A = m(:,:,1);
 m_T = m(:,:,2);
 
@@ -41,20 +41,17 @@ m_ff_A = [];
 m_fw_A = [];
 m_ww_A = [];
 
-for i in 1:nsimul
-  for j in 1:30
+for i = 1:nsimul
+  for j = 1:30
     if m_T(i,j) == 3 %strong
-      m_ff_A = [m_ff_A,m_A(i,j)]
-      end
+      m_ff_A = [m_ff_A,m_A(i,j)];
     elseif m_T(i,j) == 2 %strong-weak
-      m_fw_A = [m_fw_A,m_A(i,j)]
-      end
+      m_fw_A = [m_fw_A,m_A(i,j)];
     elseif m_T(i,j) == 1 %strong-weak
-      m_fw_A = [m_fw_A,m_A(i,j)]
-      end
+      m_fw_A = [m_fw_A,m_A(i,j)];
     elseif m_T(i,j) == 0 %weak
-      m_ww_A = [m_ww_A,m_A(i,j)]
-      end
+      m_ww_A = [m_ww_A,m_A(i,j)];
+    end
   end
 end
 

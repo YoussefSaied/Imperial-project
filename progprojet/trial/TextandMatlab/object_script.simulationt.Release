@@ -1,5 +1,5 @@
 INPUT(
-./release\main_textmatlab.o
+./release\main_textmatlabf.o
 ./release\SupportADessinTexte.o
 ./release\Systeme.o
 ./release\Aleatoire.o

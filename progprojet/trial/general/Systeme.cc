@@ -86,11 +86,11 @@ ostream& Systeme:: display(ostream& c) const
         c << KineticEnergy << " ";
         c << endl;
     } else {
-        c << time;
+        c << time<<" ";
+        c << Energy()<<" ";
+        c<< NearestCorrelation()<<" ";
         for (auto& g: tab_ptr_Magnets) {
-            c << " " << g->angle << " ";
-        }
-        // c << Energy();
+            c << g->angle << " ";}
         c << endl;
     }
     return c;
