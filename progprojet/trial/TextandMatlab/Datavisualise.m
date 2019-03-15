@@ -47,15 +47,7 @@ xlabel('cor');
 ylabel('E');
 
 %magnets
-<<<<<<< HEAD
 m = load('data/evolve/magnets'); %nx30x(a,T)
-=======
-load('data/evolve/magnets'); %nx30x(a,T)
-<<<<<<< HEAD
-m = reshape(magnets,[250,30,2]);
-=======
-m = magnets;
->>>>>>> master
 >>>>>>> d5278a81b3f4ba557433304dc882b78508e7333a
 m_A = m(:,:,1);
 m_T = m(:,:,2);
@@ -76,7 +68,7 @@ for i = 1:nsimul
     if ms == 3 %strong
       m_ff_A(i*j,1) = m_A(i,j);
       m_ff_A(i*j,2) = q;
-    elseif ms == 2 %strong-weak 
+    elseif ms == 2 %strong-weak
      m_fw_A(i*j,1) = m_A(i,j);
       m_fw_A(i*j,2) = q;
     elseif ms == 1 %strong-weak
@@ -84,14 +76,7 @@ for i = 1:nsimul
       m_fw_A(i*j,2) = q;
     elseif ms == 0 %weak
       m_ww_A(i,j) = m_A(i,j);
-<<<<<<< HEAD
-      
-=======
-<<<<<<< HEAD
-=======
-  %  elseif m_T(i,j) == 
->>>>>>> master
->>>>>>> d5278a81b3f4ba557433304dc882b78508e7333a
+
     end
   end
 end
@@ -102,7 +87,7 @@ for i = 1:length(x)
     if x(i,1) == 0
         x(i,:) = 0;
     end
-    x(i,1) = mod(x(i,1),pi);   
+    x(i,1) = mod(x(i,1),pi);
     if x(i,1)>pi/2
         q = x(i,1);
         x(i,1) = pi - q;
@@ -122,7 +107,7 @@ for i = 1:length(x)
                 count = count+1;
             end
             A(i,j) = x(i,1);
-        end  
+        end
     end
 end
 A(A==0) = nan;
@@ -147,7 +132,7 @@ grid on
 xlabel('angle');
 title('ww');
 
-%% 
+%%
 
 %vertices
 v = load('data/vertices'); %shape:(nsimul)x(20)x(anglex3,typex3,E)
