@@ -28,7 +28,7 @@ s_E = s(:,2);
 s_C = s(:,3); %maybe need a couple of different correlations
 
 %magnets
-%m = load('data/evolve/magnets'); %nx30x(a,T)
+m = load('data/evolve/magnets'); %nx30x(a,T)
 m_A = m(:,:,1);
 m_T = m(:,:,2);
 
@@ -48,7 +48,6 @@ for i = 1:nsimul
       m_fw_A(i,j) = m_A(i,j);
     elseif ms == 0 %weak
       m_ww_A(i,j) = m_A(i,j);
-    elseif m_T(i,j) == 
     end
   end
 end
