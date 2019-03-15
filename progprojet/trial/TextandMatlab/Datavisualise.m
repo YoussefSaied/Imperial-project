@@ -21,14 +21,31 @@ nsimul = 250;
 
 
 %system
-s = load('data/evolve/angles'); %nx(T,E,C,ax30)
-s_Aabs = sum(abs(s(:,4:33)));
-s_A = sum(s(:,4:33));
+load('data/evolve/angles'); %nx(T,E,C,ax30)
+s = angles;
+s_a = modpi(s(:,4:33));
+s_Aabs = sum(abs(s_a));
+s_A = sum(s_a);
 s_E = s(:,2);
 s_C = s(:,3); %maybe need a couple of different correlations
+figure
+histogram(s_E,10);
+grid on
+xlabel('energy');
+title('E');
+figure
+histogram(s_C,10);
+grid on
+xlabel('correlation');
+title('cor');
 
 %magnets
+<<<<<<< HEAD
 m = load('data/evolve/magnets'); %nx30x(a,T)
+=======
+load('data/evolve/magnets'); %nx30x(a,T)
+m = magnets;
+>>>>>>> master
 m_A = m(:,:,1);
 m_T = m(:,:,2);
 
@@ -48,37 +65,19 @@ for i = 1:nsimul
       m_fw_A(i,j) = m_A(i,j);
     elseif ms == 0 %weak
       m_ww_A(i,j) = m_A(i,j);
+<<<<<<< HEAD
+=======
+  %  elseif m_T(i,j) == 
+>>>>>>> master
     end
   end
 end
 
-m_ff_A = m_ff_A(m_ff_A ~= 0);
-m_ff_A = mod(m_ff_A,pi);
-for i = 1:length(m_ff_A)
-    if m_ff_A(i)>pi/2
-        q = m_ff_A(i);
-        m_ff_A(i) = pi - q;
-    end
-end
-m_ff_A = mod(m_ff_A,pi);
-m_fw_A = m_fw_A(m_fw_A ~= 0);
-m_fw_A = mod(m_fw_A,pi);
-for i = 1:length(m_fw_A)
-    if m_fw_A(i)>pi/2
-        q = m_fw_A(i);
-        m_fw_A(i) = pi - q;
-    end
-end
-m_fw_A = mod(m_fw_A,pi);
-m_ww_A = m_ww_A(m_ww_A ~= 0);
-m_ww_A = mod(m_ww_A,pi);
-for i = 1:length(m_ww_A)
-    if m_ww_A(i)>pi/2
-        q = m_ww_A(i);
-        m_ww_A(i) = pi - q;
-    end
-end
-m_ww_A = mod(m_ww_A,pi);
+
+m_ff_A = modpi(m_ff_A);
+m_fw_A = modpi(m_fw_A);
+m_ww_A = modpi(m_ww_A);
+
 figure
 hist(m_ff_A);
 grid on
@@ -140,3 +139,17 @@ f_O = f(:,:,12);
 
 %think of good way to visualise frequency of face types, eg
 %12 faces, each with one of four configs. Easiest is freq: number of perf faces
+
+
+function y = modpi(x)
+    x = x(x ~= 0);
+    x = mod(x,pi);
+    for i = 1:length(x)
+    if x(i)>pi/2
+        q = x(i);
+        x(i) = pi - q;
+    end
+    end
+    x = mod(x,pi);
+    y = x;
+end
