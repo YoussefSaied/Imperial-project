@@ -13,11 +13,12 @@ evolve = load('data/evolve/angles'); %time, energy, cor, anglesx30
 magnets = zeros(nsimul,30,2); %angle, type
 vertices = zeros(nsimul,20,2); %,energy, oddoneout
 doublevertices = zeros(nsimul,30,3); %centralmag_index, energy, strengthdet
-faces = zeros(nsimul,12,12); %index5,orientation,energy,
+faces = zeros(nsimul,12,10); %index5,orientation,energy,
 for i = 1:nsimul
+    tic
   angles = evolve(i,4:33);
   magnets(i,:,1) = angles;
-  dlmwrite('finalangles.in',angles,'delimiter',' ');
+  dlmwrite('finalangles',angles,'delimiter',' ');
   system('/mnt/Shared/EPFL/BA5/project/progprojet/trial/TextandMatlab/Analysis');
   %should create 4 temp files: Magnet, Vertex, DVertex, Faceparameters
   tempvertex = load('temp/Vertex');
@@ -31,6 +32,7 @@ for i = 1:nsimul
   vertices(i,:,:) = tempvertex;
   doublevertices(i,:,:) = tempdvertex(:,1:3);
   faces(i,:,:) = tempface;
+  toc
 end
 
 save('data/evolve/magnets','magnets')
@@ -52,7 +54,7 @@ for i = 1:nsimul
   dlmwrite('finalangles.in',angles,'delimiter',' ');
   system('debug/Analysis');
   %should create 4 temp files: Magnet, Vertex, DVertex, Faceparameters
-  tempmagnet = load('Magnet');
+  %tempmagnet = load('Magnet');
   tempvertex = load('Vertex');
   tempdvertex = load('DVertex');
   tempface = load('Faceparameters');
@@ -84,7 +86,7 @@ for i = 1:nsimul
   dlmwrite('finalangles.in',angles,'delimiter',' ');
   system('debug/Analysis');
   %should create 4 temp files: Magnet, Vertex, DVertex, Faceparameters
-  tempmagnet = load('Magnet');
+  %tempmagnet = load('Magnet');
   tempvertex = load('Vertex');
   tempdvertex = load('DVertex');
   tempface = load('Faceparameters');

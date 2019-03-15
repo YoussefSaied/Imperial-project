@@ -497,4 +497,18 @@ public:
             // % (facesize + 1)
         }
     } // getFaceOrientaion
+
+    int numberoftype(facemagnets fm, int type)
+    {
+        int numberoftype = 0;
+        for (auto& dv :fm.doubleVertixVector) {
+            int str = doublevertixstrength(dv);
+            if ((type == 1) and (str == 1 or str == 2 )) { numberoftype++; }
+
+            if ((type == 2) and (str == 3 )) { numberoftype++; }
+
+            if ((type == 0) and (str == 0 )) { numberoftype++; }
+        }
+        return numberoftype;
+    }
 };

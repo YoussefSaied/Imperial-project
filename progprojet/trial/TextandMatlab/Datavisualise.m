@@ -40,12 +40,10 @@ xlabel('correlation');
 title('cor');
 
 %magnets
-<<<<<<< HEAD
-m = load('data/evolve/magnets'); %nx30x(a,T)
-=======
+
 load('data/evolve/magnets'); %nx30x(a,T)
 m = magnets;
->>>>>>> master
+
 m_A = m(:,:,1);
 m_T = m(:,:,2);
 
@@ -65,10 +63,6 @@ for i = 1:nsimul
       m_fw_A(i,j) = m_A(i,j);
     elseif ms == 0 %weak
       m_ww_A(i,j) = m_A(i,j);
-<<<<<<< HEAD
-=======
-  %  elseif m_T(i,j) == 
->>>>>>> master
     end
   end
 end
@@ -93,6 +87,22 @@ hist(m_ww_A);
 grid on
 xlabel('angle');
 title('ww');
+
+
+%Youssef:
+
+load('data/evolve/faces'); %n*12*(central magnets, numberoftypes, face orientation, Energy)
+f= reshape(faces, [12*250,10]);
+%face energy:
+%fe= f(:,:,)
+figure
+grid on
+xlabel('Faceorientation');
+ylabel('Energy')
+title('Energy and orientation');
+hist([f(:,6),f(:,9)])
+
+
 
 %% 
 
