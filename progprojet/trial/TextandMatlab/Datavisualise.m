@@ -47,8 +47,16 @@ xlabel('cor');
 ylabel('E');
 
 %magnets
+<<<<<<< HEAD
+m = load('data/evolve/magnets'); %nx30x(a,T)
+=======
 load('data/evolve/magnets'); %nx30x(a,T)
+<<<<<<< HEAD
 m = reshape(magnets,[250,30,2]);
+=======
+m = magnets;
+>>>>>>> master
+>>>>>>> d5278a81b3f4ba557433304dc882b78508e7333a
 m_A = m(:,:,1);
 m_T = m(:,:,2);
 
@@ -76,7 +84,14 @@ for i = 1:nsimul
       m_fw_A(i*j,2) = q;
     elseif ms == 0 %weak
       m_ww_A(i,j) = m_A(i,j);
+<<<<<<< HEAD
       
+=======
+<<<<<<< HEAD
+=======
+  %  elseif m_T(i,j) == 
+>>>>>>> master
+>>>>>>> d5278a81b3f4ba557433304dc882b78508e7333a
     end
   end
 end

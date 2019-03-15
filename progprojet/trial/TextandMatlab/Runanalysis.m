@@ -21,7 +21,7 @@ for i = 1:nsimul
   magnets(i,:,1) = angles;
   dlmwrite('finalangles',angles,'delimiter',' ');
   eval(sprintf('!%s',executable));
-  
+
   %should create 4 temp files: Magnet, Vertex, DVertex, Faceparameters
   tempvertex = load('temp/Vertex');
   tempdvertex = load('temp/DVertex');
@@ -104,12 +104,3 @@ save('data/evolve2/magnets','magnets')
 save('data/evolve2/vertices','vertices')
 save('data/evolve2/doublevertices','doublevertices')
 save('data/evolve2/faces','faces')
-
-
-
-    
-
-
-
-
-
