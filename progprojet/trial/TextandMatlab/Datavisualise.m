@@ -132,6 +132,22 @@ grid on
 xlabel('angle');
 title('ww');
 
+
+%Youssef:
+
+load('data/evolve/faces'); %n*12*(central magnets, numberoftypes, face orientation, Energy)
+f= reshape(faces, [12*250,10]);
+%face energy:
+%fe= f(:,:,)
+figure
+grid on
+xlabel('Faceorientation');
+ylabel('Energy')
+title('Energy and orientation');
+hist([f(:,6),f(:,9)])
+
+
+
 %%
 
 %vertices
