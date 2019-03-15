@@ -52,21 +52,28 @@ m = reshape(magnets,[250,30,2]);
 m_A = m(:,:,1);
 m_T = m(:,:,2);
 
-m_ff_A = zeros((250*30,2)); %11411, 12411, 12421,
-m_fw_A = zeros(size(m_A));
+m_ff_A = zeros(250*30,2); %11411, 12411, 12421, (angle,type)
+m_fw_A = zeros(250*30,2);
 m_ww_A = zeros(size(m_A));
 m_fff_A = zeros(size(m_A));
 
 for i = 1:nsimul
   for j = 1:30
-      ms = int16(mod(m_T(i,j),1000)/100) - 1;
       q = m_T(i,j);
+      m1 = int16(q/10000);
+      m2 = int16(mod(q,10000)/1000);
+      m3 = int16(mod(q,1000)/100);
+      m4 = int16(mod(q,10000)/10);
+      m5 = int16(mod(q,10));
     if ms == 3 %strong
-      m_ff_A(i,j) = m_A(i,j);
+      m_ff_A(i*j,1) = m_A(i,j);
+      m_ff_A(i*j,2) = q;
     elseif ms == 2 %strong-weak 
-      m_fw_A(i,j) =  m_A(i,j);
+     m_fw_A(i*j,1) = m_A(i,j);
+      m_fw_A(i*j,2) = q;
     elseif ms == 1 %strong-weak
-      m_fw_A(i,j) = m_A(i,j);
+     m_fw_A(i*j,1) = m_A(i,j);
+      m_fw_A(i*j,2) = q;
     elseif ms == 0 %weak
       m_ww_A(i,j) = m_A(i,j);
       
@@ -74,16 +81,46 @@ for i = 1:nsimul
   end
 end
 
+x = m_ff_A;
 
-m_ff_A = modpi(m_ff_A);
+for i = 1:length(x)
+    if x(i,1) == 0
+        x(i,:) = 0;
+    end
+    x(i,1) = mod(x(i,1),pi);   
+    if x(i,1)>pi/2
+        q = x(i,1);
+        x(i,1) = pi - q;
+        x(i,1) = mod(x(i,1),pi);
+    end
+
+end
+
+C = unique(x(:,2));
+A = zeros(length(x),length(C));
+A = A*nan;
+count = 0;
+for i = 1:length(x)
+    for j = 1:length(C)
+        if x(i,2) == C(j)
+            if C(j) == 11411
+                count = count+1;
+            end
+            A(i,j) = x(i,1);
+        end  
+    end
+end
+A(A==0) = nan;
 m_fw_A = modpi(m_fw_A);
 m_ww_A = modpi(m_ww_A);
 
 figure
-histogram(m_ff_A,30);
+hist(A(:,2:length(C)));
+colormap jet
 grid on
 xlabel('angle');
 title('ff');
+legend(num2str(C(2:length(C))));
 figure
 histogram(m_fw_A,30);
 grid on
