@@ -1,10 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE QtCreatorProject>
-<<<<<<< HEAD
 <!-- Written by QtCreator 4.8.0, 2019-03-13T17:36:55. -->
-=======
-<!-- Written by QtCreator 4.2.1, 2019-03-13T20:16:24. -->
->>>>>>> 5040a88995b2f22abb9300c18e349161e303180a
 <qtcreator>
  <data>
   <variable>EnvironmentId</variable>
@@ -453,19 +449,9 @@
     <valuelist type="QVariantList" key="PE.EnvironmentAspect.Changes"/>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DefaultDisplayName">Qt_GL</value>
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.DisplayName"></value>
-<<<<<<< HEAD
     <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:C:/Users/arjun/Documents/GitHub/Imperial-project/progprojet/trial/Qt_GL/Qt_GL.pro</value>
     <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">Qt_GL/Qt_GL.pro</value>
     <value type="QString" key="RunConfiguration.Arguments"></value>
-=======
-    <value type="QString" key="ProjectExplorer.ProjectConfiguration.Id">Qt4ProjectManager.Qt4RunConfiguration:/mnt/Shared/EPFL/BA5/project/progprojet/trial/Qt_GL/Qt_GL.pro</value>
-    <value type="bool" key="QmakeProjectManager.QmakeRunConfiguration.UseLibrarySearchPath">true</value>
-    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.CommandLineArguments"></value>
-    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.ProFile">Qt_GL/Qt_GL.pro</value>
-    <value type="bool" key="Qt4ProjectManager.Qt4RunConfiguration.UseDyldImageSuffix">false</value>
-    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.UserWorkingDirectory"></value>
-    <value type="QString" key="Qt4ProjectManager.Qt4RunConfiguration.UserWorkingDirectory.default">/mnt/Shared/EPFL/BA5/project/progprojet/trial/Qt_GL</value>
->>>>>>> 5040a88995b2f22abb9300c18e349161e303180a
     <value type="uint" key="RunConfiguration.QmlDebugServerPort">3768</value>
     <value type="bool" key="RunConfiguration.UseCppDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseCppDebuggerAuto">true</value>
@@ -473,11 +459,8 @@
     <value type="bool" key="RunConfiguration.UseMultiProcess">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebugger">false</value>
     <value type="bool" key="RunConfiguration.UseQmlDebuggerAuto">true</value>
-<<<<<<< HEAD
     <value type="QString" key="RunConfiguration.WorkingDirectory"></value>
     <value type="QString" key="RunConfiguration.WorkingDirectory.default">C:/Users/arjun/Documents/GitHub/Imperial-project/progprojet/build-simulation1-Desktop_Qt_5_8_0_MinGW_32bit-Debug/Qt_GL</value>
-=======
->>>>>>> 5040a88995b2f22abb9300c18e349161e303180a
    </valuemap>
    <value type="int" key="ProjectExplorer.Target.RunConfigurationCount">1</value>
   </valuemap>

@@ -34,7 +34,7 @@ int main(int argc, char * argv[])
 
 
     // output files:
-    string outputPath;
+    string outputPath = "temp/";
     if (argc > 1) { // Fichier d'output specifie par l'utilisateur ("./Exercice8 config_perso.in")
         outputPath = argv[1];
     }
@@ -76,8 +76,8 @@ int main(int argc, char * argv[])
             *tfile3 << dv.centralmagnet << " ";
         }
         std::vector<double> v = SD.getFaceOrientaion(fm);
-        *tfile3 << "FACE ORIENTATION:" << v[0] << " " << v[1] << " " << v[2] << " " << v[3] << " " << v[4] << " "
-                << "FO#: " << SD.getFaceOrientaionN(fm) << " "
+        *tfile3 << v[0] << " " << v[1] << " " << v[2] << " " << v[3] << " " << v[4] << " "
+                << SD.getFaceOrientaionN(fm) << " "
                 << SD.faceEnergy(fm) << " ";
         *tfile3 << endl;
     }

@@ -40,11 +40,11 @@ int main(int argc, char * argv[])
             s.addMagnet(M);
         }
     }
-    s.setfriction(3);
-    double dt = 0.001;
-    double timesim = 5;
-
-    struct tm *newtime;
+s.setfriction(3);
+double dt = 0.001;
+double timesim = 5;
+int nsimul = 250;
+struct tm *newtime;
  time_t ltime;
 
 /* Get the time in seconds */
@@ -55,37 +55,40 @@ int main(int argc, char * argv[])
      /* Print the local time as a string */
 
    //EVOLVE
-   string output = ("data/evolve/angles %s",asctime(newtime));
+   int i;
+   string output = ("angles");// %s",asctime(newtime));
    unique_ptr<ofstream> tfile(new ofstream(output.c_str()));
    tfile->precision(20);
    SupportADessinTexte tsupport(*tfile);
    s.set_support(&tsupport);
+   for (i = 0; i < nsimul; i++){
    s.randominitial();
    s.evolue(dt, timesim,1,1);
-
+}
 
    //EVOLVE1
-   string output1 = ("data/evolve1/angles %s",asctime(newtime));
+   int j;
+   string output1 = ("angles1");// %s",asctime(newtime));
    unique_ptr<ofstream> tfile1(new ofstream(output1.c_str()));
    tfile1->precision(20);
    SupportADessinTexte tsupport1 = *tfile1;
    s.set_support(&tsupport1);
+
+   for (j = 0; j < nsimul; j++){
    s.randominitial();
    s.evolue1(dt, timesim,1,1);
-
+}
    //EVOLVE2
-   string output2 = ("data/evolve2/angles %s",asctime(newtime));
+   int k;
+   string output2 = ("angles2");// %s",asctime(newtime));
    unique_ptr<ofstream> tfile2(new ofstream(output2.c_str()));
    tfile2->precision(20);
    SupportADessinTexte tsupport2 = *tfile2;
    s.set_support(&tsupport2);
+   for (k = 0; k < nsimul; k++){
    s.randominitial();
    s.evolue2(dt, timesim,1,1);
-
-
-
-
-
+}
     // namefile with time
     // run sim. with evolve1 and evolve2
 

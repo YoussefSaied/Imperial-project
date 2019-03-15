@@ -223,6 +223,7 @@ void Systeme:: evolue(double dt, double t, bool d, bool final)
     }
     if (d and final) {
         dessine();
+        time = 0;
     }
 }
 
@@ -304,6 +305,7 @@ void Systeme:: evolue1(double dt, double t, bool d, bool final)
     }
     if (d and final) {
         dessine();
+        time = 0;
     }
 }
 
@@ -390,6 +392,7 @@ void Systeme:: evolue2(double dt, double t, bool d, bool final)
     }
     if (d and final) {
         dessine();
+        time = 0;
     }
 }
 

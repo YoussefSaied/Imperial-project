@@ -5,7 +5,7 @@
 %4. indices
 
 %has to be named correctly.. include time
-nsimul = 1;
+nsimul = 250;
 
 %% EVOLVE
 
@@ -13,30 +13,31 @@ evolve = load('data/evolve/angles'); %time, energy, cor, anglesx30
 magnets = zeros(nsimul,30,2); %angle, type
 vertices = zeros(nsimul,20,2); %,energy, oddoneout
 doublevertices = zeros(nsimul,30,3); %centralmag_index, energy, strengthdet
-faces = zeros(nsimul,12,7); %index5,orientation,energy,
+faces = zeros(nsimul,12,12); %index5,orientation,energy,
 for i = 1:nsimul
   angles = evolve(i,4:33);
   magnets(i,:,1) = angles;
   dlmwrite('finalangles.in',angles,'delimiter',' ');
-  system('debug/Analysis');
+  system('Analysis');
   %should create 4 temp files: Magnet, Vertex, DVertex, Faceparameters
-  tempmagnet = load('Magnet');
-  tempvertex = load('Vertex');
-  tempdvertex = load('DVertex');
-  tempface = load('Faceparameters');
+  tempvertex = load('temp/Vertex');
+  tempdvertex = load('temp/DVertex');
+  tempface = load('temp/Faceparameters');
   for j = 1:30
-      k = tempdvertex(j,1); %index cm
+      k = tempdvertex(j,1)+1; %index cm
       type = tempdvertex(j,3); %type
       magnets(i,k,2) = type;
   end
   vertices(i,:,:) = tempvertex;
-  doublevertices(i,:,:) = tempdvertex;
+  doublevertices(i,:,:) = tempdvertex(:,1:3);
   faces(i,:,:) = tempface;
 end
-save('data/evolve/magnets','magnets')
-save('data/evolve/vertices','vertices')
-save('data/evolve/doublevertices','doublevertices')
-save('data/evolve/faces','faces')
+
+dlmwrite('data/evolve/magnets',magnets,'delimiter',' ');
+dlmwrite('data/evolve/vertices',vertices,'delimiter',' ');
+dlmwrite('data/evolve/doublevertices',doublevertices,'delimiter',' ');
+dlmwrite('data/evolve/faces',faces,'delimiter',' ');
+
 
 %% EVOLVE1
 

@@ -35,7 +35,6 @@ m_T = m(:,:,2);
 m_ff_A = zeros(size(m_A));
 m_fw_A = zeros(size(m_A));
 m_ww_A = zeros(size(m_A));
-m_fff_A = zeros(size(m_A));
 
 for i = 1:nsimul
   for j = 1:30
@@ -48,7 +47,6 @@ for i = 1:nsimul
       m_fw_A(i,j) = m_A(i,j);
     elseif ms == 0 %weak
       m_ww_A(i,j) = m_A(i,j);
-    elseif m_T(i,j) == 
     end
   end
 end
@@ -81,20 +79,11 @@ for i = 1:length(m_ww_A)
 end
 m_ww_A = mod(m_ww_A,pi);
 figure
+x = linspace(0,10,length(m_ff_A));
 hist(m_ff_A);
 grid on
-xlabel('angle');
-title('ff');
-figure
-hist(m_fw_A);
-grid on
-xlabel('angle');
-title('fw');
-figure
-hist(m_ww_A);
-grid on
-xlabel('angle');
-title('ww');
+ylabel('angle');
+
 
 %% 
 
