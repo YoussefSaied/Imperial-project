@@ -24,7 +24,7 @@ nsimul = 250;
 load('data/evolve/angles'); %nx(T,E,C,ax30)
 s = angles;
 s_a = modpi(s(:,4:33));
-s_Aabs = sum(abs(s_a));
+%s_Aabs = sum(abs(s_a),);
 s_A = sum(s_a);
 s_E = s(:,2);
 s_C = s(:,3); %maybe need a couple of different correlations
@@ -38,14 +38,21 @@ histogram(s_C,10);
 grid on
 xlabel('correlation');
 title('cor');
+figure
+hold on
+scatter(s_C,s_E);
+R = corrcoef(s_C,s_E);
+grid on
+xlabel('cor');
+ylabel('E');
 
 %magnets
 load('data/evolve/magnets'); %nx30x(a,T)
-m = magnets;
+m = reshape(magnets,[250,30,2]);
 m_A = m(:,:,1);
 m_T = m(:,:,2);
 
-m_ff_A = zeros(size(m_A));
+m_ff_A = zeros(250*30,2); %11411, 12411, 12421, (angle,type)
 m_fw_A = zeros(size(m_A));
 m_ww_A = zeros(size(m_A));
 m_fff_A = zeros(size(m_A));
@@ -53,15 +60,17 @@ m_fff_A = zeros(size(m_A));
 for i = 1:nsimul
   for j = 1:30
       ms = int16(mod(m_T(i,j),1000)/100) - 1;
+      q = m_T(i,j);
     if ms == 3 %strong
-      m_ff_A(i,j) = m_A(i,j);
+      m_ff_A(i*j,1) = m_A(i,j);
+      m_ff_A(i*j,2) = m_T(i,j);
     elseif ms == 2 %strong-weak 
       m_fw_A(i,j) =  m_A(i,j);
     elseif ms == 1 %strong-weak
       m_fw_A(i,j) = m_A(i,j);
     elseif ms == 0 %weak
       m_ww_A(i,j) = m_A(i,j);
-  %  elseif m_T(i,j) == 
+      
     end
   end
 end
@@ -72,17 +81,17 @@ m_fw_A = modpi(m_fw_A);
 m_ww_A = modpi(m_ww_A);
 
 figure
-hist(m_ff_A);
+histogram(m_ff_A,30);
 grid on
 xlabel('angle');
 title('ff');
 figure
-hist(m_fw_A);
+histogram(m_fw_A,30);
 grid on
 xlabel('angle');
 title('fw');
 figure
-hist(m_ww_A);
+histogram(m_ww_A,30);
 grid on
 xlabel('angle');
 title('ww');
@@ -135,7 +144,7 @@ f_O = f(:,:,12);
 
 
 function y = modpi(x)
-    x = x(x ~= 0);
+     x = x(x ~= 0);
     x = mod(x,pi);
     for i = 1:length(x)
     if x(i)>pi/2

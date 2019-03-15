@@ -30,7 +30,7 @@ int main(int argc, char * argv[])
        Ftype = 5,4,3,2
      */
 
-    SystemeDodec SD("evolve");
+    SystemeDodec SD("finalangles");
 
 
     // output files:
