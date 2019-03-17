@@ -140,7 +140,6 @@ load('data/evolve/faces'); %n*12*(central magnets, numberoftypes, face orientati
 f= zeros(12*nsimul,10);
 for i= 1:length(faces)
     for j = (i*12 -11): i*12
-        f(j,:) = faces(i,mod(j-1,12)+1,:);
     end
 end
 
@@ -268,7 +267,6 @@ for i =1:(length(faces))
     end
 end
 uniquepossibleconfigurations2 = unique(dodecstg2);
-
 %Dodec configuration and Energy
 C = uniquepossibleconfigurations2;
 A = zeros(length(angles),length(C));
@@ -282,13 +280,13 @@ for i = 1:length(angles)
 end
 
 figure
-hist(A(:,1:length(C)));
+hist(A(:,470:length(C)));
 colormap jet
 grid on
 xlabel('Energy');
 ylabel('Count')
 title('Energy - Dodec configuration');
-legend(num2str(C(1:length(C))));
+legend(num2str(C(470:length(C))));
 
 
 %% Youssef: Dodec types (with basic face types)
@@ -710,70 +708,6 @@ ylabel('Count')
 title('Orientation sum - Dodec type');
 lgd = legend(num2str(uniquepossibleconfigurationsd(1:length(uniquepossibleconfigurationsd))));
 title(lgd,'Dodec type')
-
-
-%% Youssef: Orientationsum Energy and FF
-
-Orientationsum2 = zeros(nsimul,1);
-for i = 1:length(dodecs)
-       d1 = floor(dodecs(i,1)/10);
-        d2 = int64(mod(dodecs(i,1),10));
-      d3 = floor(dodecs(i,2)/10);
-       d4 = int64(mod(dodecs(i,2),10));
-      d5 = floor(dodecs(i,3)/10);
-      d6 = int64(mod(dodecs(i,3),10));
-       d7 = floor(dodecs(i,4)/10);
-       d8 = int64(mod(dodecs(i,4),10));
-       Osum = (d1-d2)*5 + (d3-d4)*4 + (d5-d6)*3 + (d7-d8)*1;
-       Orientationsum2(i) = Osum;
-end
-
-C = unique(Orientationsum2);
-A = zeros(length(faces),length(C));
-A = A*nan;
-for i = 1:length(angles)
-    for j = 1:length(C)
-        if(Orientationsum2(i) == C(j))
-            A(i,j) =angles(i,2); 
-        end
-    end
-end
-
-figure
-hist(A);
-colormap jet
-grid on
-xlabel('Energy');
-ylabel('Count')
-title('Osum - Energy');
-lgd = legend(num2str(C(1:length(C))));
-title(lgd,'Osum')
-
-%FF-Osum
-C = unique(Orientationsum2);
-A = zeros(length(faces),length(C));
-A = A*nan;
-for i = 1:length(angles)
-    for j = 1:length(C)
-        if(Orientationsum2(i) == C(j))
-            tmp =0;
-            for l = 1:12
-                tmp = tmp + faces(i,l,8);
-            end
-            A(i,j) =tmp/2; 
-        end
-    end
-end
-
-figure
-hist(A);
-colormap jet
-grid on
-xlabel('FF');
-ylabel('Count')
-title('Osum - FF');
-lgd = legend(num2str(C(1:length(C))));
-title(lgd,'Osum')
 
 %% Youssef: moredetailed dodecconfig
 load('data/evolve/dodecs');
