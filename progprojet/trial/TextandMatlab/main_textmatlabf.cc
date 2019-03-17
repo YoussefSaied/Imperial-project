@@ -18,11 +18,11 @@
 
 using namespace std;
 
-int main(int argc, char * argv[])
+int main()
 {
     // intitial configuration:
     Systeme s;
-
+    std::cout.flush();
     Dodec dode(Vecteur3D(0, 0, 0), 3e-2, Vecteur3D(0, 0, 1.0), false);
     for (size_t i = 0; i < (dode.vertipositions()).size(); ++i) {
         size_t si = ((dode.vertipositions())[i]).size();
@@ -31,7 +31,7 @@ int main(int argc, char * argv[])
             Vecteur3D polaraxis = (dode.vertipositions())[i][j] - (dode.vertipositions())[i][(j + 1) % si];
             Vecteur3D v2        =
               ((dode.vertipositions())[i][(j + 1) % si] - (dode.vertipositions())[i][(j + 2) % si]);
-            Vecteur3D v3 = polaraxis ^ v2;
+            Vecteur3D v3  = polaraxis ^ v2;
             double alph1  = -1 * atan(2) / 2;
             Vecteur3D v4  = v3.rotate(alph1, polaraxis);
             Vecteur3D axe = (v4 ^ polaraxis).normalise();
@@ -40,55 +40,58 @@ int main(int argc, char * argv[])
             s.addMagnet(M);
         }
     }
-s.setfriction(3);
-double dt = 0.001;
-double timesim = 5;
-int nsimul = 250;
-struct tm *newtime;
- time_t ltime;
+    s.setfriction(3);
+    double dt      = 0.001;
+    double timesim = 7;
+    int nsimul     = 1000;
+    // struct tm * newtime;
+    // time_t ltime;
+    //
+    // /* Get the time in seconds */
+    // time(&ltime);
+    // /* Convert it to the structure tm */
+    // newtime = localtime(&ltime);
+    //
+    // /* Print the local time as a string */
 
-/* Get the time in seconds */
- time(&ltime);
-/* Convert it to the structure tm */
- newtime = localtime(&ltime);
+    // EVOLVE
+    int i;
+    string output = ("angles");// %s",asctime(newtime));
+    unique_ptr<ofstream> tfile(new ofstream(output.c_str()));
+    tfile->precision(20);
+    SupportADessinTexte tsupport(*tfile);
+    s.set_support(&tsupport);
+    for (i = 0; i < nsimul; i++) {
+        cout << i << "*";
+        s.randominitial();
+        s.evolue(dt, timesim, 1, 1);
+    }
 
-     /* Print the local time as a string */
+    // EVOLVE1
+    int j;
+    string output1 = ("angles1");// %s",asctime(newtime));
+    unique_ptr<ofstream> tfile1(new ofstream(output1.c_str()));
+    tfile1->precision(20);
+    SupportADessinTexte tsupport1(*tfile1);
+    s.set_support(&tsupport1);
 
-   //EVOLVE
-   int i;
-   string output = ("angles");// %s",asctime(newtime));
-   unique_ptr<ofstream> tfile(new ofstream(output.c_str()));
-   tfile->precision(20);
-   SupportADessinTexte tsupport(*tfile);
-   s.set_support(&tsupport);
-   for (i = 0; i < nsimul; i++){
-   s.randominitial();
-   s.evolue(dt, timesim,1,1);
-}
-
-   //EVOLVE1
-   int j;
-   string output1 = ("angles1");// %s",asctime(newtime));
-   unique_ptr<ofstream> tfile1(new ofstream(output1.c_str()));
-   tfile1->precision(20);
-   SupportADessinTexte tsupport1 = *tfile1;
-   s.set_support(&tsupport1);
-
-   for (j = 0; j < nsimul; j++){
-   s.randominitial();
-   s.evolue1(dt, timesim,1,1);
-}
-   //EVOLVE2
-   int k;
-   string output2 = ("angles2");// %s",asctime(newtime));
-   unique_ptr<ofstream> tfile2(new ofstream(output2.c_str()));
-   tfile2->precision(20);
-   SupportADessinTexte tsupport2 = *tfile2;
-   s.set_support(&tsupport2);
-   for (k = 0; k < nsimul; k++){
-   s.randominitial();
-   s.evolue2(dt, timesim,1,1);
-}
+    for (j = 0; j < nsimul; j++) {
+        s.randominitial();
+        s.evolue1(dt, timesim, 1, 1);
+        cout << i << "*";
+    }
+    // EVOLVE2
+    int k;
+    string output2 = ("angles2");// %s",asctime(newtime));
+    unique_ptr<ofstream> tfile2(new ofstream(output2.c_str()));
+    tfile2->precision(20);
+    SupportADessinTexte tsupport2(*tfile2);
+    s.set_support(&tsupport2);
+    for (k = 0; k < nsimul; k++) {
+        s.randominitial();
+        s.evolue2(dt, timesim, 1, 1);
+        cout << i << "*";
+    }
     // namefile with time
     // run sim. with evolve1 and evolve2
 
