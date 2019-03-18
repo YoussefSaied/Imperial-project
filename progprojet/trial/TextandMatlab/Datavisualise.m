@@ -84,7 +84,6 @@ m_fff_A = zeros(size(m_A));
 for i = 1:nsimul
   for j = 1:30
       q = m_T(i,j);
-
       m1 = int32(q/10000);
       m2 = int32(mod(q,10000)/1000);
       m3 = int32(mod(q,1000)/100);
@@ -849,7 +848,6 @@ for i = 1:length(dodecs)
         numberofFF =0;
         for l = 1:12
                 numberofFF = numberofFF + faces(i,l,6);
-
         end
         numberofFF = numberofFF/2;
         dodecstgdmore(i) = dodecstgdmore(i) + numberofFF*100000000;
@@ -940,8 +938,6 @@ v_E = v(:,:,1);
 
 figure
 histogram(v_E,20)
-
-
 
 %%
 %doublevertices
