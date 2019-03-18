@@ -20,63 +20,137 @@ nsimul = 250;
 %O = face orientation = 5,4,3,2
 
 
-%system
+%% system
 load('data/evolve/angles'); %nx(T,E,C,ax30)
 s = angles;
-s_a = modpi(s(:,4:33));
-%s_Aabs = sum(abs(s_a),);
-s_A = sum(s_a);
+s_a = s(:,4:33);
+for i = 1:nsimul
+    for j = 1:30
+        s_a(i,j) = mod(s_a(i,j),pi);
+    if s_a(i,j)>pi/2
+        q = s_a(i,j);
+        s_a(i,j) = pi - q;
+        s_a(i,j) = mod(s_a(i,j),pi);
+    end
+    end
+end
+s_Aabs = sum(abs(s_a),2);
+s_A = sum(s_a,2);
 s_E = s(:,2);
 s_C = s(:,3); %maybe need a couple of different correlations
-figure
+
+
+figure %histograms of energy, correlation & angle
+subplot(1,3,1)
 histogram(s_E,10);
 grid on
-xlabel('energy');
 title('E');
-figure
+subplot(1,3,2)
 histogram(s_C,10);
 grid on
-xlabel('correlation');
-title('cor');
-figure
+title('C');
+subplot(1,3,3)
+grid on
+%histogram(mod(s_Aabs,pi),100)
+histogram(s_Aabs,30)
+
+title('A')
+
+figure %scatter E vs C, E vs A
+subplot(1,2,1)
 hold on
 scatter(s_C,s_E);
 R = corrcoef(s_C,s_E);
 grid on
 xlabel('cor');
 ylabel('E');
-
-%magnets
-m = load('data/evolve/magnets'); %nx30x(a,T)
->>>>>>> d5278a81b3f4ba557433304dc882b78508e7333a
+subplot(1,2,2)
+hold on
+scatter(mod(s_Aabs,pi),s_E);
+grid on
+xlabel('angle')
+ylabel('E')
+%% magnets
+load('data/evolve/magnets'); %nx30x(a,T)
+m = reshape(magnets,[250,30,2]);
 m_A = m(:,:,1);
 m_T = m(:,:,2);
 
 m_ff_A = zeros(250*30,2); %11411, 12411, 12421, (angle,type)
 m_fw_A = zeros(250*30,2);
-m_ww_A = zeros(size(m_A));
+m_ww_A = zeros(250*30,2);
 m_fff_A = zeros(size(m_A));
 
 for i = 1:nsimul
   for j = 1:30
       q = m_T(i,j);
-      m1 = int16(q/10000);
-      m2 = int16(mod(q,10000)/1000);
-      m3 = int16(mod(q,1000)/100);
-      m4 = int16(mod(q,10000)/10);
-      m5 = int16(mod(q,10));
-    if ms == 3 %strong
-      m_ff_A(i*j,1) = m_A(i,j);
-      m_ff_A(i*j,2) = q;
-    elseif ms == 2 %strong-weak
-     m_fw_A(i*j,1) = m_A(i,j);
-      m_fw_A(i*j,2) = q;
-    elseif ms == 1 %strong-weak
-     m_fw_A(i*j,1) = m_A(i,j);
-      m_fw_A(i*j,2) = q;
-    elseif ms == 0 %weak
-      m_ww_A(i,j) = m_A(i,j);
+      m1 = int32(q/10000);
+      m2 = int32(mod(q,10000)/1000);
+      m3 = int32(mod(q,1000)/100);
+      m4 = int32(mod(q,100)/10);
+      m5 = int32(mod(q,10));
+      ms = [m1,m2,m3,m4,m5]; 
 
+    if m3 == 4 %strong
+      n3 = nnz(ms==3);
+      n2 = nnz(ms==2);
+      n1 = nnz(ms==1);
+      m_ff_A(i*j,1) = m_A(i,j);
+
+      if n2 == 3
+          m_ff_A(i*j,2) = 22421;
+      elseif n1 == 3
+          m_ff_A(i*j,2) = 11412;
+      elseif n1 == 2 && n2 == 2
+          if m1 == m2
+              m_ff_A(i*j,2) = 11422;
+          else
+              m_ff_A(i*j,2) = 12412;
+          end
+      else
+          m_ff_A(i*j,2) = q;
+      end
+   
+    elseif m3 == 3 %strong-weak
+     m_fw_A(i*j,1) = m_A(i,j);
+     m_fw_A(i*j,2) = q;
+    elseif m3 == 2 %strong-weak
+     m_fw_A(i*j,1) = m_A(i,j);
+     m_fw_A(i*j,2) = q;
+    elseif m3 == 1 %weak
+      ms(ms==3)=2;
+      q = 10000*ms(1)+ 1000*ms(2)+100*ms(3)+10*ms(4)+ms(5);
+      m_ww_A(i*j,1) = m_A(i,j);
+      n2 = nnz(ms==2);
+      n1 = nnz(ms==1);
+      n4 = nnz(ms==4);
+      if n2 == 3
+        if n1 == 2
+          m_ww_A(i*j,2) = 22121;
+        elseif n1 == 1
+          m_ww_A(i*j,2) = 22124;
+        end
+      elseif n1 == 3
+          if n4 == 0
+              m_ww_A(i*j,2) = 12121;
+          elseif n4 ==1
+              m_ww_A(i*j,2) = 14121;
+          else
+              m_ww_A(i*j,2) = 14141;
+          end
+      elseif m(1)==2 && m(2)==2
+           m_ww_A(i*j,2) = 22141;
+      elseif m(4)==2 && m(5)==2
+           m_ww_A(i*j,2) = 22141;      
+      elseif n4 == 2
+           m_ww_A(i*j,2) = 41124;
+      elseif n1==n2
+           m_ww_A(i*j,2) = 12124;
+
+
+      else  
+        m_ww_A(i*j,2) = q;
+     end
     end
   end
 end
@@ -111,8 +185,7 @@ for i = 1:length(x)
     end
 end
 A(A==0) = nan;
-m_fw_A = modpi(m_fw_A);
-m_ww_A = modpi(m_ww_A);
+
 
 figure
 hist(A(:,2:length(C)));
@@ -121,19 +194,11 @@ grid on
 xlabel('angle');
 title('ff');
 legend(num2str(C(2:length(C))));
-figure
-histogram(m_fw_A,30);
-grid on
-xlabel('angle');
-title('fw');
-figure
-histogram(m_ww_A,30);
-grid on
-xlabel('angle');
-title('ww');
+
 
 
 %Youssef:
+%% 
 
 load('data/evolve/faces'); %n*12*(central magnets, numberoftypes, face orientation, Energy)
 f= reshape(faces, [12*250,10]);
@@ -151,11 +216,17 @@ hist([f(:,6),f(:,9)])
 %%
 
 %vertices
-v = load('data/vertices'); %shape:(nsimul)x(20)x(anglex3,typex3,E)
-v_A = v(:,:,1:3);
-v_T = v(:,:,4:6);
-v_E = v(:,:,7);
+load('data/evolve/vertices'); %nx30x(a,T)
+v = reshape(vertices,[250,20,2]);%v_A = v(:,:,1:3);
+%v_T = v(:,:,4:6);
+v_E = v(:,:,1);
 
+figure
+histogram(v_E,20)
+
+
+
+%% 
 %doublevertices
 d = load('data/doublevertices'); %shape:(nsimul)x(30)x(anglex5,typex5,E)
 d_A = d(:,:,1:5);
@@ -195,15 +266,15 @@ f_O = f(:,:,12);
 %12 faces, each with one of four configs. Easiest is freq: number of perf faces
 
 
-function y = modpi(x)
-     x = x(x ~= 0);
-    x = mod(x,pi);
-    for i = 1:length(x)
-    if x(i)>pi/2
-        q = x(i);
-        x(i) = pi - q;
-    end
-    end
-    x = mod(x,pi);
-    y = x;
-end
+% function y = modpi(x)
+%      x = x(x ~= 0);
+%     x = mod(x,pi);
+%     for i = 1:length(x)
+%     if x(i)>pi/2
+%         q = x(i);
+%         x(i) = pi - q;
+%     end
+%     end
+%     x = mod(x,pi);
+%     y = x;
+% end

@@ -20,7 +20,7 @@ f = linspace(0.1,10,nsimul);
 %param = dt;
 
 paramstr = 'f';
-folder = '/evolve2_random/';
+folder = '/evolve_random/';
 param = f;
 %time - correlation - sum angle - energy - kinetic
 
