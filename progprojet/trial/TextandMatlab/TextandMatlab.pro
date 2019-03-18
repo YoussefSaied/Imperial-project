@@ -9,7 +9,11 @@ SOURCES += \
 
 configA{
 SOURCES += \
-		Analysis.cc
+    Analysis.cc
+
+HEADERS += \
+    Analysisclass.h
+
 TARGET = Analysis
 }
 
@@ -48,5 +52,4 @@ HEADERS += \
     ../general/Brique.h \
     ../general/Dodec.h \
     ../general/Sphere.h \
-    Analysisclass.h\
     ../general/Vecteur3D.h

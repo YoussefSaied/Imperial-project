@@ -7,7 +7,7 @@ set(groot, 'defaultAxesFontSize', 18);
 %%Analysis%%
 
 %%Unpack Data%%
-nsimul = 250;
+nsimul = 1000;
 %variable glossary:
 %E = energy
 %C = correlation
@@ -89,7 +89,7 @@ for i = 1:nsimul
       m3 = int32(mod(q,1000)/100);
       m4 = int32(mod(q,100)/10);
       m5 = int32(mod(q,10));
-      ms = [m1,m2,m3,m4,m5]; 
+      ms = [m1,m2,m3,m4,m5];
 
     if m3 == 4 %strong
       n3 = nnz(ms==3);
@@ -110,7 +110,7 @@ for i = 1:nsimul
       else
           m_ff_A(i*j,2) = q;
       end
-   
+
     elseif m3 == 3 %strong-weak
      m_fw_A(i*j,1) = m_A(i,j);
      m_fw_A(i*j,2) = q;
@@ -141,14 +141,14 @@ for i = 1:nsimul
       elseif m(1)==2 && m(2)==2
            m_ww_A(i*j,2) = 22141;
       elseif m(4)==2 && m(5)==2
-           m_ww_A(i*j,2) = 22141;      
+           m_ww_A(i*j,2) = 22141;
       elseif n4 == 2
            m_ww_A(i*j,2) = 41124;
       elseif n1==n2
            m_ww_A(i*j,2) = 12124;
 
 
-      else  
+      else
         m_ww_A(i*j,2) = q;
      end
     end
@@ -197,19 +197,546 @@ legend(num2str(C(2:length(C))));
 
 
 
-%Youssef:
-%% 
+%% Youssef: Face types
+
 
 load('data/evolve/faces'); %n*12*(central magnets, numberoftypes, face orientation, Energy)
-f= reshape(faces, [12*250,10]);
+f= reshape(faces, [12*nsimul,10]);
 %face energy:
-%fe= f(:,:,)
+
 figure
+C = unique(f(:,6));
+A = zeros(length(f),length(C));
+A = A*nan;
+for i = 1:length(f)
+    for j = 1:length(C)
+        if f(i,6) == C(j)
+            A(i,j) = f(i,10);
+        end
+    end
+end
+A(A==0) = nan;
+
+xbins = -50:50;
+xbins = xbins*10^-6;
+hist(A(:,1:length(C)), xbins);
+colormap jet
+grid on
+ylabel('Count');
+xlabel('Energy')
+title('Energy and number of weaks on face');
+legend(num2str(C(1:length(C))));
+
+%Energy and Face type
+figure
+C = unique(f(:,9));
+A = zeros(length(f),length(C));
+A = A*nan;
+for i = 1:length(f)
+    for j = 1:length(C)
+        if f(i,9) == C(j)
+            A(i,j) = f(i,10);
+        end
+    end
+end
+A(A==0) = nan;
+
+hist(A(:,1:length(C)),xbins);
+colormap jet
+grid on
+xlabel('Energy');
+ylabel('Count')
+title('Energy and Face type');
+legend(num2str(C(1:length(C))));
+
+%FF and Face type
+figure
+C = unique(f(:,9));
+A = zeros(length(f),length(C));
+A = A*nan;
+for i = 1:length(f)
+    for j = 1:length(C)
+        if f(i,9) == C(j)
+            A(i,j) = f(i,8);
+        end
+    end
+end
+%A(A==0) = nan;
+
+hist(A(:,1:length(C)));
+colormap jet
 grid on
 xlabel('Faceorientation');
-ylabel('Energy')
-title('Energy and orientation');
-hist([f(:,6),f(:,9)])
+ylabel('Count')
+title('FF-Facetype');
+legend(num2str(C(1:length(C))));
+
+%Detailed face types:
+detailedfacetypes= f(:,1);
+weirdsimulations = [];
+for i = 1:length(f)
+    detailedfacetypes(i)=  f(i,6) + f(i,7)*10 +f(i,8)*100 + abs(f(i,9))*1000 ;
+    if(detailedfacetypes(i)== 10023 || detailedfacetypes(i)== 10032 || detailedfacetypes(i)== 10041 ||detailedfacetypes(i) == 10203 || detailedfacetypes(i)== 10113)
+        weirdsimulations = [weirdsimulations int64(i/12)];
+    end
+end
+length(weirdsimulations)
+weirdsimulations = unique(weirdsimulations);
+figure
+xbin = 0:15000;
+hist(detailedfacetypes,xbin);
+colormap jet
+grid on
+xlabel('Face types (detailed)');
+ylabel('Count')
+title('Detailed Face types');
+
+uniqueDetFacetypes = unique(detailedfacetypes);
+
+
+%Energy and detailed Face type
+figure
+C = uniqueDetFacetypes;
+A = zeros(length(f),length(C));
+A = A*nan;
+for i = 1:length(f)
+    for j = 1:length(C)
+        if detailedfacetypes(i) == C(j)
+            A(i,j) = f(i,10);
+        end
+    end
+end
+%A(A==0) = nan;
+
+hist(A(:,1:length(C)),xbins);
+colormap jet
+grid on
+xlabel('Energy');
+ylabel('Count')
+title('Energy and Face type(detailed)');
+legend(num2str(C(1:length(C))));
+
+
+
+%% Youssef: Dodec types
+%for every orientation equal and opposite orientation:
+load('data/evolve/dodecs'); %n*dodectype
+figure
+xbins = 0:60;
+hist(dodecs,xbins);
+colormap jet
+grid on
+xlabel('Dodec type');
+ylabel('Count')
+title('Dodec types');
+legend('10 -10','3 -3', '2 -2', '1 -1');
+
+% grouping
+dodecsg = dodecs;
+for i = 1:length(dodecs)
+   for j = 1:4
+       d1 = floor(dodecs(i,j)/10);
+       d2 = int16(mod(dodecs(i,j),10));
+       dodecsg(i,j) = min(d2,d1)*10 + max(d1,d2);
+   end
+end
+figure
+xbins = 0:60;
+hist(dodecsg,xbins);
+colormap jet
+grid on
+xlabel('Dodec type (grouped)');
+ylabel('Count')
+title('Dodec types');
+legend('10 -10','3 -3', '2 -2', '1 -1');
+
+%total grouping:
+
+dodecstg = dodecs(:,1);
+for i = 1:length(dodecs)
+       d1 = floor(dodecs(i,1)/10);
+       d2 = int16(mod(dodecs(i,1),10));
+       dodecstg(i) = d1+d2;
+       d1 = floor(dodecs(i,2)/10);
+       d2 = int16(mod(dodecs(i,2),10));
+       dodecstg(i) = dodecstg(i) +d1*10 +d2*10;
+       d1 = floor(dodecs(i,3)/10);
+       d2 = int16(mod(dodecs(i,3),10));
+       dodecstg(i) = dodecstg(i) +d1*100 +d2*100;
+end
+figure
+xbins = 0:1100;
+hist(dodecstg,xbins);
+colormap jet
+grid on
+xlabel('Dodec type (totally grouped, defects 2-2-0)');
+ylabel('Count')
+title('Dodec types');
+uniquepossibleconfigurations= unique(dodecstg);
+
+%Dodec configuration and Energy
+
+C = uniquepossibleconfigurations;
+A = zeros(length(angles),length(C));
+A = A*nan;
+for i = 1:length(angles)
+    for j = 1:length(C)
+        if dodecstg(i) == C(j)
+            A(i,j) = angles(i,2);
+        end
+    end
+end
+
+figure
+hist(A);
+colormap jet
+grid on
+xlabel('Energy');
+ylabel('Count')
+title('Energy - Dodec configuration');
+legend(num2str(C(1:length(C))));
+
+%% Youssef: Detailled Dodec:
+%total groupingdetailed:
+
+dodecstgd = dodecs(:,1);
+weird = [];
+for i = 1:length(dodecs)
+       d1 = floor(dodecs(i,1)/10);
+        d2 = int64(mod(dodecs(i,1),10));
+%        dodecstgd(i) = (d1+d2)*(d1+d2+1)/2 +d2;
+      d3 = floor(dodecs(i,2)/10);
+       d4 = int64(mod(dodecs(i,2),10));
+%        dodecstgd(i) = dodecstg(i) +((d3+d4)*(d3+d4+1)/2 +d4)*100;
+      d5 = floor(dodecs(i,3)/10);
+      d6 = int64(mod(dodecs(i,3),10));
+%        dodecstgd(i) = dodecstg(i) +((d5+d6)*(d5+d6+1)/2 +d6)*10000;
+       d7 = floor(dodecs(i,4)/10);
+       d8 = int64(mod(dodecs(i,4),10));
+%        dodecstgd(i) = dodecstg(i) +((d7+d8)*(d7+d8+1)/2 +d8)*1000000;
+%        a =0;
+%        if(d1> d2)
+%            a=1;
+%        end
+%        if(d2> d1)
+%            a=2;
+%        end
+%        dodecstgd(i) = dodecstg(i)+a*1000000;
+
+
+       dodecstgd(i) = dodecs(i,1);
+  dodecstgd(i) = dodecstgd(i) +dodecs(i,2)*100;
+
+        dodecstgd(i) = dodecstgd(i) +dodecs(i,3)*10000;
+
+        dodecstgd(i) = dodecstgd(i) +dodecs(i,4)*1000000;
+        if (d1+d2+d3+d4+d5+d6+d7+d8) ~= 12
+           weird= [weird i];
+        end
+end
+uniquepossibleconfigurationsd= unique(dodecstgd);
+indexeddodecs = dodecstgd;
+for i = 1:length(dodecstgd)
+    for j = 1:length(uniquepossibleconfigurationsd)
+        if(uniquepossibleconfigurationsd(j) == dodecstgd(i) )
+            indexeddodecs(i) =j;
+        end
+    end
+end
+
+figure
+xbins = 0:55;
+hist(indexeddodecs,xbins);
+colormap jet
+grid on
+xlabel('Dodec type (indexed)');
+ylabel('Count')
+title('Dodec types');
+
+
+
+%Dodec configuration and Energy
+
+C = uniquepossibleconfigurationsd;
+A = zeros(length(angles),length(C));
+A = A*nan;
+for i = 1:length(angles)
+    for j = 1:length(C)
+        if dodecstgd(i) == C(j)
+            A(i,j) = angles(i,2);
+        end
+    end
+end
+
+figure
+hist(A);
+colormap jet
+grid on
+xlabel('Energy');
+ylabel('Count')
+title('Energy - Dodec configuration');
+legend(num2str(C(1:length(C))));
+
+%Dodec configuration and FF (temp)
+
+%faces120 =reshape(face, [nsimul, 12*10]);
+
+C = uniquepossibleconfigurationsd;
+A = zeros(length(faces),length(C));
+A = A*nan;
+for i = 1:length(angles)
+    for j = 1:length(C)
+        if  C(j) == dodecstgd(i)
+            A(i,j) =0;
+            for l = 1:12
+                A(i,j) = A(i,j)+ faces(i,l,8);
+            end
+            A(i,j) = A(i,j)/2;
+        end
+    end
+end
+FFdodecnonunique = A;
+FFDodec = unique(A);
+FFDodec(isnan(FFDodec)) = FFDodec(1);
+FFDodec = unique(FFDodec);
+
+figure
+xbins = 0:25;
+hist(A,xbins);
+colormap jet
+grid on
+xlabel('FF');
+ylabel('Count')
+title('FF - Dodec configuration');
+legend(num2str(C(1:length(C))));
+
+
+%FF energy
+
+C = FFDodec;
+A = zeros(length(faces),length(C));
+A = A*nan;
+for i = 1:length(angles)
+    for j = 1:length(C)
+        tmp =0;
+            for l = 1:12
+                tmp = tmp + faces(i,l,8);
+            end
+            tmp = tmp/2;
+            if tmp == FFDodec(j)
+                A(i,j) = angles(i,2);
+            end
+
+    end
+end
+
+figure
+hist(A);
+colormap jet
+grid on
+xlabel('Energy');
+ylabel('Count')
+title('FF - Energy');
+legend(num2str(C(1:length(C))));
+
+%Dodec configuration and WW (temp)
+
+%faces120 =reshape(face, [nsimul, 12*10]);
+
+C = uniquepossibleconfigurationsd;
+A = zeros(length(faces),length(C));
+A = A*nan;
+for i = 1:length(angles)
+    for j = 1:length(C)
+        if  C(j) == dodecstgd(i)
+            A(i,j) =0;
+            for l = 1:12
+                A(i,j) = A(i,j)+ faces(i,l,6);
+            end
+            A(i,j) = A(i,j)/2;
+        end
+    end
+end
+
+WWDodec = unique(A);
+WWDodec(isnan(WWDodec)) = WWDodec(1);
+WWDodec = unique(WWDodec);
+
+figure
+xbins = 0:25;
+hist(A,xbins);
+colormap jet
+grid on
+xlabel('WW');
+ylabel('Count')
+title('WW - Dodec configuration');
+legend({num2str(C(1:length(C)))});
+
+
+%WW energy
+
+C = WWDodec;
+A = zeros(length(faces),length(C));
+A = A*nan;
+for i = 1:length(angles)
+    for j = 1:length(C)
+        tmp =0;
+            for l = 1:12
+                tmp = tmp + faces(i,l,6);
+            end
+            tmp = tmp/2;
+            if tmp == WWDodec(j)
+                A(i,j) = angles(i,2);
+            end
+
+    end
+end
+
+figure
+hist(A);
+colormap jet
+grid on
+xlabel('Energy');
+ylabel('Count')
+title('WW - Energy');
+legend(num2str(C(1:length(C))));
+
+
+
+%FF-WW
+
+C = WWDodec;
+A = zeros(length(faces),length(C));
+A = A*nan;
+for i = 1:length(angles)
+    for j = 1:length(C)
+                tmp =0;
+            for l = 1:12
+                tmp = tmp + faces(i,l,6);
+            end
+            tmp = tmp/2;
+
+        if  C(j) == tmp
+            A(i,j) =0;
+            for l = 1:12
+                A(i,j) = A(i,j)+ faces(i,l,8);
+            end
+            A(i,j) = A(i,j)/2;
+        end
+    end
+end
+
+figure
+hist(A);
+colormap jet
+grid on
+xlabel('FF');
+ylabel('Count')
+title('WW - FF');
+lgd = legend(num2str(C(1:length(C))));
+title(lgd,'WW')
+
+%Orientation sum Dodec type
+Orientationsum = zeros(length(dodecs),length(uniquepossibleconfigurationsd));
+Orientationsum = Orientationsum*nan;
+for i = 1:length(dodecs)
+       d1 = floor(dodecs(i,1)/10);
+        d2 = int64(mod(dodecs(i,1),10));
+      d3 = floor(dodecs(i,2)/10);
+       d4 = int64(mod(dodecs(i,2),10));
+      d5 = floor(dodecs(i,3)/10);
+      d6 = int64(mod(dodecs(i,3),10));
+       d7 = floor(dodecs(i,4)/10);
+       d8 = int64(mod(dodecs(i,4),10));
+       Osum = (d1-d2)*5 + (d3-d4)*4 + (d5-d6)*3 + (d7-d8)*1;
+    for j=1:length(uniquepossibleconfigurationsd)
+        if(uniquepossibleconfigurationsd(j) == dodecstgd(i) )
+            Orientationsum(i,j) =Osum;
+        end
+    end
+end
+
+figure
+xbins = -11:11;
+hist(Orientationsum(:,1:length(uniquepossibleconfigurationsd)),xbins);
+colormap jet
+grid on
+xlabel('Orientation sum');
+ylabel('Count')
+title('Orientation sum - Dodec type');
+lgd = legend(num2str(uniquepossibleconfigurationsd(1:length(uniquepossibleconfigurationsd))));
+title(lgd,'Dodec type')
+
+%% Youssef: moredetailed dodecconfig
+load('data/evolve/dodecs');
+dodecstgdmore = dodecs(:,1);
+weird = [];
+for i = 1:length(dodecs)
+        dodecstgdmore(i) = dodecs(i,1);
+        dodecstgdmore(i) = dodecstgdmore(i) +dodecs(i,2)*100;
+
+        dodecstgdmore(i) = dodecstgdmore(i) +dodecs(i,3)*10000;
+
+        dodecstgdmore(i) = dodecstgdmore(i) +dodecs(i,4)*1000000;
+        numberofFF =0;
+         for l = 1:12
+                numberofFF = numberofFF + faces(i,l,6);
+            end
+            numberofFF = numberofFF/2;
+         dodecstgdmore(i) = dodecstgdmore(i) + numberofFF*100000000;
+
+
+end
+uniquepossibleconfigurationsdmore= unique(dodecstgdmore);
+indexeddodecsmore = dodecstgdmore;
+for i = 1:length(dodecstgdmore)
+    for j = 1:length(uniquepossibleconfigurationsdmore)
+        if(uniquepossibleconfigurationsdmore(j) == dodecstgdmore(i) )
+            indexeddodecsmore(i) =j;
+        end
+    end
+end
+
+figure
+xbins = 0:550;
+hist(indexeddodecsmore,xbins);
+colormap jet
+grid on
+xlabel('Dodec type more detailed (indexed)');
+ylabel('Count')
+title('Dodec types (more detailed)');
+
+%FF v. number of perfect faces:
+C = FFDodec;
+A = zeros(length(dodecs),length(C));
+A = A*nan;
+for i = 1:length(angles)
+    for j = 1:length(C)
+        d1 = int64(dodecs(i,1)/10);
+        d2 = int64(mod(dodecs(i,1),10));
+        numberofperfectfaces=d1+d2;
+        numberofFF =0;
+        for l = 1:12
+            numberofFF = numberofFF + faces(i,l,8);
+        end
+        numberofFF = numberofFF/2;
+        if C(j) == numberofFF
+            A(i,j) = numberofperfectfaces;
+        end
+    end
+end
+
+figure
+xbin = 0:6;
+hist(A,xbin);
+colormap jet
+grid on
+xlabel('Numberofperfectfaces');
+ylabel('Count')
+title('FF - Numberofperfectfaces');
+lgd = legend(num2str(C(1:length(C))));
+title(lgd,'FF')
+
 
 
 
@@ -226,7 +753,7 @@ histogram(v_E,20)
 
 
 
-%% 
+%%
 %doublevertices
 d = load('data/doublevertices'); %shape:(nsimul)x(30)x(anglex5,typex5,E)
 d_A = d(:,:,1:5);

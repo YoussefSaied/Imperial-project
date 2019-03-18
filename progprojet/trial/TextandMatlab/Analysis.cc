@@ -83,6 +83,12 @@ int main(int argc, char * argv[])
         *tfile3 << endl;
     }
 
+
+    string Dodec = outputPath + "Dodectype";
+    unique_ptr<ofstream> tfile4(new ofstream(Dodec.c_str()));
+    // *tfile4 << SD.dodectype();
+    *tfile4 << SD.dodectype1(10) << " " << SD.dodectype1(3) << " " << SD.dodectype1(2) << " " << SD.dodectype1(1);
+
     // string MagnetsofFace = "FaceMagnetsindex";
     string Dvertexindex = "Dvertexindex";
 

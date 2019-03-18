@@ -230,28 +230,53 @@ public:
           - ((s.tab_ptr_Magnets[vm.magnet3])->positionN())).norme();
         double S2S3 = (((s.tab_ptr_Magnets[vm.magnet2])->positionS())
           - ((s.tab_ptr_Magnets[vm.magnet3])->positionS())).norme();
+        double P1N2 = (s.tab_ptr_Magnets[vm.magnet1]->position
+          - s.tab_ptr_Magnets[vm.magnet2]->positionN()).norme();
+        double P1S2 = (s.tab_ptr_Magnets[vm.magnet1]->position
+          - s.tab_ptr_Magnets[vm.magnet2]->positionS()).norme();
+        double P2N1 = (s.tab_ptr_Magnets[vm.magnet2]->position
+          - s.tab_ptr_Magnets[vm.magnet1]->positionN()).norme();
+        double P2S1 = (s.tab_ptr_Magnets[vm.magnet2]->position
+          - s.tab_ptr_Magnets[vm.magnet1]->positionS()).norme();
+        double P1N3 = (s.tab_ptr_Magnets[vm.magnet1]->position
+          - s.tab_ptr_Magnets[vm.magnet3]->positionN()).norme();
+        double P1S3 = (s.tab_ptr_Magnets[vm.magnet1]->position
+          - s.tab_ptr_Magnets[vm.magnet3]->positionS()).norme();
 
 
-        // cases: N1S2 (N3/S3):
-        if (N1S2 < N1N2 and N1S2 < S1S2 and N1S2 < S1N2) {
-            if (S2N3 > S2S3) { return vm.magnet1; }
-            else { return vm.magnet2; }
-        }
-        // cases: N1N2 (N3/S3)
-        else if (N1N2 < N1S2 and N1N2 < S1S2 and N1N2 < S1N2) {
-            if (N2N3 > N2S3) { return vm.magnet3;  }
-            else { return -1; }
+        // // cases: N1S2 (N3/S3):
+        // if (N1S2 < N1N2 and N1S2 < S1S2 and N1S2 < S1N2) {
+        //     if (S2N3 > S2S3) { return vm.magnet1; }
+        //     else { return vm.magnet2; }
+        // }
+        // // cases: N1N2 (N3/S3)
+        // else if (N1N2 < N1S2 and N1N2 < S1S2 and N1N2 < S1N2) {
+        //     if (N2N3 > N2S3) { return vm.magnet3;  }
+        //     else { return -1; }
+        // }
+        //
+        // // cases: S1S2 (N3/S3):
+        // else if (S1S2 < N1S2 and S1S2 < N1N2 and S1S2 < S1N2) {
+        //     if (S2N3 > S2S3) { return -2; }
+        //     else { return vm.magnet3; }
+        // }
+        // // cases: S1N2 (N3/S3)
+        // else {
+        //     if (S1N2 < N1S2 and S1N2 < N1N2 and S1N2 < S1S2) { return vm.magnet2; }
+        //     else { return vm.magnet1; }
+        // }
+
+        // cases: P1S2 P2N1:
+        if ((P1S2 > P1N2 and P1S3 > P1N3 and P2N1 > P2S1) or  (P1S2 < P1N2 and P1S3 < P1N3 and P2N1 < P2S1)) {
+            return vm.magnet1;
         }
 
-        // cases: S1S2 (N3/S3):
-        else if (S1S2 < N1S2 and S1S2 < N1N2 and S1S2 < S1N2) {
-            if (S2N3 > S2S3) { return -2; }
-            else { return vm.magnet3; }
+        if ((P1N2 > P1S2 and P1S3 > P1N3 and P2N1 > P2S1) or  (P1N2 < P1S2 and P1S3 < P1N3 and P2N1 < P2S1)) {
+            return vm.magnet3;
         }
-        // cases: S1N2 (N3/S3)
-        else {
-            if (S1N2 < N1S2 and S1N2 < N1N2 and S1N2 < S1S2) { return vm.magnet2; }
-            else { return vm.magnet1; }
+
+        if ((P1S2 > P1N2 and P1N3 > P1S3 and P2N1 > P2S1) or  (P1S2 < P1N2 and P1N3 < P1S3 and P2N1 < P2S1)) {
+            return vm.magnet2;
         }
 
         // angles:
@@ -487,13 +512,25 @@ public:
         Vecteur3D upwardorientation(barycenterofface - dode.position);
         double orientation =
           (s.tab_ptr_Magnets[fm.doubleVertixVector[maxstreakindex % facesize].centralmagnet]->orientation()
-          ^ s.tab_ptr_Magnets[fm.doubleVertixVector[(maxstreakindex + 1) % facesize].centralmagnet]->orientation())
+          ^ s.tab_ptr_Magnets[fm.doubleVertixVector[(maxstreakindex + 1 + facesize)
+          % facesize].centralmagnet]->orientation())
           * upwardorientation;
+        // fixer:
+        int fixer = 1;
+
+        double P1N2 = (s.tab_ptr_Magnets[fm.doubleVertixVector[maxstreakindex % facesize].centralmagnet]->position
+          - s.tab_ptr_Magnets[fm.doubleVertixVector[(maxstreakindex + 1 + facesize)
+          % facesize].centralmagnet]->positionN()).norme();
+        double P1S2 = (s.tab_ptr_Magnets[fm.doubleVertixVector[maxstreakindex % facesize].centralmagnet]->position
+          - s.tab_ptr_Magnets[fm.doubleVertixVector[(maxstreakindex + 1 + facesize)
+          % facesize].centralmagnet]->positionS()).norme();
+        if (P1N2 > P1S2) { fixer = -1; }
+
         if (orientation > 0) {
-            return maxstreaksize;
+            return fixer * maxstreaksize;
         }
         else {
-            return -1 * maxstreaksize;
+            return -1 * fixer * maxstreaksize;
             // % (facesize + 1)
         }
     } // getFaceOrientaion
@@ -510,5 +547,45 @@ public:
             if ((type == 0) and (str == 0 )) { numberoftype++; }
         }
         return numberoftype;
+    }
+
+    int dodectype()
+    {
+        int dodectype = 0;
+        for (auto& fm: FM) {
+            int fmtype = getFaceOrientaionN(fm);
+            switch (fmtype) {
+                case 10: dodectype += 1;
+                    break;
+                case -10: dodectype += 10;
+                    break;
+                case 3: dodectype += 100;
+                    break;
+                case -3: dodectype += 1000;
+                    break;
+                case 2: dodectype += 10000;
+                    break;
+                case -2: dodectype += 100000;
+                    break;
+                case 1: dodectype += 1000000;
+                    break;
+                case -1: dodectype += 10000000;
+                    break;
+            }
+        }
+        return dodectype;
+    }
+
+    int dodectype1(int facetype)
+    {
+        int dodectype = 0;
+        for (auto& fm: FM) {
+            int fmtype = getFaceOrientaionN(fm);
+            if (fmtype == facetype) { dodectype++; }
+            else if (fmtype == -1 * facetype) {
+                dodectype += 10;
+            }
+        }
+        return dodectype;
     }
 };
