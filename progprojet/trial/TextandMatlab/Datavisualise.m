@@ -329,19 +329,19 @@ dodecstg = dodecs(:,1);
 for i = 1:length(dodecs)
        d1 = floor(dodecs(i,1)/10);
        d2 = int16(mod(dodecs(i,1),10));
-       dodecstg(i) = d1+d2;
+       dodecstg(i) = (d1+d2)*1000;
        d1 = floor(dodecs(i,2)/10);
        d2 = int16(mod(dodecs(i,2),10));
-       dodecstg(i) = dodecstg(i) +d1*10 +d2*10;
+       dodecstg(i) = dodecstg(i) +(d1+d2)*100;
        d1 = floor(dodecs(i,3)/10);
        d2 = int16(mod(dodecs(i,3),10));
-       dodecstg(i) = dodecstg(i) +d1*100 +d2*100;
+       dodecstg(i) = dodecstg(i) +(d1+d2)*10;
        d1 = floor(dodecs(i,4)/10);
        d2 = int16(mod(dodecs(i,4),10));
-       dodecstg(i) = dodecstg(i) +d1*1000 +d2*1000;
+       dodecstg(i) = dodecstg(i) +(d1+d2)*1;
 end
 figure
-xbins = 0:5100;
+xbins = 0:7100;
 hist(dodecstg,xbins);
 colormap jet
 grid on
@@ -376,19 +376,18 @@ legend(num2str(C(1:length(C))));
 %total groupingdetailed:
 
 dodecstgd = dodecs(:,1);
-weird = [];
 for i = 1:length(dodecs)
-       d1 = floor(dodecs(i,1)/10);
-        d2 = int64(mod(dodecs(i,1),10));
-%        dodecstgd(i) = (d1+d2)*(d1+d2+1)/2 +d2;
-      d3 = floor(dodecs(i,2)/10);
-       d4 = int64(mod(dodecs(i,2),10));
-%        dodecstgd(i) = dodecstg(i) +((d3+d4)*(d3+d4+1)/2 +d4)*100;
-      d5 = floor(dodecs(i,3)/10);
-      d6 = int64(mod(dodecs(i,3),10));
-%        dodecstgd(i) = dodecstg(i) +((d5+d6)*(d5+d6+1)/2 +d6)*10000;
-       d7 = floor(dodecs(i,4)/10);
-       d8 = int64(mod(dodecs(i,4),10));
+    d1 = floor(dodecs(i,1)/10);
+    d2 = int64(mod(dodecs(i,1),10));
+    %        dodecstgd(i) = (d1+d2)*(d1+d2+1)/2 +d2;
+    d3 = floor(dodecs(i,2)/10);
+    d4 = int64(mod(dodecs(i,2),10));
+    %        dodecstgd(i) = dodecstg(i) +((d3+d4)*(d3+d4+1)/2 +d4)*100;
+    d5 = floor(dodecs(i,3)/10);
+    d6 = int64(mod(dodecs(i,3),10));
+    %        dodecstgd(i) = dodecstg(i) +((d5+d6)*(d5+d6+1)/2 +d6)*10000;
+    d7 = floor(dodecs(i,4)/10);
+    d8 = int64(mod(dodecs(i,4),10));
 %        dodecstgd(i) = dodecstg(i) +((d7+d8)*(d7+d8+1)/2 +d8)*1000000;
 %        a =0;
 %        if(d1> d2) 
@@ -400,15 +399,12 @@ for i = 1:length(dodecs)
 %        dodecstgd(i) = dodecstg(i)+a*1000000;
 
 
-       dodecstgd(i) = dodecs(i,1);
-  dodecstgd(i) = dodecstgd(i) +dodecs(i,2)*100;
+    dodecstgd(i) = dodecs(i,1)*1000000;
+    dodecstgd(i) = dodecstgd(i) +dodecs(i,2)*10000;
 
-        dodecstgd(i) = dodecstgd(i) +dodecs(i,3)*10000;
+    dodecstgd(i) = dodecstgd(i) +dodecs(i,3)*100;
 
-        dodecstgd(i) = dodecstgd(i) +dodecs(i,4)*1000000;
-        if (d1+d2+d3+d4+d5+d6+d7+d8) ~= 12
-           weird= [weird i];
-        end
+    dodecstgd(i) = dodecstgd(i) +dodecs(i,4)*1;
 end
 uniquepossibleconfigurationsd= unique(dodecstgd);
 indexeddodecs = dodecstgd;
