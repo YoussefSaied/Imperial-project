@@ -18,12 +18,16 @@ nsimul = 1000;
   %d_T = magnet types on a double vertex (x5)
   %f_T = magnet types on a face (x5)
 %O = face orientation = 5,4,3,2
+evolve = 'evolve';
+load('data/evolve/angles'); %nx(T,E,C,ax30)
+load('data/evolve/dodecs'); %n*dodectype
+load('data/evolve/faces');
 
 
 %% system
 load('data/evolve/angles'); %nx(T,E,C,ax30)
 s = angles;
-s_a = s(:,4:33);
+s_a = s(:,5:34);
 for i = 1:nsimul
     for j = 1:30
         s_a(i,j) = mod(s_a(i,j),pi);
@@ -37,7 +41,7 @@ end
 s_Aabs = sum(abs(s_a),2);
 s_A = sum(s_a,2);
 s_E = s(:,2);
-s_C = s(:,3); %maybe need a couple of different correlations
+s_C = s(:,4); %maybe need a couple of different correlations
 
 
 figure %histograms of energy, correlation & angle
@@ -52,8 +56,11 @@ title('C');
 subplot(1,3,3)
 grid on
 %histogram(mod(s_Aabs,pi),100)
-histogram(s_Aabs,30)
-
+histogram(s_Aabs,30,'Normalization','pdf')
+hold on
+x = 6:.1:13;
+norm = normpdf(x,mean(s_A),std(s_A));
+plot(x,norm);
 title('A')
 
 figure %scatter E vs C, E vs A
@@ -66,19 +73,132 @@ xlabel('cor');
 ylabel('E');
 subplot(1,2,2)
 hold on
-scatter(mod(s_Aabs,pi),s_E);
+scatter(s_Aabs,s_E);
 grid on
 xlabel('angle')
 ylabel('E')
+
+%face angle sum:
+Sumofanglesonaface = zeros(nsimul,12);
+for i= 1:nsimul
+    for j=1:12
+        for k=1:5
+        Sumofanglesonaface(i,j) = Sumofanglesonaface(i,j) + s_a(i,faces(i,j,k)+1);
+        end
+    end
+end
+
+
+
+figure
+histogram(Sumofanglesonaface(:,1),30,'Normalization','pdf')
+hold on
+x = 0:.1:10;
+norm = normpdf(x,mean(Sumofanglesonaface(:,1)),std(Sumofanglesonaface(1,:)));
+plot(x,norm);
+title("Face angle sum")
+
+%sum of a closed loop:
+
+Sumofanglesonaclosedloop = zeros(nsimul,1);
+for i= 1:nsimul
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,6);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,7);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,9);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,10);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,12);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,13);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,25);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,23);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,28);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,27);
+end
+
+
+
+figure
+hist(Sumofanglesonaclosedloop)
+title("Grandloop-angles sum")
+
+
+%all magnets
+figure
+hist(reshape(s_a,[nsimul*30,1]),100)
+title("one magnet")
+
+%sum of random magnets:
+
+Sumofanglesonaclosedloop = zeros(nsimul,1);
+for i= 1:nsimul
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,1);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,6);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,21);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,24);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,15);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,13);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,29);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,9);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,17);
+        Sumofanglesonaclosedloop(i) = Sumofanglesonaclosedloop(i) + s_a(i,4);
+end
+figure
+hist(Sumofanglesonaclosedloop)
+title("Sum of angles on 12 random magnets")
+
+%even better:
+figure
+hist(mean(s_a(:,1:30))*30,10)
+
+
+%all magnets
+figure
+hist(s_a(1,:),100)
+title("1 angle")
+
+%30 random magnets
+randommagnet =randi([1 30],1,30*nsimul);
+randomsimulation =randi([1 nsimul],1,nsimul);
+sumof30angles= zeros(1,nsimul);
+for i =1:nsimul
+    for j = 1:30
+      sumof30angles(i)= sumof30angles(i)+s_a(randomsimulation(i),randommagnet(30*(i-1)+j));  
+    end
+end
+
+
+figure
+histogram(sumof30angles,30,'Normalization','pdf')
+hold on
+x = 0:.1:20;
+norm = normpdf(x,mean(sumof30angles),std(sumof30angles));
+plot(x,norm);
+title("sumof30angles")
+std(sumof30angles)
+%sumof 0 and 1 and 26 4 14 +s_a(:,5) +s_a(:,15)
+
+sum01= s_a(:,30)+s_a(:,29) +s_a(:,28);
+sum02= s_a(:,9)+s_a(:,10) +s_a(:,8);
+sum10 =sum01+sum02;
+figure
+subplot(1,3,1)
+hist(sum02,100)
+title("sumofanglesatavertex")
+subplot(1,3,2)
+hist(sum01,100)
+title("sumofanglesatavertex2")
+subplot(1,3,3)
+hist(sum10/2,100)
+title("sum of angles at opposite vertices")
+
 %% magnets
 load('data/evolve/magnets'); %nx30x(a,T)
-m = reshape(magnets,[250,30,2]);
+m = reshape(magnets,[nsimul,30,2]);
 m_A = m(:,:,1);
 m_T = m(:,:,2);
 
-m_ff_A = zeros(250*30,2); %11411, 12411, 12421, (angle,type)
-m_fw_A = zeros(250*30,2);
-m_ww_A = zeros(250*30,2);
+m_ff_A = zeros(nsimul*30,2); %11411, 12411, 12421, (angle,type)
+m_fw_A = zeros(nsimul*30,2);
+m_ww_A = zeros(nsimul*30,2);
 m_fff_A = zeros(size(m_A));
 
 for i = 1:nsimul
@@ -95,61 +215,61 @@ for i = 1:nsimul
       n3 = nnz(ms==3);
       n2 = nnz(ms==2);
       n1 = nnz(ms==1);
-      m_ff_A(i*j,1) = m_A(i,j);
+      m_ff_A((i-1)*30+j,1) = m_A(i,j);
 
       if n2 == 3
-          m_ff_A(i*j,2) = 22421;
+          m_ff_A((i-1)*30+j,2) = 22421;
       elseif n1 == 3
-          m_ff_A(i*j,2) = 11412;
+          m_ff_A((i-1)*30+j,2) = 11412;
       elseif n1 == 2 && n2 == 2
           if m1 == m2
-              m_ff_A(i*j,2) = 11422;
+              m_ff_A((i-1)*30+j,2) = 11422;
           else
-              m_ff_A(i*j,2) = 12412;
+              m_ff_A((i-1)*30+j,2) = 12412;
           end
       else
-          m_ff_A(i*j,2) = q;
+          m_ff_A((i-1)*30+j,2) = q;
       end
 
     elseif m3 == 3 %strong-weak
-     m_fw_A(i*j,1) = m_A(i,j);
-     m_fw_A(i*j,2) = q;
+     m_fw_A((i-1)*30+j,1) = m_A(i,j);
+     m_fw_A((i-1)*30+j,2) = q;
     elseif m3 == 2 %strong-weak
-     m_fw_A(i*j,1) = m_A(i,j);
-     m_fw_A(i*j,2) = q;
+     m_fw_A((i-1)*30+j,1) = m_A(i,j);
+     m_fw_A((i-1)*30+j,2) = q;
     elseif m3 == 1 %weak
       ms(ms==3)=2;
       q = 10000*ms(1)+ 1000*ms(2)+100*ms(3)+10*ms(4)+ms(5);
-      m_ww_A(i*j,1) = m_A(i,j);
+      m_ww_A((i-1)*30+j,1) = m_A(i,j);
       n2 = nnz(ms==2);
       n1 = nnz(ms==1);
       n4 = nnz(ms==4);
       if n2 == 3
         if n1 == 2
-          m_ww_A(i*j,2) = 22121;
+          m_ww_A((i-1)*30+j,2) = 22121;
         elseif n1 == 1
-          m_ww_A(i*j,2) = 22124;
+          m_ww_A((i-1)*30+j,2) = 22124;
         end
       elseif n1 == 3
           if n4 == 0
-              m_ww_A(i*j,2) = 12121;
+              m_ww_A((i-1)*30+j,2) = 12121;
           elseif n4 ==1
-              m_ww_A(i*j,2) = 14121;
+              m_ww_A((i-1)*30+j,2) = 14121;
           else
-              m_ww_A(i*j,2) = 14141;
+              m_ww_A((i-1)*30+j,2) = 14141;
           end
       elseif m(1)==2 && m(2)==2
-           m_ww_A(i*j,2) = 22141;
+           m_ww_A((i-1)*30+j,2) = 22141;
       elseif m(4)==2 && m(5)==2
-           m_ww_A(i*j,2) = 22141;
+           m_ww_A((i-1)*30+j,2) = 22141;
       elseif n4 == 2
-           m_ww_A(i*j,2) = 41124;
+           m_ww_A((i-1)*30+j,2) = 41124;
       elseif n1==n2
-           m_ww_A(i*j,2) = 12124;
+           m_ww_A((i-1)*30+j,2) = 12124;
 
 
       else
-        m_ww_A(i*j,2) = q;
+        m_ww_A((i-1)*30+j,2) = q;
      end
     end
   end
@@ -196,6 +316,216 @@ title('ff');
 legend(num2str(C(2:length(C))));
 
 
+%% Youssef: Magnets
+
+load('data/evolve/magnets'); %nx30x(a,T)
+load('data/evolve/doublevertices');
+%m = reshape(magnets,[nsimul,30,2]);
+m= magnets;
+m_A = m(:,:,1);
+m_T = m(:,:,2);
+
+m_ff_A = zeros(nsimul*30,2); %11411, 12411, 12421, (angle,type)
+m_fw_A = zeros(nsimul*30,2);
+m_ww_A = zeros(nsimul*30,2);
+m_fff_A = zeros(size(m_A));
+
+for i = 1:nsimul
+  for j = 1:30
+      q = m_T(i,j);
+      m5 = int32(q/10000);
+      m4 = int32(mod(q,10000)/1000);
+      m3 = int32(mod(q,1000)/100);
+      m2 = int32(mod(q,100)/10);
+      m1 = int32(mod(q,10));
+      ms = [m1,m2,m3,m4,m5];
+
+    if m3 == 4 %strong
+        m_ff_A((i-1)*30+j,1) = m_A(i,j);
+        m_ff_A((i-1)*30+j,2)= q ;
+    if m1 == m5 && m2 == m4
+        m_ff_A((i-1)*30+j,2) = min(m1,m2) + max(m1,m2)*10 + 400 + max(m5,m4)*1000 + min(m5,m4)*10000;   
+    end 
+    if m1 == m4 && m2 == m5
+        m_ff_A((i-1)*30+j,2) = max(m1,m2) + min(m1,m2)*10 + 400 + max(m5,m4)*1000 + min(m5,m4)*10000;   
+    end
+    if m1==m2 
+        tmp= min([m4,m5]) + 10*max([m4,m5])+ 400+ (m2*10+m1)*1000;
+        m_ff_A((i-1)*30+j,2) =  tmp;
+    end
+    if m4==m5
+        tmp= min([m1,m2]) + 10*max([m1,m2])+ 400+ (m5*10+m4)*1000;
+        m_ff_A((i-1)*30+j,2) =  tmp;
+    end
+    if m4==m5 && m1==m2
+        tmp= min(m1+m2*10,m4 +m5*10)+ 400 + max(m1+m2*10,m4 +m5*10)*1000  ;
+        m_ff_A((i-1)*30+j,2) =  tmp;
+    end
+    
+    elseif m3 == 3 %strong-weak
+     m_fw_A((i-1)*30+j,1) = m_A(i,j);
+     m_fw_A((i-1)*30+j,2) = q;
+     
+    elseif m3 == 2 %strong-weak
+     m_fw_A((i-1)*30+j,1) = m_A(i,j);
+     m_fw_A((i-1)*30+j,2) = q;
+     
+    elseif m3 == 1 %weak
+      ms(ms==3)=2;
+      %q = 10000*ms(1)+ 1000*ms(2)+100*ms(3)+10*ms(4)+ms(5);
+      m_ww_A((i-1)*30+j,1) = m_A(i,j);
+      m_ww_A((i-1)*30+j,2) =q;
+    if m1 == m5 && m2 == m4 %180 rotation
+        tmpm1 =m1; tmpm2 = m2; tmpm4= m4; tmpm5 =m5;
+         m1 =min(tmpm1,tmpm2); m2 =max(tmpm1,tmpm2); m4= max(tmpm5,tmpm4); m5= min(tmpm5,tmpm4);
+    end
+    if m1==m4 && m2==m5 %vertical reflection
+        tmpm1 =m1; tmpm2 = m2; tmpm4= m4; tmpm5 =m5;
+        m1 = max(tmpm1,tmpm2); m4 = max(tmpm1,tmpm2);  m5=min(tmpm1,tmpm2); m2 = min(tmpm1,tmpm2);
+    end
+    if m1 == m4  %vertical reflection
+        tmpm1 =m1; tmpm2 = m2; tmpm4= m4; tmpm5 =m5;
+        m2=max(tmpm2,tmpm5); m5=min(tmpm2,tmpm5);
+    end
+    if m2 == m5 %vertical reflection
+        tmpm1 =m1; tmpm2 = m2; tmpm4= m4; tmpm5 =m5;
+        m1 = max(tmpm1,tmpm4); m4 = min(tmpm1,tmpm4);
+    end
+    if m4==m5 && m1==m2 %horizontal reflection
+        tmpm1 =m1; tmpm2 = m2; tmpm4= m4; tmpm5 =m5;
+         m1 = max(tmpm1,tmpm5); m2=m1; m4 = min(tmpm1,tmpm5); m5 =m4;
+    end
+    if m1==m2 %horizontal reflection
+        tmpm1 =m1; tmpm2 = m2; tmpm4= m4; tmpm5 =m5;
+        m4 = max(tmpm4,tmpm5); m5 =min(tmpm4,tmpm5);
+    end
+    if m4==m5 %horizontal reflection
+       tmpm1 =m1; tmpm2 = m2; tmpm4= m4; tmpm5 =m5;
+       m1 = max(tmpm1,tmpm2); m2 =min(tmpm1,tmpm2);
+    end
+    if m1==m5 %diagonal reflection
+        tmpm1 =m1; tmpm2 = m2; tmpm4= m4; tmpm5 =m5;
+        m4=min(tmpm2,tmpm4); m2=max(tmpm2,tmpm4);
+    end
+    if m2==m4 %diagonal reflection
+        tmpm1 =m1; tmpm2 = m2; tmpm4= m4; tmpm5 =m5;
+        m5=min(tmpm1,tmpm5); m1=max(tmpm5,tmpm1);
+    end
+    tmpm1 =m1; tmpm2 = m2; tmpm4= m4; tmpm5 =m5;
+    minimamldigit= min([tmpm1,tmpm2,tmpm4,tmpm5]);
+
+    if tmpm1 == minimamldigit
+        m5 = tmpm1; m4 = tmpm2; m2 = tmpm4; m1 =tmpm5;
+    elseif tmpm2 == minimamldigit
+        m5 = tmpm2; m4 = tmpm1; m2 = tmpm5; m1 =tmpm4;
+    elseif tmpm4 == minimamldigit
+        m5 = tmpm4; m4 = tmpm5; m2 = tmpm1; m1 =tmpm2;
+    end  
+    m_ww_A((i-1)*30+j,2) = m1 + m2*10 + m3*100 + m4*1000 + m5*10000;
+    end  
+    end
+  end
+
+
+x = m_ww_A;
+
+for i = 1:length(x)
+    if x(i,1) == 0
+        x(i,:) = 0;
+    end
+    x(i,1) = mod(x(i,1),pi);
+    if x(i,1)>pi/2
+        q = x(i,1);
+        x(i,1) = pi - q;
+        x(i,1) = mod(x(i,1),pi);
+    end
+
+end
+
+C = unique(x(:,2));
+A = zeros(length(x),length(C));
+A = A*nan;
+
+for i = 1:length(x)
+    for j = 1:length(C)
+        if x(i,2) == C(j)
+            A(i,j) = x(i,1);
+        end
+    end
+end
+
+
+
+figure
+hist(A(:,2:length(C)-0));
+colormap jet
+grid on
+xlabel('angle');
+title('FF/WW angles');
+legend(num2str(C(2:length(C)-0)));
+
+C = unique(x(:,2));
+A = zeros(length(x),length(C));
+A = A*nan;
+count = 0;
+for i = 1:length(x)
+    for j = 1:length(C)
+        if x(i,2) == C(j)
+            firstindex= (i -(mod(i-1,30)+1))/30 +1;
+            A(i,j) = doublevertices(firstindex,mod(i-1,30)+1,2);
+        end
+    end
+end
+
+
+
+figure
+xbins = (-160:-80)*10^-7*2;
+
+
+%/length(A(:,i))
+% %h.BinEdges =xbins;
+% for i = 2:length(C)
+% hist( A(:,i) ,xbins)/( length(A(:,i)) -sum(isnan(A(:,i))) );
+% %h(i).Normalization = 'probability';
+% hold on
+% end
+xbins = (-1600:-800)*10^-8*2;
+hist(A(:,2:2),xbins);
+colormap jet
+grid on
+xlabel('Energy');
+title('FF');
+legend(num2str(C(2:2)));
+
+load('data/evolve/vertices'); %nx20x(energy,OOO)
+v= reshape(vertices,[nsimul*20,2]);
+figure
+xbins = (-1600:-800)*10^-8;
+
+hist(v(:,1),xbins);
+colormap jet
+grid on
+xlabel('Energy');
+title('Vertices');
+
+
+DVert= reshape(doublevertices,[nsimul*30,3]);
+figure
+xbins = (-1600:-800)*10^-8*2;
+
+hist(DVert(:,2),xbins);
+colormap jet
+grid on
+xlabel('Energy');
+title('DVertices');
+
+%Dvertex energy vs Dodec energy and vs Correlation
+figure
+scatter(angles(:,4),doublevertices(:,1,2))
+grid on
+xlabel('Energy');
+title('DVertices');
 
 %% Youssef: Face types
 
@@ -225,14 +555,14 @@ for i = 1:length(f)
 end
 A(A==0) = nan;
 
-xbins = -50:50;
+xbins = -200:50;
 xbins = xbins*10^-6;
 hist(A(:,1:length(C)), xbins);
 colormap jet
 grid on
 ylabel('Count');
 xlabel('Energy')
-title('Energy and number of weaks on face');
+title('Energy and number of WW on face');
 legend(num2str(C(1:length(C))));
 
 %Energy and Face type
@@ -321,7 +651,155 @@ title('Energy and Face type(detailed)');
 legend(num2str(C(1:length(C))));
 
 
-%% Youssef: Dodec types (with detailed face types)
+%% Youssef: Facetypes with detailed FF
+
+%FF and Face type
+
+C = uniqueDetFacetypes;
+A = zeros(length(f)*5,length(C));
+A = A*nan;
+for i = 1:length(f)-1 
+    for j = 1:length(C)
+        for l = 1:5   
+            if detailedfacetypes(i) == C(j)
+            A(i+l,j) =m_ff_A(f(i,l)+1 +floor((i-1)/12)*30,2); 
+            end
+        end
+    end
+end
+    
+
+%A(A==0) = nan;
+figure
+hist(A,10000:25000);
+colormap jet
+grid on
+xlabel('Facetype');
+ylabel('Count')
+title('FF-Facetype');
+legend(num2str(C));
+
+% Face type and FF
+detailedfacetypes2 = detailedfacetypes;
+C = (unique(m_ff_A(:,2)));
+C = C(2:7);
+A = zeros(length(f),length(C));
+A = A*nan;
+for i = 1:length(f) 
+    for j = 1:length(C)
+        for l = 1:5   
+            if  m_ff_A(f(i,l)+1 +floor((i-1)/12)*30,2) == C(j)
+            A(i,j) =detailedfacetypes(i);
+%             if abs(f(i,9)) == 10 %to discretize perfect face
+            if 1==1
+            if floor(detailedfacetypes2(i)/10^5) >=j
+                detailedfacetypes2(i)= detailedfacetypes2(i)+j*10^6;
+            else
+                detailedfacetypes2(i)= detailedfacetypes2(i)+(j-floor(detailedfacetypes2(i)/10^5))*10^5   + floor(detailedfacetypes2(i)/10^5)*10^6; 
+            end
+            end
+            end
+        end
+    end
+end
+    
+
+%A(A==0) = nan;
+figure
+hist(A,1000:15000);
+colormap jet
+grid on
+xlabel('Facetype');
+ylabel('Count')
+title('FF-Facetype');
+legend(num2str(C))
+
+
+%Energy and detailed Face type
+uniqueDetFacetypes2 = unique(detailedfacetypes2);
+
+C = uniqueDetFacetypes2;
+A = zeros(length(f),length(C));
+A = A*nan;
+for i = 1:length(f)
+    for j = 1:length(C)
+        if detailedfacetypes2(i) == C(j)
+            A(i,j) = f(i,10);
+        end
+    end
+end
+%A(A==0) = nan;
+figure
+hist(A(:,:),30);
+colormap jet
+grid on
+xlabel('Energy');
+ylabel('Count')
+title('Energy and Face type(detailed)');
+legend(num2str(C(:)));
+
+figure
+hist(detailedfacetypes2,1000);
+colormap jet
+grid on
+xlabel('Face type');
+ylabel('Count')
+title('Histogram of Face type(detailed)');
+%% Youssef: detailed FF and Energy of Dodec (not useful now)
+DodecFFdetailed = zeros(length(dodecs(:,1)),1);
+C = (unique(m_ff_A(:,2)));
+C = C(2:7);
+for i = 1: length( DodecFFdetailed)
+    counter =0;
+    for k =1:30
+    for j = 1:6
+        if C(j) == m_ff_A((i-1)*30 + k,2) %% only 11411
+            DodecFFdetailed(i) = DodecFFdetailed(i) +10^(6-j);
+            counter = counter +1;
+        end
+    end
+    end
+%         to dicretize FF=6:
+    if(counter~=6) 
+        DodecFFdetailed(i) = 0;
+    end
+% DodecFFdetailed(i)= DodecFFdetailed(i)/6;
+end
+
+figure
+hist(DodecFFdetailed,1000);
+colormap jet
+grid on
+xlabel('Dodec type in terms of FF');
+ylabel('Count')
+title('Histogram of Dodec type in terms of FF');
+
+uniqueDodecFF= unique(DodecFFdetailed);
+
+%Dodec configuration and Energy
+C = uniqueDodecFF;
+A = zeros(length(angles),length(C));
+A = A*nan;
+for i = 1:length(angles)
+    for j = 1:length(C)
+        if DodecFFdetailed(i) == C(j)
+            A(i,j) = angles(i,2);
+        end
+    end
+end
+
+figure
+hist(A(:,2:length(C)),5);
+colormap jet
+grid on
+xlabel('Energy');
+ylabel('Count')
+title('Energy - Dodec configuration');
+legend(num2str(C(2:length(C))));
+
+
+
+%% Youssef: Dodec types (with detailed (7) face types)
 dodecstg2 = zeros(length(faces),1);
 for i =1:(length(faces))
     for j = (i*12 -11): (i*12)
@@ -354,6 +832,9 @@ xlabel('Energy');
 ylabel('Count')
 title('Energy - Dodec configuration');
 legend(num2str(C(1:length(C))));
+
+
+
 
 
 %% Youssef: Dodec types (with basic face types)
@@ -407,15 +888,16 @@ for i = 1:length(dodecs)
 end
 figure
 xbins = 0:7100;
+xbins2 =[2000 3000 4000 5000 6000 7000] + 500;
 hist(dodecstg,xbins);
 colormap jet
 grid on
-xlabel('Dodec type (totally grouped, defects 2-2-0)');
+xlabel('Dodec type (totally grouped, streaks digits 10-4-3-2)');
 ylabel('Count')
 title('Dodec types');
 uniquepossibleconfigurations= unique(dodecstg);
 
-%Dodec configuration and Energy
+%% Youssef: Basic face types Dodec configuration and Energy
 
 C = uniquepossibleconfigurations;
 A = zeros(length(angles),length(C));
@@ -429,12 +911,37 @@ for i = 1:length(angles)
 end
 
 figure
-hist(A);
+hist(A(:,1:21));
 colormap jet
 grid on
 xlabel('Energy');
 ylabel('Count')
 title('Energy - Dodec configuration');
+legend(num2str(C(1:21)));
+
+
+%% Youssef: Number of perfect faces and Energy (not useful now)
+
+C = [2; 3; 4; 5; 6];
+A = zeros(length(angles),length(C));
+A = A*nan;
+for i = 1:length(angles)
+    for j = 1:length(C)
+       d1 = floor(dodecs(i,1)/10);
+       d2 = int16(mod(dodecs(i,1),10));
+        if d1+ d2 == C(j)
+            A(i,j) = angles(i,2);
+        end
+    end
+end
+
+figure
+hist(A);
+colormap jet
+grid on
+xlabel('Energy');
+ylabel('Count')
+title('Energy - Number of perfect faces');
 legend(num2str(C(1:length(C))));
 
 %% Youssef: Detailled Dodec:
@@ -614,35 +1121,6 @@ xlabel('FF');
 ylabel('Count')
 title('FF - Dodec configuration');
 legend(num2str(C(1:length(C))));
-
-
-%FF energy
-
-C = FFDodec;
-A = zeros(length(faces),length(C));
-A = A*nan;
-for i = 1:length(angles)
-    for j = 1:length(C)
-        tmp =0;
-            for l = 1:12
-                tmp = tmp + faces(i,l,8);
-            end
-            tmp = tmp/2;
-            if tmp == FFDodec(j)
-                A(i,j) = angles(i,2);
-            end
-    end
-end
-
-figure
-hist(A);
-colormap jet
-grid on
-xlabel('Energy');
-ylabel('Count')
-title('FF - Energy');
-legend(num2str(C(1:length(C))));
-
 %Dodec configuration and WW (temp)
 
 %faces120 =reshape(face, [nsimul, 12*10]);
@@ -675,6 +1153,37 @@ xlabel('WW');
 ylabel('Count')
 title('WW - Dodec configuration');
 legend({num2str(C(1:length(C)))});
+
+%% Youssef: FF and WW Energy (Important)
+
+%FF energy
+
+C = FFDodec;
+A = zeros(length(faces),length(C));
+A = A*nan;
+for i = 1:length(angles)
+    for j = 1:length(C)
+        tmp =0;
+            for l = 1:12
+                tmp = tmp + faces(i,l,8);
+            end
+            tmp = tmp/2;
+            if tmp == FFDodec(j)
+                A(i,j) = angles(i,2);
+            end
+    end
+end
+
+figure
+hist(A,100);
+colormap jet
+grid on
+xlabel('Energy');
+ylabel('Count')
+title('FF - Energy');
+legend(num2str(C(1:length(C))));
+
+
 
 
 %WW energy
@@ -739,7 +1248,7 @@ title('WW - FF');
 lgd = legend(num2str(C(1:length(C))));
 title(lgd,'WW')
 
-%Orientation sum Dodec type
+%% Youssef: Orientation sum Dodec type
 Orientationsum = zeros(length(dodecs),length(uniquepossibleconfigurationsd));
 Orientationsum = Orientationsum*nan;
 for i = 1:length(dodecs)
@@ -783,7 +1292,7 @@ for i = 1:length(dodecs)
       d6 = int64(mod(dodecs(i,3),10));
        d7 = floor(dodecs(i,4)/10);
        d8 = int64(mod(dodecs(i,4),10));
-       Osum = (d1-d2)*5 + (d3-d4)*4 + (d5-d6)*3 + (d7-d8)*1;
+       Osum = abs((d1-d2)*5 + (d3-d4)*4 + (d5-d6)*3 + (d7-d8)*1);
        Orientationsum2(i) = Osum;
 end
 

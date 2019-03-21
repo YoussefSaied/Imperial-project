@@ -76,10 +76,11 @@ int main(int argc, char * argv[])
             *tfile3 << dv.centralmagnet << " ";
         }
         std::vector<double> v = SD.getFaceOrientaion(fm);
+        double FaceEnergy     = SD.faceEnergyf(fm);
         *tfile3 << SD.numberoftype(fm, 0) << " " << SD.numberoftype(fm, 1) << " " << SD.numberoftype(fm, 2) << " "
  // << v[0] << " " << v[1] << " " << v[2] << " " << v[3] << " " << v[4] << " "
                 << SD.getFaceOrientaionN(fm) << " "
-                << SD.faceEnergy(fm) << " ";
+                << FaceEnergy << " ";
         *tfile3 << endl;
     }
 

@@ -214,22 +214,22 @@ public:
 
     int Oddoneout(vertixmagnets vm)
     {
-        double N1N2 = (((s.tab_ptr_Magnets[vm.magnet1])->positionN())
-          - ((s.tab_ptr_Magnets[vm.magnet2])->positionN())).norme();
-        double N1S2 = (((s.tab_ptr_Magnets[vm.magnet1])->positionN())
-          - ((s.tab_ptr_Magnets[vm.magnet2])->positionS())).norme();
-        double S1N2 = (((s.tab_ptr_Magnets[vm.magnet1])->positionS())
-          - ((s.tab_ptr_Magnets[vm.magnet2])->positionN())).norme();
-        double S1S2 = (((s.tab_ptr_Magnets[vm.magnet1])->positionS())
-          - ((s.tab_ptr_Magnets[vm.magnet2])->positionS())).norme();
-        double N2N3 = (((s.tab_ptr_Magnets[vm.magnet2])->positionN())
-          - ((s.tab_ptr_Magnets[vm.magnet3])->positionN())).norme();
-        double N2S3 = (((s.tab_ptr_Magnets[vm.magnet2])->positionN())
-          - ((s.tab_ptr_Magnets[vm.magnet3])->positionS())).norme();
-        double S2N3 = (((s.tab_ptr_Magnets[vm.magnet2])->positionS())
-          - ((s.tab_ptr_Magnets[vm.magnet3])->positionN())).norme();
-        double S2S3 = (((s.tab_ptr_Magnets[vm.magnet2])->positionS())
-          - ((s.tab_ptr_Magnets[vm.magnet3])->positionS())).norme();
+        //        double N1N2 = (((s.tab_ptr_Magnets[vm.magnet1])->positionN())
+        //          - ((s.tab_ptr_Magnets[vm.magnet2])->positionN())).norme();
+        //        double N1S2 = (((s.tab_ptr_Magnets[vm.magnet1])->positionN())
+        //          - ((s.tab_ptr_Magnets[vm.magnet2])->positionS())).norme();
+        //        double S1N2 = (((s.tab_ptr_Magnets[vm.magnet1])->positionS())
+        //          - ((s.tab_ptr_Magnets[vm.magnet2])->positionN())).norme();
+        //        double S1S2 = (((s.tab_ptr_Magnets[vm.magnet1])->positionS())
+        //          - ((s.tab_ptr_Magnets[vm.magnet2])->positionS())).norme();
+        //        double N2N3 = (((s.tab_ptr_Magnets[vm.magnet2])->positionN())
+        //          - ((s.tab_ptr_Magnets[vm.magnet3])->positionN())).norme();
+        //        double N2S3 = (((s.tab_ptr_Magnets[vm.magnet2])->positionN())
+        //          - ((s.tab_ptr_Magnets[vm.magnet3])->positionS())).norme();
+        //        double S2N3 = (((s.tab_ptr_Magnets[vm.magnet2])->positionS())
+        //          - ((s.tab_ptr_Magnets[vm.magnet3])->positionN())).norme();
+        //        double S2S3 = (((s.tab_ptr_Magnets[vm.magnet2])->positionS())
+        //          - ((s.tab_ptr_Magnets[vm.magnet3])->positionS())).norme();
         double P1N2 = (s.tab_ptr_Magnets[vm.magnet1]->position
           - s.tab_ptr_Magnets[vm.magnet2]->positionN()).norme();
         double P1S2 = (s.tab_ptr_Magnets[vm.magnet1]->position
@@ -282,7 +282,7 @@ public:
         // angles:
 
 
-        // return -1;
+        return -1;
     } // sends back oddmagnet index
 
     int doublevertixstrength(doublevertix dv)
@@ -334,7 +334,7 @@ public:
         return 0;
     }
 
-    int finddoublevertix(int magnetindex)
+    size_t finddoublevertix(int magnetindex)
     {
         for (size_t i = 0; i < DV.size(); i++) {
             if (DV[i].centralmagnet == magnetindex) {  return i; }
@@ -352,7 +352,10 @@ public:
             strength = doublevertixstrength(DV[doublevertixindexofmagnet]);
         }
         else {
-            if (Oddoneout(dv.v1) == DV[doublevertixindexofmagnet].centralmagnet) {
+            if (Oddoneout(dv.v1) == magnetindex) {
+                strength = 2;
+            }
+            else if (Oddoneout(dv.v2) == magnetindex) {
                 strength = 2;
             }
             else { strength = 1; }
@@ -422,7 +425,7 @@ public:
         return vertixEnergy(dv.v1) + vertixEnergy(dv.v2);
     }
 
-    double faceEnergy(facemagnets fm)
+    double faceEnergy1(facemagnets fm)
     {
         double Energy = 0;
         for (size_t i = 0; i < fm.doubleVertixVector.size(); i++) {
@@ -432,6 +435,68 @@ public:
         }
         return Energy;
     }
+
+    double faceEnergy(facemagnets fm)
+    {
+        double Energy = 0;
+        for (size_t i = 0; i < fm.doubleVertixVector.size(); i++) {
+            for (size_t j = i + 1; j < fm.doubleVertixVector.size(); j++) {
+                if (i != (j) % fm.doubleVertixVector.size()) {
+                    Energy +=
+                      s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->
+                      spotB(s.tab_ptr_Magnets[fm.doubleVertixVector[(j)
+                        % fm.doubleVertixVector.size()].centralmagnet]);
+                }
+
+                //                    std::cout << i <<"  " <<(j )
+                //                                 % fm.doubleVertixVector.size() << std::endl;
+            }
+        }
+        return Energy;
+    }
+
+    double faceEnergyf(facemagnets fm)
+    {
+        double Energy = 0;
+        for (size_t i = 0; i < fm.doubleVertixVector.size(); i++) {
+            if (fm.doubleVertixVector[i].v1.magnet1 != fm.doubleVertixVector[i].centralmagnet) {
+                Energy += s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->
+                  spotB(s.tab_ptr_Magnets[fm.doubleVertixVector[i
+                    ].v1.magnet1]);
+            }
+
+            if (fm.doubleVertixVector[i].v1.magnet2 != fm.doubleVertixVector[i].centralmagnet) {
+                Energy += s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->
+                  spotB(s.tab_ptr_Magnets[fm.doubleVertixVector[i
+                    ].v1.magnet2]);
+            }
+
+            if (fm.doubleVertixVector[i].v1.magnet3 != fm.doubleVertixVector[i].centralmagnet) {
+                Energy += s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->
+                  spotB(s.tab_ptr_Magnets[fm.doubleVertixVector[i
+                    ].v1.magnet3]);
+            }
+
+            if (fm.doubleVertixVector[i].v2.magnet1 != fm.doubleVertixVector[i].centralmagnet) {
+                Energy += s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->
+                  spotB(s.tab_ptr_Magnets[fm.doubleVertixVector[i
+                    ].v2.magnet1]);
+            }
+
+            if (fm.doubleVertixVector[i].v2.magnet2 != fm.doubleVertixVector[i].centralmagnet) {
+                Energy += s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->
+                  spotB(s.tab_ptr_Magnets[fm.doubleVertixVector[i
+                    ].v2.magnet2]);
+            }
+
+            if (fm.doubleVertixVector[i].v2.magnet3 != fm.doubleVertixVector[i].centralmagnet) {
+                Energy += s.tab_ptr_Magnets[fm.doubleVertixVector[i].centralmagnet]->
+                  spotB(s.tab_ptr_Magnets[fm.doubleVertixVector[i
+                    ].v2.magnet3]);
+            }
+        }
+        return Energy;
+    } // faceEnergyf
 
     // orientation of face
     std::vector<double> getFaceOrientaion(facemagnets fm)

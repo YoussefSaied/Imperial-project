@@ -423,7 +423,10 @@ double Systeme::totalangle() const
     for (size_t i(0); i < tab_ptr_Magnets.size(); ++i) {
         double angle = tab_ptr_Magnets[i]->angle;
         int numberofrotations(angle / M_PI);
-        angle        = pow(-1, numberofrotations) * std::fmod(angle, M_PI);
+        angle =std::abs( std::fmod(angle, M_PI));
+        if(angle>M_PI/2) angle = M_PI-angle;
+        //angle        = pow(-1, numberofrotations) * std::fmod(angle, M_PI);
+        //angle        =  std::fmod(angle, M_PI/2);
         totalangle1 += angle;
     }
     // provisional:
