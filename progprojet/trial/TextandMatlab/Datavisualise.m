@@ -47,33 +47,74 @@ s_C = s(:,4); %maybe need a couple of different correlations
 figure %histograms of energy, correlation & angle
 subplot(1,3,1)
 histogram(s_E,10);
+% h = findobj(gca,'Type','patch');
+% 
+%  h.FaceColor = [0 0.5 0.5];
+%  h.EdgeColor = 'w';
 grid on
 title('E');
 subplot(1,3,2)
-histogram(s_C,10);
+hist(s_C,10);
+% h = findobj(gca,'Type','patch');
+% 
+%  h.FaceColor = [0 0.5 0.5];
+%  h.EdgeColor = 'w';
 grid on
 title('C');
 subplot(1,3,3)
 grid on
 %histogram(mod(s_Aabs,pi),100)
-histogram(s_Aabs,30,'Normalization','pdf')
+hist(s_Aabs,30,'Normalization','pdf')
+% h = findobj(gca,'Type','patch');
+% 
+%  h.FaceColor = [0 0.5 0.5];
+%  h.EdgeColor = 'w';
 hold on
 x = 6:.1:13;
 norm = normpdf(x,mean(s_A),std(s_A));
 plot(x,norm);
 title('A')
+%%
+figure %histograms of energy, correlation & angle
+subplot(1,2,1)
+histogram(s_E,10,'FaceColor',[0 0.5 0.5] );
+
+
+ %h.FaceColor = [0 0.5 0.5];
+ %h.EdgeColor = 'w';
+grid on
+xlabel('Energy [J] $10^{-5}$');
+subplot(1,2,2)
+histogram(s_C,10,'FaceColor',[0 0.5 0.5] );
+
+% h.EdgeColor = 'w';
+grid on
+xlabel('Correlation []');
+
+%%
+figure
+grid on
+%histogram(mod(s_Aabs,pi),100)
+histogram(s_Aabs,30,'Normalization','pdf','Facecolor',[0.25, 0.25, 0.25])
+
+hold on
+x = 6:.1:13;
+norm = normpdf(x,mean(s_A),std(s_A));
+plot(x,norm,'r--');
+title('Sum of angles (pdf)')
+
 
 figure %scatter E vs C, E vs A
 subplot(1,2,1)
 hold on
-scatter(s_C,s_E);
+scatter(s_C,s_E,10,'MarkerEdgeColor',[0 .5 .5],'MarkerFaceColor',[0 .7 .7],'LineWidth',0.1);
 R = corrcoef(s_C,s_E);
 grid on
 xlabel('cor');
 ylabel('E');
 subplot(1,2,2)
 hold on
-scatter(s_Aabs,s_E);
+scatter(s_Aabs,s_E,10,'MarkerEdgeColor',[0 .5 .5],'MarkerFaceColor',[0 .7 .7],'LineWidth',0.1);
 grid on
 xlabel('angle')
 ylabel('E')
@@ -324,6 +365,81 @@ load('data/evolve/doublevertices');
 m= magnets;
 m_A = m(:,:,1);
 m_T = m(:,:,2);
+for i = 1:nsimul
+    for j = 1:30
+        m_A(i,j) = mod(m_A(i,j),pi);
+    if m_A(i,j)>pi/2
+        q = m_A(i,j);
+        m_A(i,j) = pi - q;
+        m_A(i,j) = mod(m_A(i,j),pi);
+    end
+    end
+end
+
+
+%Energy-Dvertex basic
+m_Tbasic = floor(mod(m_T,1000)/100);
+m_Tbasic1 =reshape(m_Tbasic,[30*nsimul,1]);
+m_Tbasic1(m_Tbasic1 == 2) =3;
+C = unique(m_Tbasic1);
+A = zeros(length(m_Tbasic1),length(C));
+%A = A*nan;
+
+for i = 1:length(m_Tbasic1)
+    for j = 1:length(C)
+        if m_Tbasic1(i) == C(j)
+            firstindex= (i -(mod(i-1,30)+1))/30 +1;
+            A(i,j) = doublevertices(firstindex,mod(i-1,30)+1,2);
+        end
+    end
+end
+h= figure
+colormap(h,jet) 
+tmp = A(:,1);
+tmp(tmp==0)= [];
+histogram(tmp,30,'Normalization','pdf');
+hold on
+tmp = A(:,2);
+tmp(tmp==0)= [];
+histogram(tmp,30,'Normalization','pdf');
+tmp = A(:,3);
+tmp(tmp==0)= [];
+histogram(tmp,30,'Normalization','pdf');
+
+grid on
+xlabel('Energy');
+
+legend('WW','FW','FF');
+
+
+
+
+%Angle-Dvertex basic
+m_Tbasic = floor(mod(m_T,1000)/100);
+m_Tbasic1 =reshape(m_Tbasic,[30*nsimul,1]);
+m_Tbasic1(m_Tbasic1 == 2) =3;
+C = unique(m_Tbasic1);
+A = zeros(length(m_Tbasic1),length(C));
+A = A*nan;
+
+for i = 1:length(m_Tbasic1)
+    for j = 1:length(C)
+        if m_Tbasic1(i) == C(j)
+            firstindex= (i -(mod(i-1,30)+1))/30 +1;
+            A(i,j) = m_A(firstindex,mod(i-1,30)+1);
+        end
+    end
+end
+figure
+colormap(jet) 
+hist(A,15)
+grid on
+xlabel('Angle [rad]');
+
+legend('WW','FW','FF');
+
+
+
 
 m_ff_A = zeros(nsimul*30,2); %11411, 12411, 12421, (angle,type)
 m_fw_A = zeros(nsimul*30,2);
@@ -478,6 +594,7 @@ for i = 1:length(x)
 end
 
 
+%Magnet by maintype
 
 figure
 xbins = (-160:-80)*10^-7*2;
@@ -491,23 +608,33 @@ xbins = (-160:-80)*10^-7*2;
 % hold on
 % end
 xbins = (-1600:-800)*10^-8*2;
-hist(A(:,2:2),xbins);
+hist(A(:,2:length(C)),50);
 colormap jet
 grid on
 xlabel('Energy');
 title('FF');
-legend(num2str(C(2:2)));
+legend(num2str(C(2:length(C))));
+
+
+
 
 load('data/evolve/vertices'); %nx20x(energy,OOO)
 v= reshape(vertices,[nsimul*20,2]);
-figure
-xbins = (-1600:-800)*10^-8;
 
-hist(v(:,1),xbins);
-colormap jet
+figure('Renderer', 'painters', 'Position', [10 10 800 400])
+%title('Vertices');
+% xbins = (-160:-80)*10^-;
+
+hist(v(:,1),100,'FaceColor',[0 0.5 0.5]);
+%set(h,'FaceColor','r','EdgeColor','r');
+%colormap jet
 grid on
-xlabel('Energy');
-title('Vertices');
+xlabel('Energy [J]');
+h = findobj(gca,'Type','patch');
+
+ h.FaceColor = [0 0.5 0.5];
+ h.EdgeColor = 'w';
+
 
 
 DVert= reshape(doublevertices,[nsimul*30,3]);
@@ -566,7 +693,7 @@ title('Energy and number of WW on face');
 legend(num2str(C(1:length(C))));
 
 %Energy and Face type
-figure
+
 C = unique(f(:,9));
 A = zeros(length(f),length(C));
 A = A*nan;
@@ -579,13 +706,15 @@ for i = 1:length(f)
 end
 A(A==0) = nan;
 
-hist(A(:,1:length(C)),xbins);
-colormap jet
+figure
+hist(A(:,1:length(C)),50);
+%colormap([jet(1); jet(10); jet(2); jet(12); jet(4); jet(14);jet(6); jet(16)]);
+colormap(hsv(7))
 grid on
 xlabel('Energy');
-ylabel('Count')
+ylabel('Count') 
 title('Energy and Face type');
-legend(num2str(C(1:length(C))));
+legend('Frustrated face - 0FF 1FW 4WW', '(3-2) face - 0FF 3FW 2WW', '(3-2) face - 1FF 2FW 3WW', '(4-1) face - 0FF 3FW 2WW', '(4-1) face - 1FF 2FW 3WW', 'Perfect face -1FF 3FW 1WW', 'Perfect face - 2FF 1FW 2WW');
 
 %FF and Face type
 figure
